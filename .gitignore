@@ -8,3 +8,4 @@ _crawl/prev/
 _crawl/embedtest/
 _crawl/preview-site/*.png
 _crawl/preview-site$*.png
+_crawl/preview-site/_phone-test.html

@@ -1,4 +1,14 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="SBF Chicago: a youth-led nonprofit packing meals for neighbors facing hunger in Chicagoland and India.">
 <title>SBF Chicago Redesign</title>
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;700&display=swap">
@@ -306,6 +316,11 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     text-align: center;
 }
 .announcement .t-eyebrow { margin-right: var(--space-2); }
+@media (max-width: 599px) {
+    /* Keep the next-event bar to two short lines on phones */
+    .announcement, .gh-announcement-bar { padding-block: var(--space-2) !important; }
+    .announcement .t-small, .gh-announcement-bar { font-size: 13px !important; line-height: 18px !important; }
+}
 
 /* 7. Header & navigation
    -------------------------------------------------------------------------- */
@@ -1718,6 +1733,7 @@ input, select, textarea {
 }
 
 /* preview-only adjustments */
+@media (max-width: 599px) { .preview-note { font-size: 11px !important; line-height: 15px !important; padding-block: 4px !important; } }
 .preview-note { background: var(--white); border-bottom: 1px solid var(--line); padding: var(--space-2) var(--gutter); text-align: center; color: var(--ink-muted); font-size: 13px; line-height: 18px; font-weight: 500; }
 .embed-placeholder { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-8); border: 2px dashed var(--line-strong); border-radius: var(--radius-md); background: var(--cream-50); }
 .embed-placeholder .t-eyebrow { color: var(--lake-600); }
@@ -3279,3 +3295,6 @@ input, select, textarea {
   show();
 })();
 </script>
+
+</body>
+</html>
