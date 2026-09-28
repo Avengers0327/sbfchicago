@@ -39,7 +39,7 @@ Static. Fast. Free to host. Zero backend required.
 | **CSS** | Hand-written, token-based (`assets/css/screen.css`) — colors, type scale, spacing, radius and shadow all defined once at the top |
 | **JS** | ~500 lines, dependency-free, progressively enhances content into components (project cards, timelines, leader walls, item tiles) |
 | **Fonts** | Bricolage Grotesque (display) + Figtree (body), via Google Fonts |
-| **Pages** | 11 (home, 8 nav pages, tag/author archives, error page) |
+| **Pages** | 12 (home, 8 nav pages, membership, tag/author archives, error page) |
 | **Images** | 132, sourced from the live site's real events |
 | **Forms** | Google Forms (sign-up) + Zeffy (donations), both embedded, both free, neither requires a backend |
 | **Hosting cost** | $0 — any static host works |
@@ -80,3 +80,7 @@ node build-site-preview.js
 ## Forms and donations
 
 Donations use Zeffy and the sign-up forms use Google Forms. Both are embedded and work on any host. In `preview-site`, they appear as placeholder boxes with "Open the form" links.
+
+## Memberships
+
+Paid memberships (Advocate and Champion, monthly or yearly) run through Zeffy, the same tool used for donations. Members don't log in on this site. Zeffy handles payments, renewals, receipts and cancellations. Every **Join** button opens the link set in `membership_url` (`sbf-aurav-theme/package.json`). Tier copy lives in `sbf-aurav-theme/partials/membership-tiers.hbs`.

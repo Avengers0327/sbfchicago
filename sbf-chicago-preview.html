@@ -1722,6 +1722,26 @@ input, select, textarea {
     .event-card:hover, .btn-primary:hover { transform: none; }
 }
 
+/* ---------- Membership ---------- */
+.membership { padding-block: var(--space-8) var(--space-16); }
+.membership-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
+.billing-toggle { display: inline-flex; padding: 4px; border: 1px solid var(--line-strong); border-radius: var(--radius-pill); background: var(--white); }
+.billing-toggle button { font: inherit; font-weight: 700; padding: var(--space-2) var(--space-4); border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--navy-900); cursor: pointer; }
+.billing-toggle button[aria-pressed="true"] { background: var(--navy-900); color: var(--white); }
+.billing-toggle button:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.billing-save { font-weight: 500; font-size: 0.85em; }
+.tier-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: stretch; }
+.tier-card { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-6); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+.tier-card .btn { margin-top: auto; align-self: flex-start; }
+.tier-featured { border: 2px solid var(--navy-900); box-shadow: var(--shadow-md); }
+.tier-pending { border-style: dashed; border-color: var(--line-strong); background: transparent; box-shadow: none; justify-content: center; }
+.tier-price { margin: 0; color: var(--ink-muted); }
+.tier-price .t-stat { color: var(--navy-900); }
+.tier-note { color: var(--ink-muted); font-size: 14px; }
+.membership[data-billing="monthly"] .tier-price[data-period="yearly"],
+.membership[data-billing="yearly"] .tier-price[data-period="monthly"] { display: none; }
+.membership-manage { margin-top: var(--space-6); color: var(--ink-muted); max-width: 60ch; }
+
 /* preview-only adjustments */
 @media (max-width: 599px) { .preview-note { font-size: 11px !important; line-height: 15px !important; padding-block: 4px !important; } }
 .preview-note { background: var(--white); border-bottom: 1px solid var(--line); padding: var(--space-2) var(--gutter); text-align: center; color: var(--ink-muted); font-size: 13px; line-height: 18px; font-weight: 500; }
@@ -1743,8 +1763,7 @@ input, select, textarea {
       <span class="brand-name">SBF Chicago</span>
     </a>
     <div class="header-actions">
-      <a class="member-link" href="https://sbfchicago.org/#/portal/signin">Sign in</a>
-      <a class="btn btn-secondary btn-sm subscribe-btn" href="https://sbfchicago.org/#/portal/signup">Subscribe</a>
+      <a class="btn btn-secondary btn-sm subscribe-btn" href="#membership">Become a member</a>
       <a class="btn btn-primary btn-sm header-donate" href="#donations">Donate</a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
         <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -1764,7 +1783,7 @@ input, select, textarea {
         <li><a href="#youth-leaders">Youth Leadership</a></li>
         <li><a href="#sbf-fundraiser">Fundraiser</a></li>
       </ul>
-      <div class="nav-members"><a href="https://sbfchicago.org/#/portal/signin">Sign in</a><a href="https://sbfchicago.org/#/portal/signup">Subscribe</a></div>
+      <div class="nav-members"><a href="#membership">Become a member</a></div>
     </div>
   </nav>
 </header>
@@ -2515,6 +2534,46 @@ input, select, textarea {
     <div class="gh-canvas gh-content">
         <p>Here are the dates for upcoming SBF fundraiser events...will you be there?</p><ul><li>Dairy Queen - August 28, 2026 (Friday)</li><li>Lou Malnati's - September 14, 2026 (Monday)</li><li>Chipotle - October 21, 2026 (Wednesday) </li></ul><hr><figure class="kg-card kg-image-card"><img src="img/090.png" class="kg-image" alt="" loading="lazy" width="180" height="117"></figure><ul><li>August 28, 2026 (Friday) @ Dairy Queen<ul><li>Location: 307 E. Northwest Hwy, Palatine</li><li>Time: 4p - 10p</li></ul></li></ul><figure class="kg-card kg-gallery-card kg-width-wide"><div class="kg-gallery-container"><div class="kg-gallery-row"><div class="kg-gallery-image"><img src="img/091.jpg" width="1600" height="1200" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/092.jpg" width="768" height="1024" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/093.jpg" width="768" height="1024" loading="lazy" alt=""></div></div><div class="kg-gallery-row"><div class="kg-gallery-image"><img src="img/094.jpg" width="768" height="1024" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/095.jpg" width="768" height="1024" loading="lazy" alt=""></div></div><div class="kg-gallery-row"><div class="kg-gallery-image"><img src="img/096.jpg" width="768" height="1024" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/097.jpg" width="576" height="1024" loading="lazy" alt=""></div></div></div></figure><hr><figure class="kg-card kg-image-card"><img src="img/098.png" class="kg-image" alt="" loading="lazy" width="162" height="105"></figure><ul><li>September 14, 2026 (Monday) @ Lou Malnati's<ul><li>Location: 1407 Palatine Rd, Hoffman Estates</li><li>Time: 4p - 10p </li></ul></li></ul><figure class="kg-card kg-image-card"><img src="img/099.png" class="kg-image" alt="" loading="lazy" width="1024" height="1314"></figure><hr><figure class="kg-card kg-image-card"><img src="img/100.png" class="kg-image" alt="" loading="lazy" width="106" height="105"></figure><ul><li>October 21, 2026 (Wednesday) @ Chipotle <ul><li>Location: 15 E Golf Rd, Hoffman Estates</li><li>Time: 5p - 9p</li></ul></li></ul><figure class="kg-card kg-image-card"><img src="img/101.jpg" class="kg-image" alt="" loading="lazy" width="2000" height="2588"></figure><hr><h2 id="cant-make-it-but-still-want-to-help"><strong>Can't make it but still want to help...</strong></h2><figure class="kg-card kg-bookmark-card"><a class="kg-bookmark-container" href="#donations"><div class="kg-bookmark-content"><div class="kg-bookmark-title">Donations</div><div class="kg-bookmark-description">Want to impact lives of people by helping us provide them meals? We also accept Zelle at sbfchicago@gmail.com</div><div class="kg-bookmark-metadata"><span class="kg-bookmark-author">SBF Chicago</span></div></div><div class="kg-bookmark-thumbnail"><img src="img/021.jpg" alt="" loading="lazy"></div></a></figure><hr><hr>
     </div></article></div>
+<div data-page="membership" data-bodyclass="page-template page-membership" class="page-template page-membership" hidden><article class="band-page-plain">
+    <header class="page-hero">
+      <div class="container">
+        <p class="t-eyebrow">Membership</p>
+        <h1 class="t-h1">Become a member</h1>
+      </div>
+    </header>
+<section class="membership" aria-labelledby="membership-plans">
+    <div class="container">
+        <div class="membership-head">
+            <h2 class="t-h2" id="membership-plans">Choose a plan</h2>
+            <div class="billing-toggle" role="group" aria-label="Billing period">
+                <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
+                <button type="button" data-billing="yearly" aria-pressed="false">Yearly <span class="billing-save">save 8%</span></button>
+            </div>
+        </div>
+        <ul class="tier-grid" role="list">
+            <li class="tier-card tier-supporter tier-pending">
+                <p class="t-eyebrow">Supporter</p>
+                <p class="tier-note">Supporter tier details coming soon.</p>
+            </li>
+            <li class="tier-card">
+                <h3 class="t-h3">Advocate</h3>
+                <p class="tier-price" data-period="monthly"><span class="t-stat">$10</span> /month</p>
+                <p class="tier-price" data-period="yearly"><span class="t-stat">$&mdash;</span> /year <span class="tier-note">yearly price coming soon</span></p>
+                <p>Supporter benefits + 1:1 coaching for youth leader presentation, involvement in extended youth activities, and recognition during our monthly food drive</p>
+                <a class="btn btn-secondary" href="#donations">Join as an Advocate</a>
+            </li>
+            <li class="tier-card tier-featured">
+                <h3 class="t-h3">Champion</h3>
+                <p class="tier-price" data-period="monthly"><span class="t-stat">$45</span> /month</p>
+                <p class="tier-price" data-period="yearly"><span class="t-stat">$&mdash;</span> /year <span class="tier-note">yearly price coming soon</span></p>
+                <p>Advocate benefits PLUS preferred slots for youth activities by the board, recognition during our monthly food drive and newsletter, and other youth mentorship activities</p>
+                <a class="btn btn-primary" href="#donations">Join as a Champion</a>
+            </li>
+        </ul>
+        <p class="t-small membership-manage">Payments are handled securely by Zeffy. To update or cancel your membership, use the link in your Zeffy receipt email, or write to sbfchicago@gmail.com.</p>
+    </div>
+</section>
+</article></div>
 <div data-page="donations" data-bodyclass="page-template page-donations" class="page-template page-donations" hidden><article class="band-page-plain">
     <header class="page-hero">
       <div class="container">
@@ -2622,6 +2681,7 @@ input, select, textarea {
         <ul role="list">
           <li><a href="https://www.amazon.com/hz/wishlist/ls/20JFGIHHFZVGK">Amazon Wishlist</a></li>
           <li><a href="#donations">Donations</a></li>
+          <li><a href="#membership">Membership</a></li>
         </ul>
       </div>
       <div>
@@ -2634,7 +2694,7 @@ input, select, textarea {
         </ul>
       </div>
     </div>
-    <div class="footer-bottom"><span>SBF Chicago &copy; 2026</span><a href="https://ghost.org/">Powered by Ghost</a></div>
+    <div class="footer-bottom"><span>SBF Chicago &copy; 2026</span><a href="mailto:sbfchicago@gmail.com">sbfchicago@gmail.com</a></div>
   </div>
 </footer>
 
@@ -3253,6 +3313,17 @@ input, select, textarea {
         });
         Array.prototype.forEach.call(document.querySelectorAll('main .btn-primary, main .kg-btn-accent:not(.is-secondary)'), function (b) { io.observe(b); });
     }
+
+    /* Membership: monthly / yearly price toggle (both prices show without JS) */
+    Array.prototype.forEach.call(document.querySelectorAll('.membership'), function (m) {
+        var buttons = m.querySelectorAll('[data-billing]');
+        function set(period) {
+            m.setAttribute('data-billing', period);
+            Array.prototype.forEach.call(buttons, function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-billing') === period)); });
+        }
+        Array.prototype.forEach.call(buttons, function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-billing')); }); });
+        set('monthly');
+    });
 })();
 
 </script>

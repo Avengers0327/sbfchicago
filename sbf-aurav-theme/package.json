@@ -107,6 +107,11 @@
         "default": "https://docs.google.com/forms/d/e/1FAIpQLSeMOwTtIovGNNTHMTl8t6Crfiif5DA_1FoSgVhlEJzXZCSS2g/viewform?embedded=true",
         "description": "Google Form embed URL (Send → <> → src). Shown on Get Involved and Youth Leadership."
       },
+      "membership_url": {
+        "type": "text",
+        "default": "/donations/",
+        "description": "Zeffy membership form that every Join button opens."
+      },
       "wishlist_url": {
         "type": "text",
         "default": "https://www.amazon.com/hz/wishlist/ls/20JFGIHHFZVGK",

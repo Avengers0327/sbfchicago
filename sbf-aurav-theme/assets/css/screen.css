@@ -1713,3 +1713,23 @@ input, select, textarea {
     *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
     .event-card:hover, .btn-primary:hover { transform: none; }
 }
+
+/* ---------- Membership ---------- */
+.membership { padding-block: var(--space-8) var(--space-16); }
+.membership-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-6); }
+.billing-toggle { display: inline-flex; padding: 4px; border: 1px solid var(--line-strong); border-radius: var(--radius-pill); background: var(--white); }
+.billing-toggle button { font: inherit; font-weight: 700; padding: var(--space-2) var(--space-4); border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--navy-900); cursor: pointer; }
+.billing-toggle button[aria-pressed="true"] { background: var(--navy-900); color: var(--white); }
+.billing-toggle button:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.billing-save { font-weight: 500; font-size: 0.85em; }
+.tier-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); align-items: stretch; }
+.tier-card { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-6); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+.tier-card .btn { margin-top: auto; align-self: flex-start; }
+.tier-featured { border: 2px solid var(--navy-900); box-shadow: var(--shadow-md); }
+.tier-pending { border-style: dashed; border-color: var(--line-strong); background: transparent; box-shadow: none; justify-content: center; }
+.tier-price { margin: 0; color: var(--ink-muted); }
+.tier-price .t-stat { color: var(--navy-900); }
+.tier-note { color: var(--ink-muted); font-size: 14px; }
+.membership[data-billing="monthly"] .tier-price[data-period="yearly"],
+.membership[data-billing="yearly"] .tier-price[data-period="monthly"] { display: none; }
+.membership-manage { margin-top: var(--space-6); color: var(--ink-muted); max-width: 60ch; }
