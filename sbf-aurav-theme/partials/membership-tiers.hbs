@@ -1,0 +1,34 @@
+{{!-- Membership tiers. Payments, renewals and receipts run through Zeffy (@custom.membership_url);
+     members don't log in here. Yearly prices: fill in once they're set in the Zeffy form. --}}
+<section class="membership" aria-labelledby="membership-plans">
+    <div class="container">
+        <div class="membership-head">
+            <h2 class="t-h2" id="membership-plans">Choose a plan</h2>
+            <div class="billing-toggle" role="group" aria-label="Billing period">
+                <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
+                <button type="button" data-billing="yearly" aria-pressed="false">Yearly <span class="billing-save">save 8%</span></button>
+            </div>
+        </div>
+        <ul class="tier-grid" role="list">
+            <li class="tier-card tier-supporter tier-pending">
+                <p class="t-eyebrow">Supporter</p>
+                <p class="tier-note">Supporter tier details coming soon.</p>
+            </li>
+            <li class="tier-card">
+                <h3 class="t-h3">Advocate</h3>
+                <p class="tier-price" data-period="monthly"><span class="t-stat">$10</span> /month</p>
+                <p class="tier-price" data-period="yearly"><span class="t-stat">$&mdash;</span> /year <span class="tier-note">yearly price coming soon</span></p>
+                <p>Supporter benefits + 1:1 coaching for youth leader presentation, involvement in extended youth activities, and recognition during our monthly food drive</p>
+                <a class="btn btn-secondary" href="{{@custom.membership_url}}">Join as an Advocate</a>
+            </li>
+            <li class="tier-card tier-featured">
+                <h3 class="t-h3">Champion</h3>
+                <p class="tier-price" data-period="monthly"><span class="t-stat">$45</span> /month</p>
+                <p class="tier-price" data-period="yearly"><span class="t-stat">$&mdash;</span> /year <span class="tier-note">yearly price coming soon</span></p>
+                <p>Advocate benefits PLUS preferred slots for youth activities by the board, recognition during our monthly food drive and newsletter, and other youth mentorship activities</p>
+                <a class="btn btn-primary" href="{{@custom.membership_url}}">Join as a Champion</a>
+            </li>
+        </ul>
+        <p class="t-small membership-manage">Payments are handled securely by Zeffy. To update or cancel your membership, use the link in your Zeffy receipt email, or write to sbfchicago@gmail.com.</p>
+    </div>
+</section>

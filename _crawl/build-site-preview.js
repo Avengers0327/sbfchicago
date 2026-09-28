@@ -23,6 +23,7 @@ const PAGES = [
   { slug: 'in-the-news', title: 'In the news...', eyebrow: 'Milestones and press' },
   { slug: 'youth-leaders', title: 'Youth Leaders', split: true },
   { slug: 'sbf-fundraiser', title: 'SBF Fundraiser', eyebrow: 'Fundraisers' },
+  { slug: 'membership', title: 'Become a member', layout: 'membership', nocontent: true },
   { slug: 'donations', title: 'Donations', layout: 'donations' },
   { slug: 'aug-event', title: 'August 9 Chicago Food Packing Event', post: true, band: 'chicago',
     date: 'Aug 10, 2026', readingTime: '3 min read',
@@ -190,6 +191,9 @@ function shell(p, content, doc) {
       </div>
     </header>`;
 
+  if (p.layout === 'membership') {
+    return `<article class="band-page-plain">${hero().replace('<p class="t-eyebrow"></p>', '<p class="t-eyebrow">Membership</p>')}${renderPartial('membership-tiers', {})}</article>`;
+  }
   if (p.layout === 'donations') {
     return `<article class="band-page-plain">${hero().replace('<p class="t-eyebrow"></p>', '<p class="t-eyebrow">Donate</p>')}
       <div class="page-split"><div class="container page-split-grid">
@@ -266,7 +270,7 @@ const doc = dom.window.document;
 
 let pagesHtml = '';
 for (const p of PAGES) {
-  const raw = fs.readFileSync(path.join(__dirname, 'content', p.slug + '.html'), 'utf8');
+  const raw = p.nocontent ? '' : fs.readFileSync(path.join(__dirname, 'content', p.slug + '.html'), 'utf8');
   const cls = p.post ? 'post-template' : `page-template page-${p.slug}`;
   pagesHtml += `\n<div data-page="${p.slug}" data-bodyclass="${cls}" class="${cls}" hidden>${shell(p, transform(raw, doc), doc)}</div>`;
 }

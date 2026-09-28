@@ -612,4 +612,15 @@
         });
         Array.prototype.forEach.call(document.querySelectorAll('main .btn-primary, main .kg-btn-accent:not(.is-secondary)'), function (b) { io.observe(b); });
     }
+
+    /* Membership: monthly / yearly price toggle (both prices show without JS) */
+    Array.prototype.forEach.call(document.querySelectorAll('.membership'), function (m) {
+        var buttons = m.querySelectorAll('[data-billing]');
+        function set(period) {
+            m.setAttribute('data-billing', period);
+            Array.prototype.forEach.call(buttons, function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-billing') === period)); });
+        }
+        Array.prototype.forEach.call(buttons, function (b) { b.addEventListener('click', function () { set(b.getAttribute('data-billing')); }); });
+        set('monthly');
+    });
 })();

@@ -1,0 +1,15 @@
+{{!< default}}
+{{!-- Membership: tiered monthly/yearly plans, paid through Zeffy --}}
+{{#post}}
+<article class="band-page-plain {{post_class}}">
+    <header class="page-hero">
+        <div class="container">
+            <p class="t-eyebrow">Membership</p>
+            <h1 class="t-h1">Become a member</h1>
+            {{#if custom_excerpt}}<p class="t-body-lg">{{custom_excerpt}}</p>{{/if}}
+        </div>
+    </header>
+    {{> "membership-tiers"}}
+    {{#if content}}<div class="gh-canvas gh-content">{{content}}</div>{{/if}}
+</article>
+{{/post}}

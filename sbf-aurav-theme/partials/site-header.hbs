@@ -10,16 +10,7 @@
         </a>
 
         <div class="header-actions">
-            {{#unless @member}}
-                {{#if @site.members_enabled}}
-                    <a class="member-link" href="#/portal/signin" data-portal="signin">Sign in</a>
-                    {{#unless @site.members_invite_only}}
-                        <a class="btn btn-secondary btn-sm subscribe-btn" href="#/portal/signup" data-portal="signup">Subscribe</a>
-                    {{/unless}}
-                {{/if}}
-            {{else}}
-                <a class="member-link" href="#/portal/account" data-portal="account">Account</a>
-            {{/unless}}
+            <a class="btn btn-secondary btn-sm subscribe-btn" href="{{@site.url}}/membership/">Become a member</a>
             <a class="btn btn-primary btn-sm header-donate" href="{{@custom.donate_url}}">Donate</a>
             <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
                 <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -31,12 +22,7 @@
     <nav class="site-nav" id="site-nav" aria-label="Main">
         <div class="container">
             {{navigation}}
-            {{#unless @member}}{{#if @site.members_enabled}}
-                <div class="nav-members">
-                    <a href="#/portal/signin" data-portal="signin">Sign in</a>
-                    {{#unless @site.members_invite_only}}<a href="#/portal/signup" data-portal="signup">Subscribe</a>{{/unless}}
-                </div>
-            {{/if}}{{/unless}}
+            <div class="nav-members"><a href="{{@site.url}}/membership/">Become a member</a></div>
         </div>
     </nav>
 </header>
