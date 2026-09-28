@@ -3274,7 +3274,22 @@ input, select, textarea {
   function show() {
     var id = (location.hash || '#home').slice(1);
     if (id === 'main') return;
-    var target = pages[ids.indexOf(id)] || pages[0];
+    // A section link (#how-we-help, #sign-up, #items-form): stay on the page that
+    // holds that section and scroll to it, instead of treating it as a page name.
+    if (ids.indexOf(id) < 0) {
+      // Prefer the section on the page you're on (Get Involved and Youth Leadership both have #sign-up)
+      var current = pages.filter(function (p) { return !p.hidden; })[0];
+      var anchor = (current && current.querySelector('#' + CSS.escape(id))) || document.getElementById(id);
+      var owner = anchor && anchor.closest('[data-page]');
+      if (owner) {
+        if (owner.hidden) showPage(owner, false);
+        anchor.scrollIntoView();
+        return;
+      }
+    }
+    showPage(pages[ids.indexOf(id)] || pages[0], true);
+  }
+  function showPage(target, toTop) {
     pages.forEach(function (p) { p.hidden = p !== target; });
     document.body.className = target.getAttribute('data-bodyclass') || '';
     Array.prototype.forEach.call(document.querySelectorAll('.site-nav li'), function (li) {
@@ -3283,7 +3298,7 @@ input, select, textarea {
     });
     var nav = document.getElementById('site-nav');
     if (nav) nav.classList.remove('is-open');
-    window.scrollTo(0, 0);
+    if (toTop) window.scrollTo(0, 0);
   }
   document.addEventListener('click', function (e) {
     var a = e.target.closest && e.target.closest('a[href]');
