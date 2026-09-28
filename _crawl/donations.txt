@@ -1,0 +1,13 @@
+TITLE: Donations
+DESC: undefined
+---
+#1 Donations
+Want to impact lives of people by helping us provide them meals?
+Note on checkout: Zeffy is 100% free to our organization, so they ask for an optional contribution to cover credit card fees. If you do not wish to tip, select "Other" in the dropdown and enter $0.
+#3 We also accept Zelle at [email&#160;protected]
+---IMGS
+https://sbfchicago.org/content/images/2026/09/8-sbf_donation_cropped.jpg
+https://sbfchicago.org/content/images/2026/09/banner-test-16by9-trim-2-5.jpg
+---LINKS
+/cdn-cgi/l/email-protection -> [email&#160;protected]
+https://sbfchicago.org/ -> 

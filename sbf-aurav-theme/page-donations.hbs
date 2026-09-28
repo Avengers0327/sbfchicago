@@ -1,0 +1,40 @@
+{{!< default}}
+{{!-- Donations: impact recap beside the Zeffy form. The form itself is the page's action,
+     so the header Donate button is hidden here (screen.css). --}}
+{{#post}}
+<article class="band-page-plain {{post_class}}">
+    <header class="page-hero">
+        <div class="container">
+            <p class="t-eyebrow">Donate</p>
+            <h1 class="t-h1">{{title}}</h1>
+            {{#if custom_excerpt}}<p class="t-body-lg">{{custom_excerpt}}</p>{{/if}}
+        </div>
+    </header>
+
+    <div class="page-split">
+        <div class="container page-split-grid">
+            <aside class="page-split-aside" aria-label="Your impact">
+                <div class="aside-card band-navy on-navy">
+                    <p class="t-eyebrow">What your gifts have done in 2026</p>
+                    <ul class="aside-stats" role="list">
+                        <li><span class="t-stat">{{@custom.stat_1_value}}</span><span class="t-small">{{@custom.stat_1_label}}</span></li>
+                        <li><span class="t-stat">{{@custom.stat_2_value}}</span><span class="t-small">{{@custom.stat_2_label}}</span></li>
+                        <li><span class="t-stat">{{@custom.stat_3_value}}</span><span class="t-small">{{@custom.stat_3_label}}</span></li>
+                    </ul>
+                </div>
+                <div class="aside-card">
+                    <p class="t-eyebrow">Other ways to give</p>
+                    <ul>
+                        <li>Zelle to sbfchicago@gmail.com</li>
+                        <li><a href="{{@custom.wishlist_url}}">Send items from our Amazon Wishlist</a></li>
+                        <li><a href="{{@site.url}}/items-needed/">Sign up to bring items to the next food drive</a></li>
+                    </ul>
+                </div>
+            </aside>
+            <div class="page-split-main gh-content">
+                {{content}}
+            </div>
+        </div>
+    </div>
+</article>
+{{/post}}

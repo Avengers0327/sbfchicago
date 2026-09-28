@@ -1,0 +1,21 @@
+{{!< default}}
+{{#tag}}
+<header class="page-hero">
+    <div class="container">
+        <p class="t-eyebrow">Topic</p>
+        <h1 class="t-h1">{{name}}</h1>
+        {{#if description}}<p class="t-body-lg">{{description}}</p>{{/if}}
+    </div>
+</header>
+{{/tag}}
+
+<section class="section">
+    <div class="container">
+        <div class="card-grid">
+            {{#foreach posts}}
+                {{> "event-card"}}
+            {{/foreach}}
+        </div>
+        {{pagination}}
+    </div>
+</section>

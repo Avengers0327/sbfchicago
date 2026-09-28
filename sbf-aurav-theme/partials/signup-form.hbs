@@ -1,0 +1,19 @@
+{{!-- Volunteer sign-up: the Google Form embedded on the page, so people can sign up
+     without leaving. Params: eyebrow, heading, note.
+     site.js points any link to the form's short URL at #sign-up instead. --}}
+<section class="signup-form" id="sign-up" aria-labelledby="sign-up-title" data-form-url="{{@custom.volunteer_url}}">
+    <div class="container">
+        <div class="signup-grid">
+            <div class="signup-copy">
+                <p class="t-eyebrow">{{eyebrow}}</p>
+                <h2 class="t-h1" id="sign-up-title">{{heading}}</h2>
+                <p class="t-body-lg">{{note}}</p>
+                <p class="next-chip"><span class="t-eyebrow">Next event</span><span>{{@custom.next_event_details}}</span></p>
+                <p class="t-small t-muted">Form not loading? <a href="{{@custom.volunteer_url}}">Open it in a new tab</a>.</p>
+            </div>
+            <div class="signup-frame">
+                <iframe src="{{@custom.volunteer_form_embed}}" title="SBF food packing event sign-up form" loading="lazy">Loading…</iframe>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,12 @@
+TITLE: Donations test
+DESC: undefined
+---
+#1 Donations test
+Want to impact lives of people by helping us provide them meals?
+OPTION for $5000 campaign
+OPTION to replace for one time and monthly
+---IMGS
+https://sbfchicago.org/content/images/2026/09/8-sbf_donation_cropped.jpg
+https://sbfchicago.org/content/images/2026/09/banner-test-16by9-trim-2-5.jpg
+---LINKS
+https://sbfchicago.org/ -> 

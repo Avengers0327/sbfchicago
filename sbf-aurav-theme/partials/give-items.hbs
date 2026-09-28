@@ -1,0 +1,26 @@
+{{!-- Items Needed: the two ways to give items. Both options come from the sign-up form
+     ("Will you be using our Amazon Wishlist?"). --}}
+<section class="give-items" aria-labelledby="give-items-title">
+    <div class="container">
+        <div class="section-head">
+            <div class="stack">
+                <p class="t-eyebrow">Two ways to give items</p>
+                <h2 class="t-h1" id="give-items-title">Ship it, or bring it</h2>
+            </div>
+        </div>
+        <div class="give-ways">
+            <article class="give-way">
+                <span class="give-num" aria-hidden="true">1</span>
+                <h3 class="t-h3">Ship it from our Amazon Wishlist</h3>
+                <p>Order what's on the list and it ships straight to us. Tell us in the form below so we don't double up.</p>
+                <a class="btn btn-secondary btn-sm" href="{{@custom.wishlist_url}}">Open the Amazon Wishlist</a>
+            </article>
+            <article class="give-way">
+                <span class="give-num" aria-hidden="true">2</span>
+                <h3 class="t-h3">Bring it to the packing event</h3>
+                <p>Pick up the items yourself and drop them off when you come to pack.</p>
+                <p class="next-chip"><span class="t-eyebrow">Next event</span><span>{{@custom.next_event_details}}</span></p>
+            </article>
+        </div>
+    </div>
+</section>

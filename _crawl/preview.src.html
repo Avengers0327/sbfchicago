@@ -1,0 +1,123 @@
+<title>SBF Chicago Redesign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;700&display=swap">
+<style>
+/*CARDS_CSS*/
+</style>
+<style>
+/*CSS*/
+/* preview-only adjustments */
+.preview-note { background: var(--white); border-bottom: 1px solid var(--line); padding: var(--space-2) var(--gutter); text-align: center; color: var(--ink-muted); font-size: 13px; line-height: 18px; font-weight: 500; }
+.embed-placeholder { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-8); border: 2px dashed var(--line-strong); border-radius: var(--radius-md); background: var(--cream-50); }
+.embed-placeholder .t-eyebrow { color: var(--lake-600); }
+.site-header { top: env(safe-area-inset-top, 0px); }
+.hero-photo img { object-position: center 70%; }
+</style>
+
+<div class="preview-note">Design preview. Pages are shown after the content checklist; the donation form, sign-up form and videos load on the live site.</div>
+<div class="announcement" role="region" aria-label="Announcement">
+  <span class="t-small">Next Food Packing Event: October 25, 2026 at 9:30a at National India Hub, 930 National Pkwy, Schaumburg, IL 60173</span>
+</div>
+
+<header class="site-header" id="site-header">
+  <div class="container site-header-top">
+    <a class="brand" href="#home">
+      <img class="brand-mark" src="{{IMG:logo}}" alt="" width="44" height="44">
+      <span class="brand-name">SBF Chicago</span>
+    </a>
+    <div class="header-actions">
+      <a class="member-link" href="https://sbfchicago.org/#/portal/signin">Sign in</a>
+      <a class="btn btn-secondary btn-sm subscribe-btn" href="https://sbfchicago.org/#/portal/signup">Subscribe</a>
+      <a class="btn btn-primary btn-sm header-donate" href="https://sbfchicago.org/donations/">Donate</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        Menu
+      </button>
+    </div>
+  </div>
+  <nav class="site-nav" id="site-nav" aria-label="Main">
+    <div class="container">
+      <ul role="list">
+        <li><a href="https://sbfchicago.org/team/">Team &amp; Vision</a></li>
+        <li><a href="https://sbfchicago.org/who-we-serve-chicago/">Chicago Projects</a></li>
+        <li><a href="https://sbfchicago.org/who-we-serve-india/">India Projects</a></li>
+        <li><a href="https://sbfchicago.org/items-needed/">Items Needed</a></li>
+        <li><a href="https://sbfchicago.org/get-involved/">Get Involved</a></li>
+        <li><a href="https://sbfchicago.org/in-the-news/">In the News</a></li>
+        <li><a href="https://sbfchicago.org/youth-leaders/">Youth Leadership</a></li>
+        <li><a href="https://sbfchicago.org/sbf-fundraiser/">Fundraiser</a></li>
+      </ul>
+      <div class="nav-members"><a href="https://sbfchicago.org/#/portal/signin">Sign in</a><a href="https://sbfchicago.org/#/portal/signup">Subscribe</a></div>
+    </div>
+  </nav>
+</header>
+
+<main id="main">
+<div data-page="home" data-bodyclass="home-template">
+<!--HOME-->
+</div>
+<!--PAGES-->
+</main>
+
+<footer class="site-footer on-navy">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-contact">
+        <a class="brand" href="#main"><img class="brand-mark" src="{{IMG:logo}}" alt="" width="44" height="44"><span class="brand-name">SBF Chicago</span></a>
+        <p class="footer-tagline">Pack. Feed. Make a difference.</p>
+        <p class="t-small">Youth-powered. Community-fueled. Hunger-fought. A youth-led nonprofit in Chicago's Northwest suburbs, fighting hunger in Chicagoland and India.</p>
+      </div>
+      <div>
+        <p class="t-eyebrow">Support</p>
+        <ul role="list">
+          <li><a href="https://www.amazon.com/hz/wishlist/ls/20JFGIHHFZVGK">Amazon Wishlist</a></li>
+          <li><a href="https://sbfchicago.org/donations/">Donations</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="t-eyebrow">Stay in touch</p>
+        <ul role="list">
+          <li>sbfchicago@gmail.com</li>
+          <li><a href="https://www.instagram.com/sbfchicago">Instagram</a></li>
+          <li><a href="https://www.facebook.com/profile.php?id=61592796391174">Facebook</a></li>
+          <li><a href="https://www.linkedin.com/company/sbf-chicago/">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>SBF Chicago &copy; 2026</span><a href="https://ghost.org/">Powered by Ghost</a></div>
+  </div>
+</footer>
+
+<script>
+/*JS*/
+</script>
+<script>
+/* preview router: one page at a time, bare #slug anchors */
+(function () {
+  var pages = Array.prototype.slice.call(document.querySelectorAll('[data-page]'));
+  var ids = pages.map(function (p) { return p.getAttribute('data-page'); });
+  function show() {
+    var id = (location.hash || '#home').slice(1);
+    if (id === 'main') return;
+    var target = pages[ids.indexOf(id)] || pages[0];
+    pages.forEach(function (p) { p.hidden = p !== target; });
+    document.body.className = target.getAttribute('data-bodyclass') || '';
+    Array.prototype.forEach.call(document.querySelectorAll('.site-nav li'), function (li) {
+      var on = li.querySelector('a').getAttribute('href') === '#' + target.getAttribute('data-page');
+      li.classList.toggle('nav-current', on);
+    });
+    var nav = document.getElementById('site-nav');
+    if (nav) nav.classList.remove('is-open');
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a) return;
+    var m = a.getAttribute('href').match(new RegExp('^/([a-z0-9-]+)/?$'));
+    if (m && ids.indexOf(m[1]) > -1) { e.preventDefault(); location.hash = m[1]; }
+  });
+  window.addEventListener('hashchange', show);
+  show();
+})();
+</script>

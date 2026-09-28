@@ -1,0 +1,33 @@
+{{!< default}}
+{{!-- Items Needed: marigold-100 band (design system colour table).
+      Photo hero, the two ways to give items, then the shopping list (pulled live from the
+      Amazon Wishlist post, turned into item tiles by assets/js/site.js) beside the sign-up form. --}}
+{{#post}}
+{{> "page-hero-split" band="india" eyebrow="Food drive sign-up" sub="Every packing event needs bread, peanut butter, jelly, chips and more. Pick what you can give, and it becomes meals at the next event." cta_label="Sign up to give items" cta_url="#items-form" photo="2026/03/WhatsApp-Image-2026-03-13-at-5.30.30-PM.jpeg" photo_alt="Cases of snacks and chocolate milk bought with donations, stacked and ready to pack"}}
+{{> "give-items"}}
+<article class="band-page-india {{post_class}}">
+    <div class="page-split">
+        <div class="container page-split-grid">
+            <aside class="page-split-aside" aria-label="Shopping list">
+                {{#get "posts" filter="slug:we-have-an-amazon-wish-list" limit="1"}}
+                    {{#foreach posts}}
+                        <div class="aside-card band-india gh-content shopping-list">
+                            <p class="t-eyebrow">Shopping list</p>
+                            <h3 class="t-h3">What one packing event needs</h3>
+                            {{content}}
+                        </div>
+                    {{/foreach}}
+                {{else}}
+                    <div class="aside-card band-india">
+                        <p class="t-eyebrow">Shopping list</p>
+                        <a class="btn btn-secondary" href="{{@custom.wishlist_url}}">Open the Amazon Wishlist</a>
+                    </div>
+                {{/get}}
+            </aside>
+            <div class="page-split-main gh-content" id="items-form">
+                {{content}}
+            </div>
+        </div>
+    </div>
+</article>
+{{/post}}

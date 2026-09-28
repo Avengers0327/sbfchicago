@@ -1,0 +1,19 @@
+{{!-- Split page hero: live title + one action beside a real photo.
+     Params: band ("india" for a marigold-100 band; optional), eyebrow, sub (used when the page has no excerpt), cta_label, cta_url,
+             photo (fallback path under /content/images, used when the page has no feature image), photo_alt --}}
+<header class="page-hero page-hero-split band-{{band}}">
+    <div class="container">
+        <div class="hero-copy">
+            <p class="t-eyebrow">{{eyebrow}}</p>
+            <h1 class="t-display">{{title}}</h1>
+            <p class="t-body-lg">{{#if custom_excerpt}}{{custom_excerpt}}{{else}}{{sub}}{{/if}}</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{{cta_url}}">{{cta_label}}</a>
+            </div>
+            <p class="next-chip"><span class="t-eyebrow">Next event</span><span>{{@custom.next_event_details}}</span></p>
+        </div>
+        <figure class="hero-photo">
+            <img src="{{#if feature_image}}{{img_url feature_image size="l"}}{{else}}{{@site.url}}/content/images/size/w1000/{{photo}}{{/if}}" alt="{{photo_alt}}">
+        </figure>
+    </div>
+</header>

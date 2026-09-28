@@ -1,0 +1,9 @@
+{{!< default}}
+<section class="error-hero">
+    <div class="container">
+        <p class="t-eyebrow error-code">Error {{statusCode}}</p>
+        <h1 class="t-h1">{{#match statusCode "404"}}We couldn't find that page{{else}}{{message}}{{/match}}</h1>
+        <p class="t-body-lg">It may have moved. Try the homepage or one of the pages in the menu.</p>
+        <a class="btn btn-secondary" href="{{@site.url}}">Go to the homepage</a>
+    </div>
+</section>

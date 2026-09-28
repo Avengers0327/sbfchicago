@@ -1,0 +1,9 @@
+{{!< default}}
+{{!-- Selectable in the editor as "Chicago band" for any future Chicago page or post --}}
+{{#post}}
+    {{#is "post"}}
+        {{> "page-body" band="chicago" eyebrow="Chicagoland" is_post=true}}
+    {{else}}
+        {{> "page-body" band="chicago" eyebrow="Chicagoland"}}
+    {{/is}}
+{{/post}}
