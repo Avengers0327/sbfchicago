@@ -306,6 +306,11 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     text-align: center;
 }
 .announcement .t-eyebrow { margin-right: var(--space-2); }
+@media (max-width: 599px) {
+    /* Keep the next-event bar to two short lines on phones */
+    .announcement, .gh-announcement-bar { padding-block: var(--space-2) !important; }
+    .announcement .t-small, .gh-announcement-bar { font-size: 13px !important; line-height: 18px !important; }
+}
 
 /* 7. Header & navigation
    -------------------------------------------------------------------------- */
@@ -1718,6 +1723,7 @@ input, select, textarea {
 }
 
 /* preview-only adjustments */
+@media (max-width: 599px) { .preview-note { font-size: 11px !important; line-height: 15px !important; padding-block: 4px !important; } }
 .preview-note { background: var(--white); border-bottom: 1px solid var(--line); padding: var(--space-2) var(--gutter); text-align: center; color: var(--ink-muted); font-size: 13px; line-height: 18px; font-weight: 500; }
 .embed-placeholder { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-8); border: 2px dashed var(--line-strong); border-radius: var(--radius-md); background: var(--cream-50); }
 .embed-placeholder .t-eyebrow { color: var(--lake-600); }

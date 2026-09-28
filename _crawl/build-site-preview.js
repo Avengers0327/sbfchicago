@@ -298,7 +298,28 @@ html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\
   return SLUGS.has(slug) ? `href="#${slug}"` : `href="https://sbfchicago.org/${slug}/"`;
 });
 
-fs.writeFileSync(path.join(OUT, 'index.html'), html);
+// Two outputs from the same page:
+// 1. preview-site/index.html: a complete HTML document for real hosting (Cloudflare Pages etc).
+//    Without the doctype and viewport tag, phones render it as a shrunken 980px desktop page.
+// 2. ../sbf-chicago-preview.html: the bare fragment for the Claude artifact viewer, which adds
+//    its own <!doctype>, <head> and viewport tag and must not get a second set.
+const titleTag = (html.match(/<title>[\s\S]*?<\/title>/) || [''])[0];
+const fullDoc = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="SBF Chicago: a youth-led nonprofit packing meals for neighbors facing hunger in Chicagoland and India.">
+${titleTag}
+<style>[hidden]{display:none!important}</style>
+</head>
+<body>
+${html.replace(titleTag, '')}
+</body>
+</html>
+`;
+fs.writeFileSync(path.join(OUT, 'index.html'), fullDoc);
+fs.writeFileSync(path.join(ROOT, 'sbf-chicago-preview.html'), html);
 fs.copyFileSync(path.join(T, 'assets/images/sbf-logo.jpg'), path.join(IMG, 'logo.jpg'));
 
 // Download images

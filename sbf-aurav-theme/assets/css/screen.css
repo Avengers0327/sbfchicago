@@ -298,6 +298,11 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     text-align: center;
 }
 .announcement .t-eyebrow { margin-right: var(--space-2); }
+@media (max-width: 599px) {
+    /* Keep the next-event bar to two short lines on phones */
+    .announcement, .gh-announcement-bar { padding-block: var(--space-2) !important; }
+    .announcement .t-small, .gh-announcement-bar { font-size: 13px !important; line-height: 18px !important; }
+}
 
 /* 7. Header & navigation
    -------------------------------------------------------------------------- */
