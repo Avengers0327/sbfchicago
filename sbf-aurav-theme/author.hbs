@@ -1,0 +1,21 @@
+{{!< default}}
+{{#author}}
+<header class="page-hero">
+    <div class="container">
+        <p class="t-eyebrow">Posts by</p>
+        <h1 class="t-h1">{{name}}</h1>
+        {{#if bio}}<p class="t-body-lg">{{bio}}</p>{{/if}}
+    </div>
+</header>
+{{/author}}
+
+<section class="section">
+    <div class="container">
+        <div class="card-grid">
+            {{#foreach posts}}
+                {{> "event-card"}}
+            {{/foreach}}
+        </div>
+        {{pagination}}
+    </div>
+</section>

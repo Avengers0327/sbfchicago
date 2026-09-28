@@ -1,0 +1,43 @@
+{{!< default}}
+{{!-- Posts. Food packing events (and anything tagged "chicago") get the Chicago band;
+     posts tagged "india" get the India band. --}}
+{{#post}}
+    {{#has tag="india"}}
+        {{> "page-body" band="india" eyebrow="India" is_post=true}}
+    {{else}}
+        {{#has tag="chicago"}}
+            {{> "page-body" band="chicago" eyebrow="Chicago food packing" is_post=true}}
+        {{else}}
+            {{#match title "~" "Food Packing"}}
+                {{> "page-body" band="chicago" eyebrow="Chicago food packing" is_post=true}}
+            {{else}}
+                {{> "page-body" eyebrow="News" is_post=true}}
+            {{/match}}
+        {{/has}}
+    {{/has}}
+{{/post}}
+
+{{> "donate-panel"}}
+
+{{#post}}
+    {{#get "posts" limit="3" filter="id:-{{id}}"}}
+        {{#if posts}}
+            <section class="section band-chicago" aria-labelledby="more-title">
+                <div class="container">
+                    <div class="section-head">
+                        <div class="stack">
+                            <p class="t-eyebrow eyebrow-chicago">Keep reading</p>
+                            <h2 class="t-h2" id="more-title">More from SBF Chicago</h2>
+                        </div>
+                        <a class="link-arrow" href="{{@site.url}}/">All updates</a>
+                    </div>
+                    <div class="card-grid">
+                        {{#foreach posts}}
+                            {{> "event-card"}}
+                        {{/foreach}}
+                    </div>
+                </div>
+            </section>
+        {{/if}}
+    {{/get}}
+{{/post}}

@@ -1,0 +1,9 @@
+{{!< default}}
+{{!-- Selectable in the editor as "India band" for any future India page or post --}}
+{{#post}}
+    {{#is "post"}}
+        {{> "page-body" band="india" eyebrow="India" is_post=true}}
+    {{else}}
+        {{> "page-body" band="india" eyebrow="India"}}
+    {{/is}}
+{{/post}}

@@ -1,0 +1,117 @@
+{
+  "name": "sbf-aurav",
+  "description": "SBF Chicago theme built on the \"Aurav Website\" design system: navy anchors, marigold acts, two cities one palette.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "SBF Chicago",
+    "email": "sbfchicago@gmail.com",
+    "url": "https://sbfchicago.org"
+  },
+  "keywords": [
+    "ghost-theme"
+  ],
+  "engines": {
+    "ghost": ">=5.0.0"
+  },
+  "config": {
+    "posts_per_page": 12,
+    "card_assets": true,
+    "image_sizes": {
+      "xs": {
+        "width": 160
+      },
+      "s": {
+        "width": 400
+      },
+      "m": {
+        "width": 720
+      },
+      "l": {
+        "width": 1120
+      },
+      "xl": {
+        "width": 2000
+      }
+    },
+    "custom": {
+      "hero_headline": {
+        "type": "text",
+        "default": "Hunger is closer than you think.",
+        "group": "homepage",
+        "description": "Homepage hero headline (display style). Sentence case."
+      },
+      "hero_subcopy": {
+        "type": "text",
+        "default": "Neighbors without a home in Chicagoland. Students with no school meal on weekends. Families and daily laborers in India. SBF packs meals for all of them.",
+        "group": "homepage"
+      },
+      "hero_image": {
+        "type": "image",
+        "group": "homepage",
+        "description": "Lead photo in the 'What it looks like' section. If empty, the newest post's feature image is used."
+      },
+      "stat_1_value": {
+        "type": "text",
+        "default": "6,100+",
+        "group": "homepage"
+      },
+      "stat_1_label": {
+        "type": "text",
+        "default": "Meals from our Chicago food drives",
+        "group": "homepage"
+      },
+      "stat_2_value": {
+        "type": "text",
+        "default": "18,500+",
+        "group": "homepage"
+      },
+      "stat_2_label": {
+        "type": "text",
+        "default": "Meals from our India food drives",
+        "group": "homepage"
+      },
+      "stat_3_value": {
+        "type": "text",
+        "default": "5,100+",
+        "group": "homepage"
+      },
+      "stat_3_label": {
+        "type": "text",
+        "default": "Peanut butter sandwiches packed, Jan to Sept 2026",
+        "group": "homepage"
+      },
+      "next_event_title": {
+        "type": "text",
+        "default": "Pack with us on October 25",
+        "group": "homepage",
+        "description": "Closing call to action. Update after each event."
+      },
+      "next_event_details": {
+        "type": "text",
+        "default": "Sunday, October 25, 2026 · 9:30 AM · National India Hub, 930 National Pkwy, Schaumburg, IL 60173",
+        "group": "homepage"
+      },
+      "donate_url": {
+        "type": "text",
+        "default": "/donations/",
+        "description": "Where every Donate button points."
+      },
+      "volunteer_url": {
+        "type": "text",
+        "default": "https://tinyurl.com/SBFVolunteerSignup",
+        "description": "Volunteer / youth-leader sign-up form."
+      },
+      "volunteer_form_embed": {
+        "type": "text",
+        "default": "https://docs.google.com/forms/d/e/1FAIpQLSeMOwTtIovGNNTHMTl8t6Crfiif5DA_1FoSgVhlEJzXZCSS2g/viewform?embedded=true",
+        "description": "Google Form embed URL (Send → <> → src). Shown on Get Involved and Youth Leadership."
+      },
+      "wishlist_url": {
+        "type": "text",
+        "default": "https://www.amazon.com/hz/wishlist/ls/20JFGIHHFZVGK",
+        "description": "Amazon Wishlist for food drives."
+      }
+    }
+  }
+}

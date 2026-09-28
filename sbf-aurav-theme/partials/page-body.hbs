@@ -1,0 +1,39 @@
+{{!-- Shared page/post body.
+     Params: band = "chicago" | "india" | "" (two-city palette rule)
+             eyebrow = label above the title
+             is_post = true to show date + reading time
+             no_hero = true when the template renders its own hero --}}
+<article class="band-page-{{#if band}}{{band}}{{else}}plain{{/if}} {{post_class}}">
+    {{#unless no_hero}}
+    <header class="page-hero{{#if band}} band-{{band}}{{/if}}">
+        <div class="container">
+            {{#if is_post}}
+                <p class="t-eyebrow"><time datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM D, YYYY"}}</time>{{#if eyebrow}} &middot; {{eyebrow}}{{/if}}</p>
+            {{else}}
+                {{#if eyebrow}}<p class="t-eyebrow">{{eyebrow}}</p>{{/if}}
+            {{/if}}
+            <h1 class="t-h1">{{title}}</h1>
+            {{#if custom_excerpt}}<p class="t-body-lg">{{custom_excerpt}}</p>{{/if}}
+            {{#if is_post}}
+                <p class="t-small page-hero-meta">
+                    {{#if primary_author}}<span>By {{primary_author.name}}</span>{{/if}}
+                    <span>{{reading_time}}</span>
+                </p>
+                {{#if feature_image}}
+                    <figure class="page-hero-feature">
+                        <img
+                            srcset="{{img_url feature_image size="m"}} 720w, {{img_url feature_image size="l"}} 1120w, {{img_url feature_image size="xl"}} 2000w"
+                            sizes="(min-width: 920px) 880px, 100vw"
+                            src="{{img_url feature_image size="l"}}"
+                            alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}">
+                    </figure>
+                {{/if}}
+            {{/if}}
+        </div>
+    </header>
+    {{/unless}}
+
+    <div class="gh-canvas gh-content">
+        {{content}}
+    </div>
+</article>

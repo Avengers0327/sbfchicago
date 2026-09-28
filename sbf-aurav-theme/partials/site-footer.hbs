@@ -1,0 +1,35 @@
+<footer class="site-footer on-navy">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-contact">
+                <a class="brand" href="{{@site.url}}">
+                    <img class="brand-mark" src="{{#if @site.icon}}{{img_url @site.icon size="xs"}}{{else}}{{asset "images/sbf-logo.jpg"}}{{/if}}" alt="" width="44" height="44">
+                    <span class="brand-name">{{@site.title}}</span>
+                </a>
+                <p class="footer-tagline">Pack. Feed. Make a difference.</p>
+                <p class="t-small">Youth-powered. Community-fueled. Hunger-fought. A youth-led nonprofit in Chicago's Northwest suburbs, fighting hunger in Chicagoland and India.</p>
+            </div>
+
+            <div>
+                <p class="t-eyebrow">Support</p>
+                {{navigation type="secondary"}}
+            </div>
+
+            <div>
+                <p class="t-eyebrow">Stay in touch</p>
+                <ul role="list">
+                    <li><a href="mailto:sbfchicago@gmail.com">sbfchicago@gmail.com</a></li>
+                    <li><a href="https://www.instagram.com/sbfchicago">Instagram</a></li>
+                    <li><a href="https://www.facebook.com/profile.php?id=61592796391174">Facebook</a></li>
+                    <li><a href="https://www.linkedin.com/company/sbf-chicago/">LinkedIn</a></li>
+                    {{#if @site.members_enabled}}{{#unless @member}}<li><a href="#/portal/signup" data-portal="signup">Subscribe for updates</a></li>{{/unless}}{{/if}}
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <span>{{@site.title}} &copy; {{date format="YYYY"}}</span>
+            <a href="https://ghost.org/" target="_blank" rel="noopener">Powered by Ghost</a>
+        </div>
+    </div>
+</footer>

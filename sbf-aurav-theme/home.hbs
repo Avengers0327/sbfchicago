@@ -1,0 +1,261 @@
+{{!< default}}
+{{!-- Homepage story, in four acts:
+     1. See the problem   (who goes hungry near us: homelessness first, then students, then India)
+     2. Feel the problem  (what partners told us, in their words)
+     3. See the solution  (the same week, with the gap filled; how it works; impact)
+     4. Feel the solution (the people who pack; the next event)
+     Every claim comes from sbfchicago.org's own pages and posts; sources are noted inline. --}}
+
+{{!-- ACT 1 · SEE THE PROBLEM ------------------------------------------------ --}}
+<section class="story-hero" aria-labelledby="hero-title">
+    <div class="container">
+        <p class="t-eyebrow">Who goes hungry near us</p>
+        <h1 class="t-display" id="hero-title">{{@custom.hero_headline}}</h1>
+        <p class="t-body-lg">{{@custom.hero_subcopy}}</p>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="{{@custom.donate_url}}">Donate now</a>
+            <a class="scroll-cue" href="#how-we-help">See how we reach them</a>
+        </div>
+        <p class="t-small t-muted hero-note">Short on time? Donate, and the SBF team buys the food on your behalf.</p>
+
+        <div class="who-feed">
+            <article class="who who-lead band-chicago">
+                <img src="{{@site.url}}/content/images/size/w1000/2026/03/WhatsApp-Image-2026-03-20-at-8.40.58-AM.jpeg" alt="A Night Ministry volunteer in the snow holding SBF brown bags beside the Night Ministry van" loading="lazy">
+                <div class="who-body">
+                    <p class="t-eyebrow">Chicagoland &middot; most of what we pack</p>
+                    <h2 class="t-h2">Neighbors facing homelessness</h2>
+                    <p class="who-stat"><span class="t-stat">5,100+</span> <span>sandwiches</span></p>
+                    <p class="who-stat"><span class="t-stat">2,600+</span> <span>brown bags</span></p>
+                    <p class="t-small">Through the Night Ministry, Food For Friends, Wayside Cross Ministries and other partners.</p>
+                </div>
+            </article>
+            <article class="who band-chicago">
+                <p class="t-eyebrow">Palatine &amp; Hoffman Estates</p>
+                <h2 class="t-h3">Students with no school meal on weekends</h2>
+                <span aria-hidden="true"></span>
+                <p class="who-stat"><span class="t-stat">1,000+</span> <span>weekend meal bags</span></p>
+            </article>
+            <article class="who band-india">
+                <p class="t-eyebrow">India</p>
+                <h2 class="t-h3">Families, daily laborers and children</h2>
+                <span aria-hidden="true"></span>
+                <p class="who-stat"><span class="t-stat">18,500+</span> <span>meals</span></p>
+            </article>
+        </div>
+        <p class="t-small t-muted">January to September 2026.</p>
+    </div>
+</section>
+
+{{!-- ACT 2 · FEEL THE PROBLEM ----------------------------------------------- --}}
+<section class="act act-dark" aria-labelledby="feel-title">
+    <div class="container">
+        <div class="act-head">
+            <p class="t-eyebrow">In their words</p>
+            <h2 class="t-h1" id="feel-title">It's along the Chicago River. It's in Palatine. It's at Labor Chowk in Gurugram.</h2>
+        </div>
+        <div class="feel-grid">
+            <figure class="feel-photo">
+                <img src="{{@site.url}}/content/images/size/w1000/2026/08/WhatsApp-Image-2026-08-10-at-10.05.13-PM.jpeg" alt="SBF volunteers, seen from behind, handing out brown bags in a hotel hallway" loading="lazy">
+                <figcaption>SBF volunteers serving brown bags at the Annex men's hotel, a homeless shelter in Chicago, August 2026.</figcaption>
+            </figure>
+            <ol class="moments" role="list">
+                <li class="moment">
+                    <p class="t-eyebrow">Chicago &middot; Chancez NFP</p>
+                    <blockquote>&ldquo;Half were distributed at the Lexington Hotel, where many individuals experiencing homelessness are currently staying, and the other half were shared along the river and throughout the park&hellip;&rdquo;</blockquote>
+                    <cite>Chancez NFP, on 150 SBF bags, May 21, 2026</cite>
+                </li>
+                <li class="moment">
+                    <p class="t-eyebrow">Palatine High School &middot; March 2026</p>
+                    <p class="moment-statement">Their shelf was completely empty.</p>
+                    <p>That's what the school's coordinator told us when our 200 weekend bags arrived, just in time. She planned to give each student two bags, so they would have meals over spring break.</p>
+                </li>
+                <li class="moment">
+                    <p class="t-eyebrow">Gurugram, India &middot; Labor Chowk</p>
+                    <p>Lunch for about 150 to 200 daily laborers, plus their kids and families. One of seven SBF feeding projects in India.</p>
+                </li>
+            </ol>
+        </div>
+    </div>
+</section>
+
+{{!-- ACT 3 · SEE THE SOLUTION ---------------------------------------------- --}}
+<section class="act" id="how-we-help" aria-labelledby="solve-title">
+    <div class="container">
+        <div class="act-head">
+            <p class="t-eyebrow">How SBF closes the gap</p>
+            <h2 class="t-h1" id="solve-title">Once a month, we pack the meals that reach all of them.</h2>
+        </div>
+
+        <div class="solve-grid">
+            <div class="week-wrap">
+                <p class="t-eyebrow">For students: the weekend gap, filled</p>
+                <ol class="week will-fill" aria-label="A school week for a student who relies on school lunch, with SBF weekend bags on Saturday and Sunday">
+                    <li class="day is-lunch"><span class="t-eyebrow">Mon</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
+                    <li class="day is-lunch"><span class="t-eyebrow">Tue</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
+                    <li class="day is-lunch"><span class="t-eyebrow">Wed</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
+                    <li class="day is-lunch"><span class="t-eyebrow">Thu</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
+                    <li class="day is-lunch"><span class="t-eyebrow">Fri</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
+                    <li class="day is-sbf"><span class="t-eyebrow">Sat</span>{{> "icon-bag"}}<span class="day-label">SBF weekend bag</span></li>
+                    <li class="day is-sbf"><span class="t-eyebrow">Sun</span>{{> "icon-bag"}}<span class="day-label">SBF weekend bag</span></li>
+                </ol>
+                <p class="week-legend"><span><i class="k-lunch"></i>School lunch</span><span><i class="k-sbf"></i>SBF weekend meal bag (where there used to be no meal)</span></p>
+            </div>
+
+            <div class="bag-card">
+                <p class="t-eyebrow">What's in a weekend bag</p>
+                <dl>
+                    <div><dt>2 proteins</dt><dd>Mac and cheese, ramen</dd></div>
+                    <div><dt>2 healthy snacks</dt><dd>Skinny Pop, Goldfish</dd></div>
+                    <div><dt>2 breakfasts</dt><dd>Chocolate milk, granola</dd></div>
+                </dl>
+                <p class="t-small t-muted">Packed with Blessings in a Backpack for Hoffman Estates High School students, Feb 2026.</p>
+            </div>
+        </div>
+
+        <ol class="steps" aria-label="How it works">
+            <li class="step">
+                <img src="{{@site.url}}/content/images/size/w1000/2026/03/WhatsApp-Image-2026-03-13-at-5.30.30-PM.jpeg" alt="Cases of snacks and meals bought with donations, stacked and ready to pack" loading="lazy">
+                <p class="t-eyebrow">Step 1 &middot; You give</p>
+                <h3 class="t-h3">Donations become groceries</h3>
+                <p>Give through our donation form or Zelle, or send items from our <a href="{{@custom.wishlist_url}}">Amazon Wishlist</a>. The SBF team buys food on your behalf.</p>
+            </li>
+            <li class="step">
+                <img src="{{@site.url}}/content/images/size/w1000/2026/09/IMG_6241.JPEG" alt="Volunteers filling brown bags at a long table" loading="lazy">
+                <p class="t-eyebrow">Step 2 &middot; We pack</p>
+                <h3 class="t-h3">Up to 1,200+ meals in one afternoon</h3>
+                <p>At our recent events, 45 to 60+ volunteers pack sandwiches, brown bags and weekend meal bags at National India Hub in Schaumburg.</p>
+            </li>
+            <li class="step">
+                <img src="{{@site.url}}/content/images/size/w1000/2026/04/WhatsApp-Image-2026-04-18-at-8.30.08-AM.jpeg" alt="Two students wheeling boxes of packed bags into a school" loading="lazy">
+                <p class="t-eyebrow">Step 3 &middot; Partners deliver</p>
+                <h3 class="t-h3">Meals reach people who need them</h3>
+                <p>The Night Ministry, Food For Friends and Blessings in a Backpack bring the meals to people facing homelessness and to students at Palatine and Hoffman Estates High Schools.</p>
+            </li>
+        </ol>
+
+        <div class="solve-stats">
+            <p class="t-eyebrow">So far in 2026</p>
+            <div class="stat-band">
+                <div class="stat">
+                    <span class="t-stat">{{@custom.stat_1_value}}</span>
+                    <span class="t-small">{{@custom.stat_1_label}}</span>
+                </div>
+                <div class="stat">
+                    <span class="t-stat">{{@custom.stat_2_value}}</span>
+                    <span class="t-small">{{@custom.stat_2_label}}</span>
+                </div>
+                <div class="stat">
+                    <span class="t-stat">{{@custom.stat_3_value}}</span>
+                    <span class="t-small">{{@custom.stat_3_label}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="act act-tight-top" aria-labelledby="cities-title">
+    <div class="container">
+        <div class="section-head">
+            <div class="stack">
+                <p class="t-eyebrow t-muted">Two cities, one mission</p>
+                <h2 class="t-h2" id="cities-title">Local hearts. Global impact.</h2>
+            </div>
+        </div>
+        <div class="cities">
+            <article class="city band-chicago">
+                <p class="t-eyebrow">Chicagoland</p>
+                <h3 class="t-h2">Monthly food packing events</h3>
+                <p>Sandwiches and brown bags for people facing homelessness, and weekend meal bags for Palatine and Hoffman Estates High School students.</p>
+                <a class="link-arrow" href="{{@site.url}}/who-we-serve-chicago/">See Chicago projects</a>
+            </article>
+            <article class="city band-india">
+                <p class="t-eyebrow">India</p>
+                <h3 class="t-h2">Seven feeding projects</h3>
+                <p>A blind school, two slum schools, Labor Chowk, Apna Ghar, an orphanage in Shirdi, feeding cows and an animal rescue shelter, across New Delhi, Gurugram, Pratapgarh and Shirdi.</p>
+                <a class="link-arrow" href="{{@site.url}}/who-we-serve-india/">See India projects</a>
+            </article>
+        </div>
+    </div>
+</section>
+
+{{!-- ACT 4 · FEEL THE SOLUTION ---------------------------------------------- --}}
+<section class="act band-chicago" aria-labelledby="together-title">
+    <div class="container">
+        <div class="act-head">
+            <p class="t-eyebrow">What it looks like, every month</p>
+            <h2 class="t-h1" id="together-title">Youth-powered. Community-fueled. Hunger-fought.</h2>
+        </div>
+
+        <div class="mosaic">
+            {{#if @custom.hero_image}}
+                <figure class="tile-lead">
+                    <img src="{{img_url @custom.hero_image size="l"}}" alt="SBF Chicago volunteers at a food packing event" loading="lazy">
+                </figure>
+            {{else}}
+                {{#get "posts" limit="1" filter="feature_image:-null"}}
+                    {{#foreach posts}}
+                        <figure class="tile-lead">
+                            <img src="{{img_url feature_image size="l"}}" alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}Volunteers at the {{title}}{{/if}}" loading="lazy">
+                            <figcaption>{{title}}</figcaption>
+                        </figure>
+                    {{/foreach}}
+                {{/get}}
+            {{/if}}
+            <figure>
+                <img src="{{@site.url}}/content/images/size/w720/2026/05/WhatsApp-Image-2026-05-17-at-4.09.58-PM.jpeg" alt="Smiling teen volunteers making sandwiches" loading="lazy">
+                <figcaption>May 17: 55+ people, 975+ meals</figcaption>
+            </figure>
+            <figure>
+                <img src="{{@site.url}}/content/images/size/w720/2026/08/WhatsApp-Image-2026-08-10-at-1.47.30-PM--2-.jpeg" alt="A large circle of volunteers at the August 9 packing event" loading="lazy">
+                <figcaption>Aug 9: 60+ people, 1,200+ meals</figcaption>
+            </figure>
+            <figure>
+                <img src="{{@site.url}}/content/images/size/w720/2026/05/WhatsApp-Image-2026-05-17-at-4.09.44-PM.jpeg" alt="Volunteers packing brown bags together" loading="lazy">
+                <figcaption>Youth leaders run every event</figcaption>
+            </figure>
+            <figure>
+                <img src="{{@site.url}}/content/images/size/w720/2026/09/IMG_6330-1.jpeg" alt="Palatine High School's Instagram story thanking SBF for food pantry donations" loading="lazy">
+                <figcaption>Palatine High School said thank you, Sept 2026</figcaption>
+            </figure>
+        </div>
+
+        <figure class="feel-quote">
+            <blockquote>&ldquo;Thank you Rani and Rashmi for partnering with Food For Friends and providing 150 sack lunches of PBJ, power bar and chips for the homeless men at the Annex Hotel on Clarke Street in the downtown loop of Chicago.&rdquo;</blockquote>
+            <figcaption><cite>Dan, founder of Food For Friends</cite></figcaption>
+        </figure>
+    </div>
+</section>
+
+<section class="section" aria-labelledby="events-title">
+    <div class="container">
+        <div class="section-head">
+            <div class="stack">
+                <p class="t-eyebrow eyebrow-chicago">From the packing table</p>
+                <h2 class="t-h2" id="events-title">Recent events</h2>
+            </div>
+            <a class="link-arrow" href="{{@site.url}}/who-we-serve-chicago/">All Chicago projects</a>
+        </div>
+        <div class="card-grid">
+            {{#foreach posts limit="3"}}
+                {{> "event-card"}}
+            {{/foreach}}
+        </div>
+    </div>
+</section>
+
+<section class="post-cta next-event" aria-labelledby="next-title">
+    <div class="container">
+        <div class="cta-panel band-navy on-navy">
+            <div class="stack">
+                <p class="t-eyebrow">Next food packing event</p>
+                <h2 class="t-h1" id="next-title">{{@custom.next_event_title}}</h2>
+                <p class="event-when">{{@custom.next_event_details}}</p>
+                <p class="t-body">Can't make it? Your donation still fills the weekend. We also accept Zelle at sbfchicago@gmail.com, or <a class="wishlist-link" href="{{@custom.wishlist_url}}">send items from the Amazon Wishlist</a>.</p>
+            </div>
+            <div class="cta-actions">
+                <a class="btn btn-primary" href="{{@custom.donate_url}}">Donate</a>
+                <a class="btn btn-secondary" href="{{@custom.volunteer_url}}">Sign up to pack</a>
+            </div>
+        </div>
+    </div>
+</section>

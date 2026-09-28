@@ -1,0 +1,19 @@
+{{!< default}}
+{{!-- Post archive (/page/2/ etc.). The homepage itself is home.hbs. --}}
+<header class="page-hero">
+    <div class="container">
+        <p class="t-eyebrow">Updates</p>
+        <h1 class="t-h1">Events and news</h1>
+    </div>
+</header>
+
+<section class="section band-chicago">
+    <div class="container">
+        <div class="card-grid">
+            {{#foreach posts}}
+                {{> "event-card"}}
+            {{/foreach}}
+        </div>
+        {{pagination}}
+    </div>
+</section>

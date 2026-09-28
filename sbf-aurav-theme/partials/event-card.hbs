@@ -1,0 +1,23 @@
+{{!-- Event card recipe: white, radius-md, shadow-sm, photo on top,
+     eyebrow date in lake-600, title in h3. Used for every post. --}}
+<article class="event-card {{post_class}}">
+    {{#if feature_image}}
+        <div class="event-card-media">
+            <img
+                srcset="{{img_url feature_image size="s"}} 400w, {{img_url feature_image size="m"}} 720w"
+                sizes="(min-width: 1120px) 360px, (min-width: 700px) 50vw, 100vw"
+                src="{{img_url feature_image size="m"}}"
+                alt="{{#if feature_image_alt}}{{feature_image_alt}}{{else}}{{title}}{{/if}}"
+                loading="lazy">
+        </div>
+    {{/if}}
+    <div class="event-card-body">
+        <time class="t-eyebrow event-card-date" datetime="{{date format="YYYY-MM-DD"}}">{{date format="MMM D, YYYY"}}</time>
+        <h3 class="t-h3 event-card-title"><a href="{{url}}">{{title}}</a></h3>
+        <p class="event-card-excerpt">{{excerpt words="26"}}</p>
+        <p class="t-small event-card-meta">
+            {{#match title "~" "Food Packing"}}Chicago food packing{{else}}{{#match title "~" "India"}}India projects{{else}}Update{{/match}}{{/match}}
+            &middot; {{reading_time}}
+        </p>
+    </div>
+</article>
