@@ -1742,6 +1742,10 @@ input, select, textarea {
 .membership[data-billing="yearly"] .tier-price[data-period="monthly"] { display: none; }
 .membership-manage { margin-top: var(--space-6); color: var(--ink-muted); max-width: 60ch; }
 
+.membership-note { display: grid; gap: var(--space-2); max-width: 70ch; margin-bottom: var(--space-8); padding: var(--space-4) var(--space-6); background: var(--lake-100); border-left: 4px solid var(--navy-700); border-radius: var(--radius-sm); }
+.membership-note p { margin: 0; }
+.membership-note .t-eyebrow { color: var(--navy-900); }
+
 /* preview-only adjustments */
 .embed-placeholder { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-8); border: 2px dashed var(--line-strong); border-radius: var(--radius-md); background: var(--cream-50); }
 .embed-placeholder .t-eyebrow { color: var(--lake-600); }
@@ -2545,6 +2549,10 @@ input, select, textarea {
     </header>
 <section class="membership" aria-labelledby="membership-plans">
     <div class="container">
+        <aside class="membership-note" role="note">
+            <p class="t-eyebrow">A note on this preview</p>
+            <p>This is a development version, so it shows how memberships would look and read. Making them work for real (live signup, payments and a mailing list) is separate build work, and I&rsquo;d like to start it once the design is finalized and we&rsquo;ve agreed to move forward together. Until then, the Join buttons are placeholders.</p>
+        </aside>
         <div class="membership-head">
             <h2 class="t-h2" id="membership-plans">Choose a plan</h2>
             <div class="billing-toggle" role="group" aria-label="Billing period">
