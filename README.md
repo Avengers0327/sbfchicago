@@ -79,7 +79,7 @@ node build-site-preview.js
 
 ## Forms and donations
 
-Donations use Zeffy and the sign-up forms use Google Forms. Both are embedded and work on any host. In `preview-site`, they appear as placeholder boxes with "Open the form" links.
+Donations use Zeffy and the sign-up forms use Google Forms. Both are embedded and work on any host. They load live on the deployed site.
 
 ## Memberships
 
