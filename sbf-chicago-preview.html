@@ -1743,15 +1743,15 @@ input, select, textarea {
 .membership-manage { margin-top: var(--space-6); color: var(--ink-muted); max-width: 60ch; }
 
 /* preview-only adjustments */
-@media (max-width: 599px) { .preview-note { font-size: 11px !important; line-height: 15px !important; padding-block: 4px !important; } }
-.preview-note { background: var(--white); border-bottom: 1px solid var(--line); padding: var(--space-2) var(--gutter); text-align: center; color: var(--ink-muted); font-size: 13px; line-height: 18px; font-weight: 500; }
 .embed-placeholder { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-8); border: 2px dashed var(--line-strong); border-radius: var(--radius-md); background: var(--cream-50); }
 .embed-placeholder .t-eyebrow { color: var(--lake-600); }
+.form-embed iframe { display: block; width: 100%; height: 900px; border: 0; border-radius: var(--radius-md); background: var(--white); }
+.form-embed-zeffy iframe { height: 760px; }
+@media (max-width: 599px) { .form-embed-zeffy iframe { height: 900px; } }
 .site-header { top: env(safe-area-inset-top, 0px); }
 .hero-photo img { object-position: center 70%; }
 </style>
 
-<div class="preview-note">Design preview. Pages are shown after the content checklist; the donation form, sign-up form and videos load on the live site.</div>
 <div class="announcement" role="region" aria-label="Announcement">
   <span class="t-small">Next Food Packing Event: October 25, 2026 at 9:30a at National India Hub, 930 National Pkwy, Schaumburg, IL 60173</span>
 </div>
@@ -2373,7 +2373,9 @@ input, select, textarea {
 <!--kg-card-begin: html-->
 
 
-<div class="embed-placeholder"><p class="t-eyebrow">Google Form</p><p>The item sign-up form loads here on sbfchicago.org, exactly as it does today.</p><a class="btn btn-secondary btn-sm" href="https://docs.google.com/forms/d/e/1FAIpQLSdBzIJgPWj4-WNd3ginKpRrD8fkD0ydb2FXmE8xsy3TneNgSg/viewform?">Open the form</a></div>
+<div id="form-top" style="width: 100%; margin: 1.5em 0; clear: both;">
+  <div class="form-embed"><iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdBzIJgPWj4-WNd3ginKpRrD8fkD0ydb2FXmE8xsy3TneNgSg/viewform?embedded=true" frameborder="0" marginheight="0" marginwidth="0" style="display: block !important; margin-left: auto !important; margin-right: auto !important; max-width: 100%;" title="Item sign-up form" loading="lazy">Loading…</iframe></div>
+</div>
 <!--kg-card-end: html-->
 <hr>
 <!--kg-card-begin: html-->
@@ -2450,7 +2452,7 @@ input, select, textarea {
                 <p class="t-small t-muted">Form not loading? <a href="https://tinyurl.com/SBFVolunteerSignup">Open it in a new tab</a>.</p>
             </div>
             <div class="signup-frame">
-                <div class="embed-placeholder"><p class="t-eyebrow">Google Form embedded here</p><p>On sbfchicago.org the full volunteer sign-up form (10 questions) appears right here, so people can sign up without leaving the page. The preview sandbox can't load other sites' forms.</p><a class="btn btn-secondary btn-sm" href="https://tinyurl.com/SBFVolunteerSignup">Open the real form</a></div>
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeMOwTtIovGNNTHMTl8t6Crfiif5DA_1FoSgVhlEJzXZCSS2g/viewform?embedded=true" title="SBF food packing event sign-up form" loading="lazy">Loading…</iframe>
             </div>
         </div>
     </div>
@@ -2518,7 +2520,7 @@ input, select, textarea {
                 <p class="t-small t-muted">Form not loading? <a href="https://tinyurl.com/SBFVolunteerSignup">Open it in a new tab</a>.</p>
             </div>
             <div class="signup-frame">
-                <div class="embed-placeholder"><p class="t-eyebrow">Google Form embedded here</p><p>On sbfchicago.org the full volunteer sign-up form (10 questions) appears right here, so people can sign up without leaving the page. The preview sandbox can't load other sites' forms.</p><a class="btn btn-secondary btn-sm" href="https://tinyurl.com/SBFVolunteerSignup">Open the real form</a></div>
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeMOwTtIovGNNTHMTl8t6Crfiif5DA_1FoSgVhlEJzXZCSS2g/viewform?embedded=true" title="SBF food packing event sign-up form" loading="lazy">Loading…</iframe>
             </div>
         </div>
     </div>
@@ -2599,7 +2601,7 @@ input, select, textarea {
         <div class="page-split-main gh-content">
         <p>Want to impact lives of people by helping us provide them meals?</p><p><strong>Note on checkout:</strong> Zeffy is 100% free to our organization, so they ask for an optional contribution to cover credit card fees. If you do not wish to tip, select <strong>"Other"</strong> in the dropdown and enter <strong>$0</strong>.</p>
 <!--kg-card-begin: html-->
-<div class="embed-placeholder"><p class="t-eyebrow">Zeffy donation form</p><p>The secure Zeffy form loads here on sbfchicago.org, exactly as it does today.</p><a class="btn btn-secondary btn-sm" href="https://www.zeffy.com/en-US/donation-form/sbf-chicago-donation">Open the form</a></div>
+<div class="form-embed form-embed-zeffy"><iframe src="https://www.zeffy.com/embed/donation-form/sbf-chicago-donation" title="Donation form powered by Zeffy" allowpaymentrequest="" allowtransparency="true" loading="lazy"></iframe></div>
 <!--kg-card-end: html-->
 <h3 id="we-also-accept-zelle-at-sbfchicagogmailcom"><strong>We also accept Zelle at </strong><em>sbfchicago@gmail.com</em></h3><hr><hr>
     </div>
@@ -2640,7 +2642,7 @@ input, select, textarea {
             </div>
         </div><hr><p>The Youth Leaders for this event were <strong>our Junior Board and Executive Team </strong>members<strong>. </strong> We had <strong>over 60+ people helping to pack 1200+ meals! </strong>We could not have done this without your support. </p><p>Through our partnership with <strong>Food For Friends</strong>, we were able to distribute the meals we packed to <strong>Chancez NFP</strong> and <strong>House of Restoration Community Outreach</strong>. They are both doing great work helping the underserved in Elgin, IL and surrounding area. We also provided meals to the <strong>Annex Men's Hotel </strong>- a men's homeless shelter in the city of Chicago. More information for all these organizations can be found here. </p><div class="kg-card kg-button-card kg-align-center"><a href="https://www.foodforfriends.org/?ref=sbfchicago.org" class="kg-btn kg-btn-accent">https://www.foodforfriends.org/</a></div><div class="kg-card kg-button-card kg-align-center"><a href="https://chanceznfp.org/?ref=sbfchicago.org" class="kg-btn kg-btn-accent">https://chanceznfp.org/</a></div><div class="kg-card kg-button-card kg-align-center"><a href="https://www.houseofrestorationinc.org/?ref=sbfchicago.org" class="kg-btn kg-btn-accent">https://www.houseofrestorationinc.org/</a></div><p><strong>The Night Ministry</strong>&nbsp;is a Chicago-based organization whose mission is to provide human connection, housing support, and health care to members of our community who are unhoused or experiencing poverty.</p><div class="kg-card kg-button-card kg-align-center"><a href="https://thenightministry.org/?ref=sbfchicago.org" class="kg-btn kg-btn-accent">https://thenightministry.org/</a></div><p>Here are some pictures from the event. </p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="img/105.jpg" class="kg-image" alt="" loading="lazy" width="1024" height="768"><figcaption><span>Our Junior Board introducing two new members (Aarin Mehta and Amaya Arora)</span></figcaption></figure><hr><figure class="kg-card kg-gallery-card kg-width-wide"><div class="kg-gallery-container"><div class="kg-gallery-row"><div class="kg-gallery-image"><img src="img/106.jpg" width="1024" height="768" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/089.jpg" width="768" height="1024" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/107.jpg" width="1024" height="768" loading="lazy" alt=""></div></div><div class="kg-gallery-row"><div class="kg-gallery-image"><img src="img/108.jpg" width="1024" height="768" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/109.jpg" width="768" height="1024" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/110.jpg" width="768" height="1024" loading="lazy" alt=""></div></div><div class="kg-gallery-row"><div class="kg-gallery-image"><img src="img/111.jpg" width="768" height="1024" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/112.jpg" width="1024" height="768" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/113.jpg" width="768" height="1024" loading="lazy" alt=""></div></div></div></figure><hr><figure class="kg-card kg-gallery-card kg-width-wide"><div class="kg-gallery-container"><div class="kg-gallery-row"><div class="kg-gallery-image"><img src="img/114.jpg" width="1200" height="1600" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/115.jpg" width="1200" height="1600" loading="lazy" alt=""></div><div class="kg-gallery-image"><img src="img/116.jpg" width="1200" height="1600" loading="lazy" alt=""></div></div></div></figure><figure class="kg-card kg-image-card kg-card-hascaption"><img class="kg-image" src="img/102.jpg" alt="Video thumbnail" loading="lazy"><figcaption>Video plays on sbfchicago.org</figcaption></figure><p>COMING UP!! Look out for more information on our upcoming fundraisers:</p><figure class="kg-card kg-image-card"><img src="img/117.png" class="kg-image" alt="" loading="lazy" width="873" height="488"></figure><p>The Mayor of Schaumburg was also present to encourage our youth(s)!</p>
 <!--kg-card-begin: html-->
-<div class="embed-placeholder"><p class="t-eyebrow">Embedded post</p><p>The Facebook post embed loads here on sbfchicago.org.</p></div>
+<iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fpermalink.php%3Fstory_fbid%3Dpfbid0gXUtFtRMaXNKHUNhT2LPYtQpqSaBgt2QNppdNFSwmDDsxGoFVrRPnqACDBAnSSdal%26id%3D61592796391174&amp;show_text=true&amp;width=500" width="500" height="734" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
 <!--kg-card-end: html-->
 <div class="kg-card kg-header-card kg-v2 kg-width-full kg-content-wide " style="background-color: #000000;" data-background-color="#000000">
             

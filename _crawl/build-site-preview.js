@@ -74,19 +74,13 @@ function transform(html, doc) {
     a.replaceWith(doc.createTextNode(decodeCf(n.getAttribute('data-cfemail'))));
   });
 
-  // Embeds can't run inside the preview sandbox → labelled placeholders
+  // Live embeds: Zeffy's script-based embed becomes a plain iframe; Google Forms and Facebook iframes stay
   box.querySelectorAll('[data-zeffy-embed]').forEach(n => {
-    const card = n.parentElement;
-    replaceWith(card, `<div class="embed-placeholder"><p class="t-eyebrow">Zeffy donation form</p><p>The secure Zeffy form loads here on sbfchicago.org, exactly as it does today.</p><a class="btn btn-secondary btn-sm" href="https://www.zeffy.com/en-US/donation-form/sbf-chicago-donation">Open the form</a></div>`);
+    replaceWith(n.parentElement, '<div class="form-embed form-embed-zeffy"><iframe src="https://www.zeffy.com/embed/donation-form/sbf-chicago-donation" title="Donation form powered by Zeffy" allowpaymentrequest allowtransparency="true" loading="lazy"></iframe></div>');
   });
-  box.querySelectorAll('iframe').forEach(f => {
-    const src = f.getAttribute('src') || '';
-    const holder = f.closest('#form-top') || f;
-    if (/docs\.google\.com\/forms/.test(src)) {
-      replaceWith(holder, `<div class="embed-placeholder"><p class="t-eyebrow">Google Form</p><p>The item sign-up form loads here on sbfchicago.org, exactly as it does today.</p><a class="btn btn-secondary btn-sm" href="${src.replace('embedded=true', '')}">Open the form</a></div>`);
-    } else {
-      replaceWith(holder, `<div class="embed-placeholder"><p class="t-eyebrow">Embedded post</p><p>The Facebook post embed loads here on sbfchicago.org.</p></div>`);
-    }
+  box.querySelectorAll('iframe[src*="docs.google.com/forms"]').forEach(f => {
+    f.removeAttribute('width'); f.removeAttribute('height'); f.setAttribute('title', 'Item sign-up form'); f.setAttribute('loading', 'lazy');
+    const w = doc.createElement('div'); w.className = 'form-embed'; f.replaceWith(w); w.appendChild(f);
   });
   box.querySelectorAll('.kg-video-card').forEach(v => {
     const thumb = v.getAttribute('data-kg-thumbnail');
@@ -168,8 +162,7 @@ function partialParams(slug, name) {
 function signupSection(slug) {
   const params = partialParams(slug, 'signup-form');
   if (!params) return '';
-  return renderPartial('signup-form', params).replace(/<iframe[\s\S]*?<\/iframe>/,
-    '<div class="embed-placeholder"><p class="t-eyebrow">Google Form embedded here</p><p>On sbfchicago.org the full volunteer sign-up form (10 questions) appears right here, so people can sign up without leaving the page. The preview sandbox can\'t load other sites\' forms.</p><a class="btn btn-secondary btn-sm" href="https://tinyurl.com/SBFVolunteerSignup">Open the real form</a></div>');
+  return renderPartial('signup-form', params);
 }
 
 function shell(p, content, doc) {
