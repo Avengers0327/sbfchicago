@@ -316,7 +316,15 @@ ${html.replace(titleTag, '')}
 </html>
 `;
 fs.writeFileSync(path.join(OUT, 'index.html'), fullDoc);
-fs.writeFileSync(path.join(ROOT, 'sbf-chicago-preview.html'), html);
+// The Claude preview can't frame other sites, so its copy shows placeholders instead of the forms
+const holder = (name, href) => `<div class="embed-placeholder"><p>I need the ${name} embed code, so I cannot display the form right now.</p><a class="btn btn-secondary btn-sm" href="${href}">Open the form</a></div>`;
+const previewHtml = html.replace(/<iframe[^>]*src="([^"]+)"[^>]*>[\s\S]*?<\/iframe>/g, (m, src) => {
+  if (src.includes('docs.google.com/forms')) return holder('Google Forms', src.replace(/[?&]embedded=true/, ''));
+  if (src.includes('zeffy.com')) return holder('Zeffy', 'https://www.zeffy.com/en-US/donation-form/sbf-chicago-donation');
+  if (src.includes('facebook.com')) return '<div class="embed-placeholder"><p class="t-eyebrow">Embedded post</p><p>The Facebook post embed loads here on the live site.</p></div>';
+  return m;
+});
+fs.writeFileSync(path.join(ROOT, 'sbf-chicago-preview.html'), previewHtml);
 fs.copyFileSync(path.join(T, 'assets/images/sbf-logo.jpg'), path.join(IMG, 'logo.jpg'));
 
 // Download images
