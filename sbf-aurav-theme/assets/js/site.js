@@ -565,6 +565,32 @@
         });
     }
 
+    // Projects dropdown (desktop): click to open, Escape or an outside click to close
+    var subToggles = document.querySelectorAll('.nav-sub-toggle');
+    function closeSubs(except) {
+        Array.prototype.forEach.call(subToggles, function (t) { if (t !== except) t.setAttribute('aria-expanded', 'false'); });
+    }
+    Array.prototype.forEach.call(subToggles, function (t) {
+        t.addEventListener('click', function () {
+            var open = t.getAttribute('aria-expanded') !== 'true';
+            closeSubs(t);
+            t.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+    });
+    document.addEventListener('click', function (e) { if (!e.target.closest('.nav-has-sub')) closeSubs(); });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var openOne = document.querySelector('.nav-sub-toggle[aria-expanded="true"]');
+        if (openOne) { closeSubs(); openOne.focus(); }
+    });
+    // Mark Projects as current when one of its pages is
+    Array.prototype.forEach.call(document.querySelectorAll('.nav-has-sub'), function (li) {
+        Array.prototype.forEach.call(li.querySelectorAll('.nav-sub a'), function (a) {
+            if (a.pathname.replace(/\/$/, '') === location.pathname.replace(/\/$/, '')) a.parentNode.classList.add('nav-current');
+        });
+        if (li.querySelector('.nav-sub .nav-current')) li.classList.add('nav-current');
+    });
+
     if (header) {
         var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 4); };
         onScroll();

@@ -40,8 +40,13 @@
     <div class="container">
       <ul role="list">
         <li><a href="https://sbfchicago.org/team/">Team &amp; Vision</a></li>
-        <li><a href="https://sbfchicago.org/who-we-serve-chicago/">Chicago Projects</a></li>
-        <li><a href="https://sbfchicago.org/who-we-serve-india/">India Projects</a></li>
+        <li class="nav-projects nav-has-sub">
+            <button class="nav-sub-toggle" type="button" aria-expanded="false" aria-controls="nav-projects-menu">Projects <svg viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+            <ul class="nav-sub" id="nav-projects-menu" role="list">
+                <li class="nav-chicago-projects"><a href="https://sbfchicago.org/who-we-serve-chicago/">Chicago Projects</a></li>
+                <li class="nav-india-projects"><a href="https://sbfchicago.org/who-we-serve-india/">India Projects</a></li>
+            </ul>
+        </li>
         <li><a href="https://sbfchicago.org/items-needed/">Items Needed</a></li>
         <li><a href="https://sbfchicago.org/get-involved/">Get Involved</a></li>
         <li><a href="https://sbfchicago.org/in-the-news/">In the News</a></li>
@@ -120,9 +125,11 @@
     pages.forEach(function (p) { p.hidden = p !== target; });
     document.body.className = target.getAttribute('data-bodyclass') || '';
     Array.prototype.forEach.call(document.querySelectorAll('.site-nav li'), function (li) {
-      var on = li.querySelector('a').getAttribute('href') === '#' + target.getAttribute('data-page');
+      var links = li.querySelectorAll(':scope > a, :scope > ul a');
+      var on = Array.prototype.some.call(links, function (a) { return a.getAttribute('href') === '#' + target.getAttribute('data-page'); });
       li.classList.toggle('nav-current', on);
     });
+    Array.prototype.forEach.call(document.querySelectorAll('.nav-sub-toggle[aria-expanded="true"]'), function (b) { b.setAttribute('aria-expanded', 'false'); });
     var nav = document.getElementById('site-nav');
     if (nav) nav.classList.remove('is-open');
     if (toTop) window.scrollTo(0, 0);
