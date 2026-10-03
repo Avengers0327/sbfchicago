@@ -405,10 +405,32 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     border-bottom: 3px solid transparent;
 }
 .site-nav a:hover { color: var(--lake-600); text-decoration: underline; }
-.site-nav .nav-current a {
+.site-nav .nav-current > a,
+.site-nav .nav-current > .nav-sub-toggle {
     font-weight: 700;
     border-bottom-color: var(--lake-600);
 }
+
+/* Projects dropdown: opens on click, closes on Escape or an outside click */
+.nav-has-sub { position: relative; }
+.nav-sub-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: var(--space-3) 0;
+    border: 0; border-bottom: 3px solid transparent; background: none; cursor: pointer;
+    font: inherit; font-size: 15px; line-height: 20px; font-weight: 500; color: var(--navy-900);
+}
+.nav-sub-toggle:hover { color: var(--lake-600); }
+.nav-sub-toggle:focus-visible, .nav-sub a:focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: 2px; }
+.nav-sub-toggle svg { width: 12px; height: 12px; transition: transform 150ms ease; }
+.nav-sub-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.site-nav .nav-sub { display: none; }
+.site-nav .nav-sub-toggle[aria-expanded="true"] + .nav-sub {
+    display: block; position: absolute; top: 100%; left: calc(-1 * var(--space-4)); z-index: 30;
+    min-width: 200px; padding: var(--space-2);
+    background: var(--white); border: 1px solid var(--line-strong); border-radius: var(--radius-md);
+}
+.site-nav .nav-sub a { padding: var(--space-2) var(--space-4); border-bottom: 0; white-space: nowrap; }
+.site-nav .nav-sub .nav-current a { font-weight: 700; color: var(--lake-600); }
 
 /* Header Donate is hidden on the homepage while the hero's Donate is on screen */
 .header-donate[data-hidden="true"] { display: none; }
@@ -420,7 +442,12 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     .site-nav.is-open { display: block; }
     .site-nav ul { flex-direction: column; padding-block: var(--space-2); }
     .site-nav a { padding-block: var(--space-3); border-bottom: 0; }
-    .site-nav .nav-current a { color: var(--lake-600); text-decoration: underline; }
+    .site-nav .nav-current > a { color: var(--lake-600); text-decoration: underline; }
+    /* Phone menu: Projects is a label with its two pages listed beneath, no extra tap */
+    .nav-sub-toggle { pointer-events: none; padding-block: var(--space-3) var(--space-1); }
+    .nav-sub-toggle svg { display: none; }
+    .site-nav .nav-sub, .site-nav .nav-sub-toggle[aria-expanded] + .nav-sub { display: block; position: static; min-width: 0; padding: 0 0 var(--space-2) var(--space-4); border: 0; border-radius: 0; background: none; }
+    .site-nav .nav-sub a { padding: var(--space-2) 0; }
     .site-nav .nav-members { display: flex; gap: var(--space-4); padding-block: var(--space-4); border-top: 1px solid var(--line); }
 }
 @media (min-width: 960px) {
@@ -1789,8 +1816,13 @@ input, select, textarea {
     <div class="container">
       <ul role="list">
         <li><a href="#team">Team &amp; Vision</a></li>
-        <li><a href="#who-we-serve-chicago">Chicago Projects</a></li>
-        <li><a href="#who-we-serve-india">India Projects</a></li>
+        <li class="nav-projects nav-has-sub">
+            <button class="nav-sub-toggle" type="button" aria-expanded="false" aria-controls="nav-projects-menu">Projects <svg viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+            <ul class="nav-sub" id="nav-projects-menu" role="list">
+                <li class="nav-chicago-projects"><a href="#who-we-serve-chicago">Chicago Projects</a></li>
+                <li class="nav-india-projects"><a href="#who-we-serve-india">India Projects</a></li>
+            </ul>
+        </li>
         <li><a href="#items-needed">Items Needed</a></li>
         <li><a href="#get-involved">Get Involved</a></li>
         <li><a href="#in-the-news">In the News</a></li>
@@ -3286,6 +3318,32 @@ input, select, textarea {
         });
     }
 
+    // Projects dropdown (desktop): click to open, Escape or an outside click to close
+    var subToggles = document.querySelectorAll('.nav-sub-toggle');
+    function closeSubs(except) {
+        Array.prototype.forEach.call(subToggles, function (t) { if (t !== except) t.setAttribute('aria-expanded', 'false'); });
+    }
+    Array.prototype.forEach.call(subToggles, function (t) {
+        t.addEventListener('click', function () {
+            var open = t.getAttribute('aria-expanded') !== 'true';
+            closeSubs(t);
+            t.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+    });
+    document.addEventListener('click', function (e) { if (!e.target.closest('.nav-has-sub')) closeSubs(); });
+    document.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var openOne = document.querySelector('.nav-sub-toggle[aria-expanded="true"]');
+        if (openOne) { closeSubs(); openOne.focus(); }
+    });
+    // Mark Projects as current when one of its pages is
+    Array.prototype.forEach.call(document.querySelectorAll('.nav-has-sub'), function (li) {
+        Array.prototype.forEach.call(li.querySelectorAll('.nav-sub a'), function (a) {
+            if (a.pathname.replace(/\/$/, '') === location.pathname.replace(/\/$/, '')) a.parentNode.classList.add('nav-current');
+        });
+        if (li.querySelector('.nav-sub .nav-current')) li.classList.add('nav-current');
+    });
+
     if (header) {
         var onScroll = function () { header.classList.toggle('is-scrolled', window.scrollY > 4); };
         onScroll();
@@ -3374,9 +3432,11 @@ input, select, textarea {
     pages.forEach(function (p) { p.hidden = p !== target; });
     document.body.className = target.getAttribute('data-bodyclass') || '';
     Array.prototype.forEach.call(document.querySelectorAll('.site-nav li'), function (li) {
-      var on = li.querySelector('a').getAttribute('href') === '#' + target.getAttribute('data-page');
+      var links = li.querySelectorAll(':scope > a, :scope > ul a');
+      var on = Array.prototype.some.call(links, function (a) { return a.getAttribute('href') === '#' + target.getAttribute('data-page'); });
       li.classList.toggle('nav-current', on);
     });
+    Array.prototype.forEach.call(document.querySelectorAll('.nav-sub-toggle[aria-expanded="true"]'), function (b) { b.setAttribute('aria-expanded', 'false'); });
     var nav = document.getElementById('site-nav');
     if (nav) nav.classList.remove('is-open');
     if (toTop) window.scrollTo(0, 0);

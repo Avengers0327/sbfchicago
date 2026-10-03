@@ -387,10 +387,32 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     border-bottom: 3px solid transparent;
 }
 .site-nav a:hover { color: var(--lake-600); text-decoration: underline; }
-.site-nav .nav-current a {
+.site-nav .nav-current > a,
+.site-nav .nav-current > .nav-sub-toggle {
     font-weight: 700;
     border-bottom-color: var(--lake-600);
 }
+
+/* Projects dropdown: opens on click, closes on Escape or an outside click */
+.nav-has-sub { position: relative; }
+.nav-sub-toggle {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: var(--space-3) 0;
+    border: 0; border-bottom: 3px solid transparent; background: none; cursor: pointer;
+    font: inherit; font-size: 15px; line-height: 20px; font-weight: 500; color: var(--navy-900);
+}
+.nav-sub-toggle:hover { color: var(--lake-600); }
+.nav-sub-toggle:focus-visible, .nav-sub a:focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: 2px; }
+.nav-sub-toggle svg { width: 12px; height: 12px; transition: transform 150ms ease; }
+.nav-sub-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.site-nav .nav-sub { display: none; }
+.site-nav .nav-sub-toggle[aria-expanded="true"] + .nav-sub {
+    display: block; position: absolute; top: 100%; left: calc(-1 * var(--space-4)); z-index: 30;
+    min-width: 200px; padding: var(--space-2);
+    background: var(--white); border: 1px solid var(--line-strong); border-radius: var(--radius-md);
+}
+.site-nav .nav-sub a { padding: var(--space-2) var(--space-4); border-bottom: 0; white-space: nowrap; }
+.site-nav .nav-sub .nav-current a { font-weight: 700; color: var(--lake-600); }
 
 /* Header Donate is hidden on the homepage while the hero's Donate is on screen */
 .header-donate[data-hidden="true"] { display: none; }
@@ -402,7 +424,12 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     .site-nav.is-open { display: block; }
     .site-nav ul { flex-direction: column; padding-block: var(--space-2); }
     .site-nav a { padding-block: var(--space-3); border-bottom: 0; }
-    .site-nav .nav-current a { color: var(--lake-600); text-decoration: underline; }
+    .site-nav .nav-current > a { color: var(--lake-600); text-decoration: underline; }
+    /* Phone menu: Projects is a label with its two pages listed beneath, no extra tap */
+    .nav-sub-toggle { pointer-events: none; padding-block: var(--space-3) var(--space-1); }
+    .nav-sub-toggle svg { display: none; }
+    .site-nav .nav-sub, .site-nav .nav-sub-toggle[aria-expanded] + .nav-sub { display: block; position: static; min-width: 0; padding: 0 0 var(--space-2) var(--space-4); border: 0; border-radius: 0; background: none; }
+    .site-nav .nav-sub a { padding: var(--space-2) 0; }
     .site-nav .nav-members { display: flex; gap: var(--space-4); padding-block: var(--space-4); border-top: 1px solid var(--line); }
 }
 @media (min-width: 960px) {

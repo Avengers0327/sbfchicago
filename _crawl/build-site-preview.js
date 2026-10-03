@@ -12,7 +12,9 @@ const IMG = path.join(OUT, 'img');
 fs.rmSync(IMG, { recursive: true, force: true });
 fs.mkdirSync(IMG, { recursive: true });
 
-const snippet = f => fs.readFileSync(path.join(T, 'content-snippets', f), 'utf8').replace(/<!--[\s\S]*?-->/g, '').trim();
+// Theme files may have Windows line endings after a git checkout; read them as LF
+const readT = (...a) => fs.readFileSync(path.join(T, ...a), 'utf8').replace(/\r\n/g, '\n');
+const snippet = f => readT('content-snippets', f).replace(/<!--[\s\S]*?-->/g, '').trim();
 
 const PAGES = [
   { slug: 'team', title: 'SBF Vision and Team', eyebrow: 'Who we are' },
@@ -124,9 +126,9 @@ const STATS = [['6,100+', 'Meals from our Chicago food drives'], ['18,500+', 'Me
 // Minimal render of a theme partial for the preview: the page has no excerpt or
 // feature image, so every {{#if x}}a{{else}}b{{/if}} takes its else branch.
 function renderPartial(name, params) {
-  const pkg = JSON.parse(fs.readFileSync(path.join(T, 'package.json'), 'utf8'));
+  const pkg = JSON.parse(readT('package.json'));
   const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
-  let h = fs.readFileSync(path.join(T, 'partials', name + '.hbs'), 'utf8');
+  let h = readT('partials', name + '.hbs');
   h = h.replace(/\{\{!--[\s\S]*?--\}\}/g, '');
   h = h.replace(/\{\{#if [^}]+\}\}[\s\S]*?\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, '$1');
   h = h.replace(/\{\{@custom\.(\w+)\}\}/g, (m, k) => defs[k] || '');
@@ -139,9 +141,9 @@ function renderPartial(name, params) {
 
 // Read the hash params a template passes to page-hero-split
 function splitParams(slug) {
-  const tpl = fs.readFileSync(path.join(T, `page-${slug}.hbs`), 'utf8');
+  const tpl = readT(`page-${slug}.hbs`);
   const call = tpl.match(/\{\{> "page-hero-split"([^}]*)\}\}/)[1];
-  const pkg = JSON.parse(fs.readFileSync(path.join(T, 'package.json'), 'utf8'));
+  const pkg = JSON.parse(readT('package.json'));
   const out = {};
   for (const m of call.matchAll(/(\w+)=(?:"([^"]*)"|@custom\.(\w+))/g)) out[m[1]] = m[2] != null ? m[2] : pkg.config.custom[m[3]].default;
   return out;
@@ -149,10 +151,10 @@ function splitParams(slug) {
 
 // Params a template passes to any partial call
 function partialParams(slug, name) {
-  const tpl = fs.readFileSync(path.join(T, `page-${slug}.hbs`), 'utf8');
+  const tpl = readT(`page-${slug}.hbs`);
   const m = tpl.match(new RegExp('\\{\\{> "' + name + '"([^}]*)\\}\\}'));
   if (!m) return null;
-  const pkg = JSON.parse(fs.readFileSync(path.join(T, 'package.json'), 'utf8'));
+  const pkg = JSON.parse(readT('package.json'));
   const out = {};
   for (const x of m[1].matchAll(/(\w+)=(?:"([^"]*)"|@custom\.(\w+))/g)) out[x[1]] = x[2] != null ? x[2] : pkg.config.custom[x[3]].default;
   return out;
@@ -167,7 +169,7 @@ function signupSection(slug) {
 
 function shell(p, content, doc) {
   if (p.split) {
-    const tpl = fs.readFileSync(path.join(T, `page-${p.slug}.hbs`), 'utf8');
+    const tpl = readT(`page-${p.slug}.hbs`);
     const formFirst = tpl.indexOf('"signup-form"') < tpl.indexOf('"page-body"');
     return renderPartial('page-hero-split', Object.assign({ title: p.title }, splitParams(p.slug)))
       + (p.packing ? renderPartial('packing-day', {}) : '')
@@ -234,10 +236,10 @@ function shell(p, content, doc) {
 
 // Homepage: render the real home.hbs with the theme's default settings
 function renderHome(cardHtml) {
-  const pkg = JSON.parse(fs.readFileSync(path.join(T, 'package.json'), 'utf8'));
+  const pkg = JSON.parse(readT('package.json'));
   const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
-  const partial = n => fs.readFileSync(path.join(T, 'partials', n + '.hbs'), 'utf8').trim();
-  let h = fs.readFileSync(path.join(T, 'home.hbs'), 'utf8');
+  const partial = n => readT('partials', n + '.hbs').trim();
+  let h = readT('home.hbs');
   // Replace the text between two literal markers (inclusive)
   const cut = (str, start, end, withText) => {
     const a = str.indexOf(start), b = str.indexOf(end, a);
@@ -283,8 +285,8 @@ const cardHtml = homeCards.slice(0, 3).map(c => `
 
 let html = src
   .replace('/*CARDS_CSS*/', () => fs.readFileSync(path.join(__dirname, 'ghost', 'cards.min.css'), 'utf8'))
-  .replace('/*CSS*/', () => fs.readFileSync(path.join(T, 'assets/css/screen.css'), 'utf8'))
-  .replace('/*JS*/', () => fs.readFileSync(path.join(T, 'assets/js/site.js'), 'utf8'))
+  .replace('/*CSS*/', () => readT('assets/css/screen.css'))
+  .replace('/*JS*/', () => readT('assets/js/site.js'))
   .replace('<!--HOME-->', () => renderHome(cardHtml))
   .replace('<!--PAGES-->', () => pagesHtml)
   .replace(/\{\{IMG:logo\}\}/g, 'img/logo.jpg');

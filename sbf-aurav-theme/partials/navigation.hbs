@@ -1,5 +1,17 @@
+{{!-- Chicago Projects and India Projects (by Ghost nav slug) share one "Projects" dropdown. --}}
 <ul role="list">
     {{#foreach navigation}}
+        {{#match slug "chicago-projects"}}
+            <li class="nav-projects nav-has-sub">
+                <button class="nav-sub-toggle" type="button" aria-expanded="false" aria-controls="nav-projects-menu">Projects <svg viewBox="0 0 12 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+                <ul class="nav-sub" id="nav-projects-menu" role="list">
+                    <li class="nav-chicago-projects"><a href="{{url absolute="true"}}">Chicago Projects</a></li>
+                    <li class="nav-india-projects"><a href="{{@site.url}}/who-we-serve-india/">India Projects</a></li>
+                </ul>
+            </li>
+        {{else match slug "india-projects"}}
+        {{else}}
         <li class="nav-{{slug}}{{#if current}} nav-current{{/if}}"><a href="{{url absolute="true"}}"{{#if current}} aria-current="page"{{/if}}>{{label}}</a></li>
+        {{/match}}
     {{/foreach}}
 </ul>
