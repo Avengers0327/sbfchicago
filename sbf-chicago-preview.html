@@ -3423,7 +3423,11 @@ input, select, textarea {
     document.body.className = target.getAttribute('data-bodyclass') || '';
     Array.prototype.forEach.call(document.querySelectorAll('.site-nav li'), function (li) {
       var links = li.querySelectorAll(':scope > a, :scope > ul a');
-      var on = Array.prototype.some.call(links, function (a) { return a.getAttribute('href') === '#' + target.getAttribute('data-page'); });
+      var slug = target.getAttribute('data-page');
+      var on = Array.prototype.some.call(links, function (a) {
+        var h = a.getAttribute('href');
+        return h === '#' + slug || h === '/' + slug + '/';
+      });
       li.classList.toggle('nav-current', on);
     });
     Array.prototype.forEach.call(document.querySelectorAll('.nav-sub-toggle[aria-expanded="true"]'), function (b) { b.setAttribute('aria-expanded', 'false'); });
@@ -3435,7 +3439,8 @@ input, select, textarea {
     var a = e.target.closest && e.target.closest('a[href]');
     if (!a) return;
     var m = a.getAttribute('href').match(new RegExp('^/([a-z0-9-]+)/?$'));
-    if (m && ids.indexOf(m[1]) > -1) { e.preventDefault(); location.hash = m[1]; }
+    // Only the one-page preview swaps pages in place; real pages just navigate
+    if (ids.length > 1 && m && ids.indexOf(m[1]) > -1) { e.preventDefault(); location.hash = m[1]; }
   });
   window.addEventListener('hashchange', show);
   show();
