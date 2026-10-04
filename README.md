@@ -84,3 +84,16 @@ Donations use Zeffy and the sign-up forms use Google Forms. Both are embedded an
 ## Memberships
 
 Paid memberships (Advocate and Champion, monthly or yearly) run through Zeffy, the same tool used for donations. Members don't log in on this site. Zeffy handles payments, renewals, receipts and cancellations. Every **Join** button opens the link set in `membership_url` (`sbf-aurav-theme/package.json`). Tier copy lives in `sbf-aurav-theme/partials/membership-tiers.hbs`.
+
+## Search (SEO)
+
+Every page is its own real URL (`/team/`, `/youth-leaders/`, ...) with its own title, description, canonical link, social-share tags, and a `sitemap.xml`. The homepage also carries `NonprofitOrganization` data.
+
+Until the real domain is ready, the build marks every page `noindex` so this preview can't compete with sbfchicago.org. At launch, build with the real address and indexing on:
+
+```bash
+cd _crawl
+SITE_URL=https://sbfchicago.org INDEXABLE=1 node build-site-preview.js
+```
+
+On Cloudflare Pages, set `SITE_URL` and `INDEXABLE=1` under Settings → Variables and Secrets (build) instead, and redeploy. Page titles and descriptions live in the `SEO` table in `_crawl/build-site-preview.js`.

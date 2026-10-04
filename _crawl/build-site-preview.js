@@ -297,27 +297,115 @@ html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\
   return SLUGS.has(slug) ? `href="#${slug}"` : `href="https://sbfchicago.org/${slug}/"`;
 });
 
-// Two outputs from the same page:
-// 1. preview-site/index.html: a complete HTML document for real hosting (Cloudflare Pages etc).
-//    Without the doctype and viewport tag, phones render it as a shrunken 980px desktop page.
-// 2. ../sbf-chicago-preview.html: the bare fragment for the Claude artifact viewer, which adds
-//    its own <!doctype>, <head> and viewport tag and must not get a second set.
-const titleTag = (html.match(/<title>[\s\S]*?<\/title>/) || [''])[0];
-const fullDoc = `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="SBF Chicago: a youth-led nonprofit packing meals for neighbors facing hunger in Chicagoland and India.">
-${titleTag}
-<style>[hidden]{display:none!important}</style>
-</head>
-<body>
-${html.replace(titleTag, '')}
-</body>
-</html>
-`;
-fs.writeFileSync(path.join(OUT, 'index.html'), fullDoc);
+// Outputs: one real HTML file per page in preview-site/ (SEO block below), plus ../sbf-chicago-preview.html,
+// the bare one-page fragment for the Claude artifact viewer, which adds its own <!doctype>, <head>
+// and viewport tag and must not get a second set.
+/* ---------- SEO: one real URL per page ----------
+   SITE_URL and INDEXABLE are the only things to change at launch:
+     SITE_URL=https://sbfchicago.org INDEXABLE=1 node build-site-preview.js
+   Until then every page says noindex, so the preview domain can't compete with the live site. */
+const SITE_URL = (process.env.SITE_URL || 'https://sbfchicago.pages.dev').replace(/\/+$/, '');
+const INDEXABLE = process.env.INDEXABLE === '1';
+const SEO = {
+  home: ['SBF Chicago: Youth-led hunger relief in Chicagoland & India', 'SBF Chicago: a youth-led nonprofit packing meals for neighbors facing hunger in Chicagoland and India.'],
+  team: ['Team & Vision | SBF Chicago', "Meet the founders, junior board and executive team of SBF Chicago, a youth-led nonprofit in Chicago's Northwest suburbs fighting hunger."],
+  'who-we-serve-chicago': ['Chicago Projects | SBF Chicago', 'Monthly Chicago food packing events with local partners provide lunches and packed meals for people facing homelessness and students in need.'],
+  'who-we-serve-india': ['India Projects | SBF Chicago', "SBF's feeding projects in India: lunches for a blind school, slum schools and day laborers at Labor Chowk, and more across northern India and Shirdi."],
+  'items-needed': ['Items Needed | SBF Chicago', 'Sign up to bring bread, peanut butter, jelly, chips and other items for the next SBF Chicago food packing event.'],
+  'get-involved': ['Get Involved | SBF Chicago', "Volunteer at SBF Chicago's monthly food packing event. Students, families and groups are welcome, and volunteer hours are available."],
+  'in-the-news': ['In the News | SBF Chicago', 'News and milestones from SBF Chicago, including 10,200+ meals packed in Chicagoland and India by August 2026.'],
+  'youth-leaders': ['Youth Leadership | SBF Chicago', "Student youth leaders run SBF Chicago's monthly food packing events: presenting, recruiting, buying food and supervising. Leads earn 4 volunteer hours."],
+  'sbf-fundraiser': ['Fundraiser | SBF Chicago', "Upcoming SBF Chicago fundraiser events, and ways to help if you can't make it."],
+  membership: ['Become a Member | SBF Chicago', 'Become an SBF Chicago member with Advocate and Champion plans: coaching, recognition and mentorship for youth leaders.'],
+  donations: ['Donate | SBF Chicago', 'Donate to SBF Chicago to help provide meals. Zeffy is 100% free to the organization, and we also accept Zelle.'],
+  'aug-event': ['August 9 Food Packing Event | SBF Chicago', 'We packed 1,200+ sandwiches and 650 brown bags at our August 9 food packing event. Thanks to National India Hub for hosting.'],
+};
+const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+const ogImage = SITE_URL + '/' + imgMap.get('https://sbfchicago.org/content/images/size/w600/2026/09/IMG_6248-2.JPEG');
+const urlFor = slug => SITE_URL + (slug === 'home' ? '/' : `/${slug}/`);
+
+const orgJsonLd = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'NonprofitOrganization',
+  name: 'SBF Chicago',
+  url: SITE_URL + '/',
+  logo: SITE_URL + '/img/logo.jpg',
+  description: SEO.home[1],
+  email: 'sbfchicago@gmail.com',
+  sameAs: ['https://www.instagram.com/sbfchicago', 'https://www.facebook.com/profile.php?id=61592796391174', 'https://www.linkedin.com/company/sbf-chicago/'],
+});
+
+function pageDoc(slug) {
+  const dom = new JSDOM(`<!doctype html><body>${html}</body>`);
+  const d = dom.window.document;
+  let bodyClass = '';
+  d.querySelectorAll('[data-page]').forEach(p => {
+    if (p.getAttribute('data-page') === slug) { p.removeAttribute('hidden'); bodyClass = p.getAttribute('data-bodyclass') || ''; }
+    else p.remove();
+  });
+  // Empty alt text on real photos: use the caption, or the person's name on team cards
+  const clip = t => t.replace(/\s+/g, ' ').trim().slice(0, 125);
+  d.querySelectorAll('img[alt=""]').forEach(img => {
+    if (img.classList.contains('brand-mark')) return;
+    const card = img.closest('.kg-header-card');
+    const fig = img.closest('figure');
+    const cap = fig && fig.querySelector('figcaption');
+    const head = card && card.querySelector('.kg-header-card-heading');
+    if (head) img.setAttribute('alt', clip(head.textContent.split(',')[0]));
+    else if (cap && cap.textContent.trim()) img.setAttribute('alt', clip(cap.textContent));
+  });
+  let body = d.body.innerHTML.replace(/<title>[\s\S]*?<\/title>/, '');
+  // Hash routes become real URLs; section anchors (#sign-up, #how-we-help) stay as they are
+  body = body.replace(/href="#([a-z0-9-]+)"/g, (m, id) => id === 'home' ? 'href="/"' : (SLUGS.has(id) ? `href="/${id}/"` : m));
+  body = body.replace(/(src|href)="img\//g, '$1="/img/');
+  const [title, desc] = SEO[slug];
+  const url = urlFor(slug);
+  const others = [...SLUGS].filter(x => x !== 'home');
+  const head = [
+    '<meta charset="utf-8">',
+    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
+    `<title>${esc(title)}</title>`,
+    `<meta name="description" content="${esc(desc)}">`,
+    `<link rel="canonical" href="${url}">`,
+    INDEXABLE ? '' : '<meta name="robots" content="noindex,nofollow">',
+    '<link rel="icon" href="/img/logo.jpg">',
+    '<link rel="apple-touch-icon" href="/img/logo.jpg">',
+    `<meta property="og:type" content="${slug === 'aug-event' ? 'article' : 'website'}">`,
+    '<meta property="og:site_name" content="SBF Chicago">',
+    `<meta property="og:title" content="${esc(title)}">`,
+    `<meta property="og:description" content="${esc(desc)}">`,
+    `<meta property="og:url" content="${url}">`,
+    `<meta property="og:image" content="${ogImage}">`,
+    '<meta name="twitter:card" content="summary_large_image">',
+    `<meta name="twitter:title" content="${esc(title)}">`,
+    `<meta name="twitter:description" content="${esc(desc)}">`,
+    `<meta name="twitter:image" content="${ogImage}">`,
+    slug === 'home' ? `<script type="application/ld+json">${orgJsonLd}</script>` : '',
+    // Old #team style links (shared before real URLs existed) go to the real page
+    slug === 'home' ? `<script>(function(){var s=${JSON.stringify(others)},h=location.hash.slice(1);if(s.indexOf(h)>-1)location.replace('/'+h+'/');})();</script>` : '',
+    '<style>[hidden]{display:none!important}</style>',
+  ].filter(Boolean).join('\n');
+  return `<!doctype html>\n<html lang="en">\n<head>\n${head}\n</head>\n<body class="${bodyClass}">\n${body}\n</body>\n</html>\n`;
+}
+
+const pageSlugs = ['home'].concat(PAGES.map(p => p.slug));
+for (const e of fs.readdirSync(OUT, { withFileTypes: true })) {
+  if (e.isDirectory() && e.name !== 'img') fs.rmSync(path.join(OUT, e.name), { recursive: true, force: true });
+}
+for (const slug of pageSlugs) {
+  if (!SEO[slug]) throw new Error('No SEO entry for ' + slug);
+  const dest = slug === 'home' ? OUT : path.join(OUT, slug);
+  fs.mkdirSync(dest, { recursive: true });
+  fs.writeFileSync(path.join(dest, 'index.html'), pageDoc(slug));
+}
+fs.writeFileSync(path.join(OUT, 'sitemap.xml'),
+  '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
+  pageSlugs.map(s => `  <url><loc>${urlFor(s)}</loc></url>`).join('\n') + '\n</urlset>\n');
+fs.writeFileSync(path.join(OUT, 'robots.txt'), INDEXABLE
+  ? `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`
+  : 'User-agent: *\nAllow: /\n');
+console.log(`seo: ${pageSlugs.length} pages, ${INDEXABLE ? 'INDEXABLE' : 'noindex'}, ${SITE_URL}`);
+
 // The Claude preview can't frame other sites, so its copy shows placeholders instead of the forms
 const holder = (name, href) => `<div class="embed-placeholder"><p>I need the ${name} embed code, so I cannot display the form right now.</p><a class="btn btn-secondary btn-sm" href="${href}">Open the form</a></div>`;
 const previewHtml = html.replace(/<iframe[^>]*src="([^"]+)"[^>]*>[\s\S]*?<\/iframe>/g, (m, src) => {
