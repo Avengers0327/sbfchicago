@@ -1,5 +1,5 @@
-// Multi-page preview: real sbfchicago.org content → new theme CSS/JS.
-// Simulates the finished content checklist (banners removed, infographics → snippets).
+// Multi-page preview: real sbfchicago.org content in the new theme's CSS and JS.
+// Simulates the finished content checklist (banners removed, infographics replaced by snippets).
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
@@ -63,14 +63,14 @@ function transform(html, doc) {
 
   // checklist: banners with baked-in text are deleted
   ['_cropped', '1-team-and-vision', '9-sbf-items-needed', 'banner-test-16by9'].forEach(k => figOf(k).forEach(f => f.remove()));
-  // checklist: infographics → live HTML snippets
+  // checklist: swap infographics for live HTML snippets
   figOf('chicago-sept.jpg').forEach(f => replaceWith(f, snippet('chicago-impact.html')));
   figOf('our_partners-grid').forEach(f => replaceWith(f, snippet('chicago-partners.html')));
   figOf('India-top.png').forEach(f => replaceWith(f, snippet('india-impact.html')));
   figOf('india-middle-sept').forEach(f => f.remove());
   figOf('india-bottom-sept').forEach(f => replaceWith(f, snippet('india-drives.html')));
 
-  // Cloudflare-obfuscated emails → plain text
+  // Decode Cloudflare-obfuscated emails to plain text
   box.querySelectorAll('[data-cfemail]').forEach(n => {
     const a = n.closest('a[href*="email-protection"]') || n;
     a.replaceWith(doc.createTextNode(decodeCf(n.getAttribute('data-cfemail'))));
@@ -93,7 +93,7 @@ function transform(html, doc) {
   box.querySelectorAll('.kg-bookmark-icon, .kg-bookmark-publisher').forEach(n => n.remove());
   box.querySelectorAll('script').forEach(n => n.remove());
 
-  // Images → local files
+  // Point images at local copies
   box.querySelectorAll('img').forEach(img => {
     img.removeAttribute('srcset'); img.removeAttribute('sizes'); img.removeAttribute('onerror');
     const src = img.getAttribute('src');
@@ -291,7 +291,7 @@ let html = src
   .replace('<!--PAGES-->', () => pagesHtml)
   .replace(/\{\{IMG:logo\}\}/g, 'img/logo.jpg');
 
-// Internal links → in-preview routes
+// Point internal links at the site's own routes
 html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\?[^"]*)?"/g, (m, slug) => {
   if (slug === '') return 'href="#home"';
   return SLUGS.has(slug) ? `href="#${slug}"` : `href="https://sbfchicago.org/${slug}/"`;

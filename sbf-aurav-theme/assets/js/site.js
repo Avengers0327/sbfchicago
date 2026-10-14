@@ -1,9 +1,7 @@
 (function () {
     'use strict';
 
-    /* ----------------------------------------------------------------------
-       Helpers
-       ---------------------------------------------------------------------- */
+    // Helpers
     var MONTHS = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
     var DATE_AT_START = /^([A-Z][a-z]+\.?\s+\d{1,2},\s*\d{4})/;
 
@@ -77,7 +75,7 @@
         return s;
     }
 
-    // Image cards that link to a social profile (the site uses QR-code images) → real links
+    // Image cards that link to a social profile (the site uses QR-code images) become real links
     var SOCIAL = /instagram|facebook|linkedin/;
     function socialLinks(content) {
         runs(content, function (c) {
@@ -101,13 +99,11 @@
         });
     }
 
-    /* ----------------------------------------------------------------------
-       Every page and post
-       ---------------------------------------------------------------------- */
+    // Every page and post
     function generic(content) {
         socialLinks(content);
 
-        // "Collaborative Partners & sponsors:" → no trailing colon on headings
+        // Drop the trailing colon from headings like "Collaborative Partners & sponsors:"
         Array.prototype.forEach.call(content.querySelectorAll(':scope > h2, :scope > h3'), function (h) {
             var last = h.lastChild;
             while (last && last.nodeType !== 3 && last.lastChild) last = last.lastChild;
@@ -134,7 +130,7 @@
             if (r.length > 1) wrap(r, 'bookmark-grid');
         });
 
-        // CTA card (or a heading) followed by link previews → one help panel
+        // A CTA card (or heading) followed by link previews becomes one help panel
         Array.prototype.slice.call(content.children).forEach(function (c) {
             var isCta = has(c, 'kg-cta-card');
             var isHeading = /^H[23]$/.test(c.tagName) && txt(c);
@@ -148,9 +144,7 @@
         });
     }
 
-    /* ----------------------------------------------------------------------
-       Team & vision: header cards → people grid
-       ---------------------------------------------------------------------- */
+    // Team page: header cards become a people grid
     function team(content) {
         // Vision intro = the paragraphs before the first divider
         var intro = [];
@@ -171,7 +165,7 @@
             wrap(intro, 'vision', 'section');
         }
 
-        // Section-heading images → live headings
+        // Section-heading images become real headings
         var headings = {
             meet_our_founders: 'Meet our founders',
             meet_our_junior_board: 'Meet our junior board members',
@@ -183,7 +177,7 @@
             });
         });
 
-        // Header cards → person cards
+        // Header cards become person cards
         Array.prototype.forEach.call(content.querySelectorAll(':scope > .kg-header-card'), function (card) {
             var full = txt(card.querySelector('.kg-header-card-heading'));
             var bio = card.querySelector('.kg-header-card-subheading');
@@ -220,9 +214,7 @@
         runs(content, function (c) { return has(c, 'person-card'); }).forEach(function (r) { wrap(r, 'people-grid'); });
     }
 
-    /* ----------------------------------------------------------------------
-       India projects: "Project N: Title" + captioned photo → project cards
-       ---------------------------------------------------------------------- */
+    // India page: "Project N: Title" plus a captioned photo becomes a project card
     function india(content) {
         var cards = [];
         Array.prototype.slice.call(content.children).forEach(function (p) {
@@ -252,9 +244,7 @@
         });
     }
 
-    /* ----------------------------------------------------------------------
-       In the news: "Month D, YYYY - text" + media → timeline; callouts → quotes
-       ---------------------------------------------------------------------- */
+    // News page: dated entries ("Month D, YYYY - text") become a timeline, callouts become quotes
     function news(content) {
         var items = [];
         Array.prototype.slice.call(content.children).forEach(function (p) {
@@ -296,9 +286,7 @@
         runs(content, function (c) { return has(c, 'quote-card'); }).forEach(function (r) { wrap(r, 'quote-grid'); });
     }
 
-    /* ----------------------------------------------------------------------
-       Youth leadership: hours → tiles, other roles → chips, leaders → wall
-       ---------------------------------------------------------------------- */
+    // Youth Leadership page: hours become tiles, other roles become chips, leaders go on a wall
     function youth(content) {
         var ul = content.querySelector(':scope > ul');
         if (ul) {
@@ -364,9 +352,7 @@
         }
     }
 
-    /* ----------------------------------------------------------------------
-       Fundraiser: "Date (Day) @ Venue" + Location/Time → dated event cards
-       ---------------------------------------------------------------------- */
+    // Fundraiser page: "Date (Day) @ Venue" entries with Location/Time become dated event cards
     function fundraiser(content) {
         var today = new Date(); today.setHours(0, 0, 0, 0);
         var cards = [], summary = null;
@@ -419,14 +405,12 @@
         runs(content, function (c) { return has(c, 'fund-card'); }).forEach(function (r) { wrap(r, 'fund-list'); });
     }
 
-    /* ----------------------------------------------------------------------
-       Get involved: social icon images → one row
-       ---------------------------------------------------------------------- */
+    // Get Involved page: social icon images become one row
     function involved(content) {
-        // Social QR images → real links first, so they can move into "Spread the word"
+        // Turn the social QR images into real links first, so they can move into "Spread the word"
         socialLinks(content);
 
-        // Ways to help: the editor's numbered list → titled cards with one clear action each
+        // Ways to help: the editor's numbered list becomes titled cards, one action each
         var ol = content.querySelector(':scope > ol');
         if (ol) {
             var picks = [[/donat/i, 'donate'], [/youth leader|lead/i, 'lead'], [/buy|items/i, 'buy'], [/spread|word/i, 'spread'], [/volunteer|pack/i, 'volunteer']];
@@ -500,9 +484,7 @@
         });
     }
 
-    /* ----------------------------------------------------------------------
-       Items needed: "16 jars of Peanut Butter (48 Oz/equivalent)" → item tiles
-       ---------------------------------------------------------------------- */
+    // Items Needed page: lines like "16 jars of Peanut Butter (48 Oz/equivalent)" become item tiles
     function shoppingList(card) {
         var leaves = Array.prototype.filter.call(card.querySelectorAll('li'), function (li) { return !li.querySelector('ul, ol'); });
         var items = [];
@@ -544,9 +526,7 @@
     }
     Array.prototype.forEach.call(document.querySelectorAll('.gh-content'), enhance);
 
-    /* ----------------------------------------------------------------------
-       Chrome: menu, sticky header, one marigold CTA per screen
-       ---------------------------------------------------------------------- */
+    // Chrome: menu, sticky header, one marigold CTA per screen
     var header = document.getElementById('site-header');
     var toggle = document.querySelector('.nav-toggle');
     var nav = document.getElementById('site-nav');

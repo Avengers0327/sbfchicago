@@ -1,11 +1,10 @@
-/* ==========================================================================
-   SBF Chicago: "Aurav Website" design system, as a Ghost theme
-   Every value below maps 1:1 to project/tokens.json. Token names are kept
-   verbatim so the CSS can be traced back to the design system.
-   ========================================================================== */
+/*
+ SBF Chicago: "Aurav Website" design system, as a Ghost theme
+ Every value below maps 1:1 to project/tokens.json. Token names are kept
+ verbatim so the CSS can be traced back to the design system.
+ */
 
-/* 1. Tokens
-   -------------------------------------------------------------------------- */
+/* 1. Tokens */
 :root {
     /* color */
     --navy-900: #0E2747;
@@ -72,8 +71,7 @@
     }
 }
 
-/* 2. Base
-   -------------------------------------------------------------------------- */
+/* 2. Base */
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; scroll-padding-top: 140px; }
@@ -130,8 +128,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     white-space: nowrap;
 }
 
-/* 3. Type styles (tokens.json → type.groups)
-   -------------------------------------------------------------------------- */
+/* 3. Type styles (from tokens.json, type.groups) */
 .t-display {
     font-family: var(--font-display);
     font-size: 40px; line-height: 44px; /* phones */
@@ -177,8 +174,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 }
 .t-muted { color: var(--ink-muted); }
 
-/* 4. Layout
-   -------------------------------------------------------------------------- */
+/* 4. Layout */
 .container {
     width: 100%;
     max-width: calc(var(--max-width) + 2 * var(--gutter));
@@ -204,8 +200,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .eyebrow-chicago { color: var(--lake-600); }
 .eyebrow-india { color: var(--navy-900); }
 
-/* 5. Buttons (recipes)
-   -------------------------------------------------------------------------- */
+/* 5. Buttons (recipes) */
 .btn,
 .gh-content .kg-btn-accent,
 .gh-content .kg-cta-button {
@@ -268,9 +263,8 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .link-arrow { font-weight: 700; }
 .link-arrow::after { content: " \2192"; }
 
-/* 6. Announcement bar (Ghost) → marigold-100 + navy-900 recipe
-   Overrides every background choice (accent / light / dark) in Ghost Admin.
-   -------------------------------------------------------------------------- */
+/* 6. Announcement bar: marigold-100 background, navy-900 text
+   Overrides every background choice (accent / light / dark) in Ghost Admin. */
 .gh-announcement-bar,
 .gh-announcement-bar.accent,
 .gh-announcement-bar.light,
@@ -304,8 +298,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     .announcement .t-small, .gh-announcement-bar { font-size: 13px !important; line-height: 18px !important; }
 }
 
-/* 7. Header & navigation
-   -------------------------------------------------------------------------- */
+/* 7. Header & navigation */
 .site-header {
     position: sticky;
     top: 0;
@@ -440,8 +433,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     .brand-name { display: none; }
 }
 
-/* 8. Homepage hero
-   -------------------------------------------------------------------------- */
+/* 8. Homepage hero */
 .hero { padding-block: var(--space-12) var(--space-8); }
 .hero-grid {
     display: grid;
@@ -486,8 +478,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     box-shadow: var(--shadow-md);
 }
 
-/* 8b. Homepage story: see the problem → feel it → see the solution → feel it
-   -------------------------------------------------------------------------- */
+/* 8b. Homepage story, in four acts: see the problem, feel it, see the solution, feel it */
 .act { padding-block: var(--section-y); }
 .act-head { display: grid; gap: var(--space-3); max-width: 760px; margin-bottom: var(--space-12); }
 .act-head .t-eyebrow { color: var(--lake-600); }
@@ -674,8 +665,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .next-event .cta-actions { align-items: center; }
 .next-event .wishlist-link { color: var(--white); font-weight: 700; }
 
-/* 9. Stat band: navy-900 panel, radius-lg, marigold stat numbers, white small labels
-   -------------------------------------------------------------------------- */
+/* 9. Stat band: navy-900 panel, radius-lg, marigold stat numbers, white small labels */
 .stat-band {
     background: var(--navy-900);
     color: var(--white);
@@ -699,8 +689,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     font-size: 14px; line-height: 20px; font-weight: 500;
 }
 
-/* 10. Two-city split
-   -------------------------------------------------------------------------- */
+/* 10. Two-city split */
 .cities {
     display: grid;
     gap: var(--space-6);
@@ -718,8 +707,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .city ul { margin: 0; padding-left: 1.2em; display: grid; gap: var(--space-2); }
 .city .link-arrow { justify-self: start; }
 
-/* 11. Event card: white, radius-md, shadow-sm, photo on top, eyebrow date in lake-600, h3 title
-   -------------------------------------------------------------------------- */
+/* 11. Event card: white, radius-md, shadow-sm, photo on top, eyebrow date in lake-600, h3 title */
 .card-grid {
     display: grid;
     gap: var(--space-6);
@@ -768,8 +756,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 }
 .event-card-meta { color: var(--ink-muted); margin-top: auto; padding-top: var(--space-2); }
 
-/* 12. Ways to help
-   -------------------------------------------------------------------------- */
+/* 12. Ways to help */
 .ways {
     list-style: none;
     margin: 0;
@@ -805,8 +792,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .cta-panel .zelle { color: var(--lake-500); font-weight: 500; } /* lake-500 on navy only */
 .cta-panel .cta-actions { display: flex; flex-wrap: wrap; gap: var(--space-4); }
 
-/* 13. Page & post hero (live HTML text, replaces baked-in banner JPGs)
-   -------------------------------------------------------------------------- */
+/* 13. Page & post hero (live HTML text, replaces baked-in banner JPGs) */
 .page-hero {
     padding-block: var(--space-12);
     border-bottom: 1px solid var(--line);
@@ -828,8 +814,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 }
 .page-hero-feature img { width: 100%; height: 100%; max-height: 560px; object-fit: cover; }
 
-/* 14. Content (Ghost editor output)
-   -------------------------------------------------------------------------- */
+/* 14. Content (Ghost editor output) */
 .gh-canvas {
     display: grid;
     grid-template-columns:
@@ -889,7 +874,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .gh-content iframe { border: 0; border-radius: var(--radius-md); }
 .gh-content .kg-video-card, .gh-content .kg-video-container { border-radius: var(--radius-md); overflow: hidden; }
 
-/* Callout: default accent (blue) → lake-100 info callout */
+/* Callout: swap the editor's default blue accent for a lake-100 info callout */
 .gh-content .kg-callout-card,
 .gh-content .kg-callout-card-accent,
 .gh-content .kg-callout-card-blue,
@@ -917,7 +902,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .gh-content .kg-cta-card :is(.kg-cta-content, .kg-cta-content-inner) { align-items: flex-start !important; text-align: left !important; }
 .gh-content .kg-cta-card .kg-cta-text { text-align: left !important; }
 
-/* Bookmark card → white card, radius-md */
+/* Bookmark card: white, radius-md */
 .gh-content .kg-bookmark-card { width: 100%; }
 .gh-content .kg-bookmark-card a.kg-bookmark-container,
 .gh-content .kg-bookmark-card a.kg-bookmark-container:hover,
@@ -991,8 +976,7 @@ input, select, textarea {
    the image. The theme now renders that text as live HTML in
    .page-hero, so these images are hidden until they are deleted in
    the Ghost editor. Section-heading PNGs on the Team page are swapped
-   for live text headings.
-   ------------------------------------------------------------------ */
+   for live text headings. */
 .gh-content .kg-image-card:has(img[src*="_cropped"]),
 .gh-content .kg-image-card:has(img[src*="1-team-and-vision"]),
 .gh-content .kg-image-card:has(img[src*="9-sbf-items-needed"]),
@@ -1017,8 +1001,7 @@ input, select, textarea {
 /* 14b. Page designs
    Editors keep writing plain blocks separated by dividers; assets/js/site.js
    groups them into the components below. Without JS the content still reads
-   top to bottom in the same order.
-   -------------------------------------------------------------------------- */
+   top to bottom in the same order. */
 .gh-content :is(h2, h3):empty { display: none; }
 .gh-content :is(h2, h3) u { text-decoration: none; }
 .gh-content :is(h2, h3) strong { font-weight: inherit; }
@@ -1046,7 +1029,7 @@ input, select, textarea {
     .gh-content .kg-layout-split .kg-header-card-content { grid-template-columns: 1fr; }
 }
 
-/* Button rows: a run of link buttons is navigation, not the page's CTA → secondary */
+/* Button rows: a run of link buttons is navigation, not the page's CTA, so they're secondary */
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
 .btn-row .kg-button-card { margin: 0 !important; }
 .gh-content .kg-btn.is-secondary {
@@ -1188,7 +1171,7 @@ input, select, textarea {
     font-weight: 500;
 }
 
-/* Team: header cards → people grid */
+/* Team: header cards as a people grid */
 .team-heading { margin-top: var(--space-12) !important; }
 .vision {
     display: grid;
@@ -1677,8 +1660,7 @@ input, select, textarea {
 .aside-stats .t-small { color: var(--white); }
 .page-donations .header-donate { display: none; }
 
-/* 15. Post footer / pagination
-   -------------------------------------------------------------------------- */
+/* 15. Post footer / pagination */
 .post-cta { padding-bottom: var(--section-y); }
 
 .pagination {
@@ -1690,8 +1672,7 @@ input, select, textarea {
     color: var(--ink-muted);
 }
 
-/* 16. Footer
-   -------------------------------------------------------------------------- */
+/* 16. Footer */
 .site-footer {
     background: var(--navy-900);
     color: var(--white);
@@ -1728,14 +1709,12 @@ input, select, textarea {
     font-size: 14px; line-height: 20px; font-weight: 500;
 }
 
-/* 17. Error page
-   -------------------------------------------------------------------------- */
+/* 17. Error page */
 .error-hero { padding-block: var(--space-24); text-align: left; }
 .error-hero .container { display: grid; gap: var(--space-4); justify-items: start; }
 .error-code { color: var(--lake-600); }
 
-/* 18. Motion
-   -------------------------------------------------------------------------- */
+/* 18. Motion */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
     .event-card:hover, .btn-primary:hover { transform: none; }
