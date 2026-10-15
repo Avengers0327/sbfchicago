@@ -1,0 +1,12 @@
+{
+  "name": "sbf-chicago-site",
+  "version": "1.0.0",
+  "description": "Builds the SBF Chicago website from the theme and the site's content",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "jsdom": "^24.1.3"
+  }
+}

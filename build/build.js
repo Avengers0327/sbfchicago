@@ -1,4 +1,4 @@
-// Multi-page preview: real sbfchicago.org content in the new theme's CSS and JS.
+// Builds the site: real sbfchicago.org content in the new theme's CSS and JS.
 // Simulates the finished content checklist (banners removed, infographics replaced by snippets).
 const fs = require('fs');
 const path = require('path');
@@ -7,7 +7,7 @@ const { JSDOM } = require('jsdom');
 
 const ROOT = path.join(__dirname, '..');
 const T = path.join(ROOT, 'sbf-aurav-theme');
-const OUT = path.join(__dirname, 'preview-site');
+const OUT = path.join(__dirname, 'dist');
 const IMG = path.join(OUT, 'img');
 fs.rmSync(IMG, { recursive: true, force: true });
 fs.mkdirSync(IMG, { recursive: true });
@@ -259,7 +259,7 @@ function renderHome(cardHtml) {
 }
 
 /* ---------- build ---------- */
-const src = fs.readFileSync(path.join(__dirname, 'preview.src.html'), 'utf8');
+const src = fs.readFileSync(path.join(__dirname, 'template.html'), 'utf8');
 const dom = new JSDOM('<!doctype html><body></body>');
 const doc = dom.window.document;
 
@@ -297,12 +297,12 @@ html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\
   return SLUGS.has(slug) ? `href="#${slug}"` : `href="https://sbfchicago.org/${slug}/"`;
 });
 
-// Outputs: one real HTML file per page in preview-site/ (SEO block below), plus ../sbf-chicago-preview.html,
+// Outputs: one real HTML file per page in dist/ (SEO block below), plus ../sbf-chicago-preview.html,
 // the bare one-page fragment for the Claude artifact viewer, which adds its own <!doctype>, <head>
 // and viewport tag and must not get a second set.
 /* ---------- SEO: one real URL per page ----------
    SITE_URL and INDEXABLE are the only things to change at launch:
-     SITE_URL=https://sbfchicago.org INDEXABLE=1 node build-site-preview.js
+     SITE_URL=https://sbfchicago.org INDEXABLE=1 node build.js
    Until then every page says noindex, so the preview domain can't compete with the live site. */
 const SITE_URL = (process.env.SITE_URL || 'https://sbfchicago.pages.dev').replace(/\/+$/, '');
 const INDEXABLE = process.env.INDEXABLE === '1';

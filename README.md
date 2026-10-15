@@ -34,7 +34,7 @@ Static. Fast. Free to host. Zero backend required.
 | | |
 |---|---|
 | **Output** | Static HTML + CSS + vanilla JS (no framework, no build step to *view* it) |
-| **Build tooling** | Node.js + a page-generation script (`_crawl/build-site-preview.js`) |
+| **Build tooling** | Node.js + a page-generation script (`build/build.js`) |
 | **Theme format** | Also a valid Ghost theme (Handlebars `.hbs`), `gscan`-clean |
 | **CSS** | Hand-written, token-based (`assets/css/screen.css`) — colors, type scale, spacing, radius and shadow all defined once at the top |
 | **JS** | ~500 lines, dependency-free, progressively enhances content into components (project cards, timelines, leader walls, item tiles) |
@@ -51,25 +51,24 @@ Static. Fast. Free to host. Zero backend required.
 
 | Path | What it is |
 | --- | --- |
-| `_crawl/preview-site/` | **The website.** `index.html` + `img/`. Upload this folder to Cloudflare Pages (or any static host) as-is. |
+| `build/dist/` | **The website.** One folder per page plus `img/`, `sitemap.xml` and `robots.txt`. Made by the build; point Cloudflare Pages (or any static host) at this folder. |
 | `sbf-aurav-theme/` | Source for the design: templates (`*.hbs`), styles (`assets/css/screen.css`), script (`assets/js/site.js`). Edit these to change the site. Also works as a Ghost theme. |
 | `sbf-aurav-theme.zip` | The same theme, zipped for uploading to Ghost (only if you ever use Ghost). |
-| `sbf-chicago-preview.html` | A copy of the built site page. |
-| `_crawl/build-site-preview.js` | Builds `preview-site/` from the theme + the site's real content. |
-| `_crawl/content/` | Each page's real content, taken from the current sbfchicago.org. |
-| `_crawl/*.html`, `*.txt`, `cand/`, `prev/`, `embedtest/` | Research and test files from the redesign. Safe to ignore. |
+| `build/build.js` | Builds `build/dist/` from the theme and the page content. |
+| `build/template.html` | The page shell: header, footer, and the one-page preview router. |
+| `build/content/` | Each page's text and photos, taken from the current sbfchicago.org. |
 
 ## Rebuild the site after editing
 
 Needs [Node.js](https://nodejs.org). In a terminal:
 
 ```bash
-cd _crawl
+cd build
 npm install
-node build-site-preview.js
+node build.js
 ```
 
-`npm install` is only needed the first time. The rebuilt site lands in `_crawl/preview-site/`.
+`npm install` is only needed the first time. The rebuilt site lands in `build/dist/`.
 
 ## Where to edit common things
 
@@ -92,8 +91,8 @@ Every page is its own real URL (`/team/`, `/youth-leaders/`, ...) with its own t
 Until the real domain is ready, the build marks every page `noindex` so this preview can't compete with sbfchicago.org. At launch, build with the real address and indexing on:
 
 ```bash
-cd _crawl
-SITE_URL=https://sbfchicago.org INDEXABLE=1 node build-site-preview.js
+cd build
+SITE_URL=https://sbfchicago.org INDEXABLE=1 node build.js
 ```
 
-On Cloudflare Pages, set `SITE_URL` and `INDEXABLE=1` under Settings → Variables and Secrets (build) instead, and redeploy. Page titles and descriptions live in the `SEO` table in `_crawl/build-site-preview.js`.
+On Cloudflare Pages, set `SITE_URL` and `INDEXABLE=1` under Settings → Variables and Secrets (build) instead, and redeploy. Page titles and descriptions live in the `SEO` table in `build/build.js`.
