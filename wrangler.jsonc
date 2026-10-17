@@ -1,5 +1,9 @@
 {
   "name": "rapid-dawn-629d",
+  "main": "worker.js",
   "compatibility_date": "2026-10-01",
-  "assets": { "directory": "./build/dist" }
+  "assets": {
+    "directory": "./build/dist",
+    "binding": "ASSETS"
+  }
 }
