@@ -798,7 +798,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     border-bottom: 1px solid var(--line);
 }
 @media (min-width: 768px) { .page-hero { padding-block: var(--space-16); } }
-.page-hero .container { display: grid; gap: var(--space-4); justify-items: start; }
+.page-hero .container { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); justify-items: start; }
 .page-hero .t-eyebrow { color: var(--lake-600); }
 .page-hero.band-india .t-eyebrow { color: var(--ink-muted); } /* 6.3:1 on marigold-100 */
 .page-hero .t-body-lg { max-width: 40em; }
@@ -828,7 +828,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 /* One shared left edge: everything starts where the page title starts.
    Text keeps a comfortable reading width; wide blocks use the full 1120px. */
 .gh-canvas > * { grid-column: wide-start / wide-end; }
-.gh-canvas > :not(.sbf-wide):not(.kg-width-wide):not(.kg-width-full):not(.sbf-impact):not(.sbf-drives):not(.kg-header-card) { max-width: var(--measure); }
+.gh-canvas > :not(.sbf-wide):not(.kg-width-wide):not(.kg-width-full):not(.sbf-impact):not(.sbf-drives):not(.kg-header-card) { max-width: min(var(--measure), 100%); }
 .gh-canvas > * + * { margin-top: var(--space-6); }
 .gh-canvas > :is(h2, h3) { margin-top: var(--space-12); }
 .gh-canvas > :is(h2, h3) + * { margin-top: var(--space-4); }
@@ -1769,8 +1769,24 @@ input, select, textarea {
 .give-food { padding-top: 0; border-top: 0; }
 .give-food .give-items { padding-top: var(--section-y); }
 
+/* Where We Serve: the two cities side by side, then a section each */
+.serve-cities { justify-self: stretch; width: 100%; max-width: 760px; list-style: none; margin: var(--space-8) 0 0; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.serve-city-tile { display: grid; gap: var(--space-1); align-content: start; padding: var(--space-6); border-radius: var(--radius-md); }
+.serve-city-tile > * { margin: 0; }
+.serve-city-tile .t-eyebrow { color: var(--navy-900); }
+.serve-city-tile .t-stat { color: var(--navy-900); }
+.serve-city-tile .t-small { color: var(--ink-muted); }
+.serve-city-tile .link-arrow { margin-top: var(--space-2); }
+.serve-city { padding-top: 0; border-top: 0; }
+.serve-city-head { padding-block: var(--space-12); margin-bottom: var(--space-8); }
+.serve-city-head .container { display: grid; gap: var(--space-2); }
+.serve-city-head .container > * { margin: 0; }
+.serve-city-head .t-body-lg { max-width: 60ch; }
+.serve-help { padding-bottom: var(--space-8); }
+
 /* News & Events */
 .events-upcoming { padding-bottom: var(--space-8); }
 .next-packing { margin-bottom: var(--space-8); grid-template-columns: 1fr auto; align-items: center; }
 .events-news { padding-bottom: var(--space-8); }
 .fund-past-title { margin: var(--space-8) 0 0 !important; }
+

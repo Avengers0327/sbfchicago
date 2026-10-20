@@ -18,8 +18,7 @@ const snippet = f => readT('content-snippets', f).replace(/<!--[\s\S]*?-->/g, ''
 
 const PAGES = [
   { slug: 'team', title: 'SBF Vision and Team', eyebrow: 'Who we are' },
-  { slug: 'who-we-serve-chicago', title: 'Chicago Projects', eyebrow: 'Chicagoland', band: 'chicago', donate: true },
-  { slug: 'who-we-serve-india', title: 'India Projects', eyebrow: 'India', band: 'india' },
+  { slug: 'where-we-serve', title: 'Where We Serve', layout: 'serve', nocontent: true },
   { slug: 'get-involved', title: 'Get Involved!', layout: 'involved', nocontent: true },
   { slug: 'give', title: 'Give', layout: 'template', nocontent: true },
   { slug: 'news-events', title: 'News &amp; Events', layout: 'template', nocontent: true },
@@ -32,6 +31,8 @@ const SLUGS = new Set(PAGES.map(p => p.slug).concat(['home']));
 
 // Pages folded into others: old address -> [page, section]
 const MOVED = {
+  'who-we-serve-chicago': ['where-we-serve', 'chicago'],
+  'who-we-serve-india': ['where-we-serve', 'india'],
   'youth-leaders': ['get-involved', 'youth-leadership'],
   donations: ['give', 'donate'],
   'items-needed': ['give', 'items'],
@@ -40,6 +41,7 @@ const MOVED = {
 };
 // Sections other pages link to, and the page each one lives on
 const SECTION_PAGE = {
+  chicago: 'where-we-serve', india: 'where-we-serve',
   'youth-leadership': 'get-involved', 'volunteer-hours': 'get-involved', 'sign-up': 'get-involved',
   donate: 'give', items: 'give', 'items-form': 'give',
   upcoming: 'news-events', news: 'news-events',
@@ -185,6 +187,33 @@ function partialParams(slug, name) {
 }
 const splitParams = slug => partialParams(slug, 'page-hero-split');
 
+// Where We Serve: Chicago and India built the same way, then one shared "want to help?" ending.
+// Chicago's help block (CTA + links to the wish list, items, donations, get involved) becomes that
+// ending; India's shorter copy of it (CTA + donations link) is dropped as a duplicate.
+function servePage(p) {
+  const chicago = contentOf('who-we-serve-chicago');
+  const help = chicago.indexOf('<div class="kg-card kg-cta-card');
+  const past = chicago.indexOf('<h2 id="details-of-our-past-events');
+  const india = contentOf('who-we-serve-india');
+  const indiaHelp = india.indexOf('<div class="kg-card kg-cta-card');
+  if (help < 0 || past < help || indiaHelp < 0) throw new Error('Where We Serve: help or past-events block not found');
+  // Hero and city headings come straight from the template, so the two can't drift apart
+  const tpl = readT('page-where-we-serve.hbs');
+  const between = (from, to) => { const i = tpl.indexOf(from); return tpl.slice(i, tpl.indexOf(to, i)); };
+  const fill = h => fillHbs(h.replace('{{> "serve-cities"}}', readT('partials', 'serve-cities.hbs')), {}, null, 'page-where-we-serve');
+  const head = city => fill(between('<div class="serve-city-head band-' + city + '">', '        {{#get'));
+  return `<article class="band-page-plain">${fill(between('<header class="page-hero">', '    <section'))}
+    <section class="page-section serve-city band-page-chicago" id="chicago" aria-labelledby="chicago-title">${head('chicago')}
+      <div class="gh-canvas gh-content">${chicago.slice(0, help)}${chicago.slice(past)}</div>
+    </section>
+    <section class="page-section serve-city band-page-india page-who-we-serve-india" id="india" aria-labelledby="india-title">${head('india')}
+      <div class="gh-canvas gh-content">${india.slice(0, indiaHelp)}</div>
+    </section>
+    <section class="page-section serve-help" aria-label="Help with our mission">
+      <div class="gh-canvas gh-content">${chicago.slice(help, past)}</div>
+    </section></article>${donatePanel}`;
+}
+
 // A whole page template: its partials, then its {{#get}} content blocks
 function renderTemplate(p) {
   let h = readT(`page-${p.slug}.hbs`).replace(/\{\{!--[\s\S]*?--\}\}/g, '').replace(/\{\{[#/]post\}\}/g, '');
@@ -218,6 +247,7 @@ function signupSection(slug) {
 function shell(p, content, doc) {
   if (p.layout === 'template') return renderTemplate(p);
   if (p.layout === 'involved') return involvedPage(p);
+  if (p.layout === 'serve') return servePage(p);
   const band = p.band || '';
   const hero = (extra = '') => `
     <header class="page-hero${band ? ' band-' + band : ''}">
@@ -315,8 +345,7 @@ const INDEXABLE = process.env.INDEXABLE === '1';
 const SEO = {
   home: ['SBF Chicago: Youth-led hunger relief in Chicagoland & India', 'SBF Chicago: a youth-led nonprofit packing meals for neighbors facing hunger in Chicagoland and India.'],
   team: ['Team & Vision | SBF Chicago', "Meet the founders, junior board and executive team of SBF Chicago, a youth-led nonprofit in Chicago's Northwest suburbs fighting hunger."],
-  'who-we-serve-chicago': ['Chicago Projects | SBF Chicago', 'Monthly Chicago food packing events with local partners provide lunches and packed meals for people facing homelessness and students in need.'],
-  'who-we-serve-india': ['India Projects | SBF Chicago', "SBF's feeding projects in India: lunches for a blind school, slum schools and day laborers at Labor Chowk, and more across northern India and Shirdi."],
+  'where-we-serve': ['Where We Serve | SBF Chicago', 'Monthly food packing events in Chicagoland for people facing homelessness and students in need, and seven feeding projects across India.'],
   'get-involved': ['Get Involved | SBF Chicago', "Volunteer at SBF Chicago's monthly food packing event, or lead one as a student youth leader. Students, families and groups welcome; volunteer hours available."],
   give: ['Give | SBF Chicago', 'Donate to SBF Chicago through Zeffy or Zelle, or give food items from our Amazon Wishlist. Zeffy is 100% free to the organization.'],
   'news-events': ['News & Events | SBF Chicago', 'Upcoming SBF Chicago packing events and fundraisers, plus milestones, press and words from our partners.'],

@@ -39,7 +39,7 @@ Static. Fast. Free to host. Zero backend required.
 | **CSS** | Hand-written, token-based (`assets/css/screen.css`) — colors, type scale, spacing, radius and shadow all defined once at the top |
 | **JS** | ~500 lines, dependency-free, progressively enhances content into components (project cards, timelines, leader walls, item tiles) |
 | **Fonts** | Bricolage Grotesque (display) + Figtree (body), via Google Fonts |
-| **Pages** | 9 (home, Team & Vision, Chicago and India projects, Get Involved, Give, News & Events, Membership, a sample event post) |
+| **Pages** | 8 (home, Team & Vision, Where We Serve, Get Involved, Give, News & Events, Membership, a sample event post) |
 | **Images** | 132, sourced from the live site's real events |
 | **Forms** | Google Forms (sign-up) + Zeffy (donations), both embedded, both free, neither requires a backend |
 | **Hosting cost** | $0 — any static host works |
@@ -103,6 +103,8 @@ Some old pages now live as sections of one page. Their old addresses forward to 
 
 | Old page | Now |
 | --- | --- |
+| `/who-we-serve-chicago/` | Where We Serve → Chicago Projects (`/where-we-serve/#chicago`) |
+| `/who-we-serve-india/` | Where We Serve → India Projects (`/where-we-serve/#india`) |
 | `/youth-leaders/` | Get Involved → Lead an event (`/get-involved/#youth-leadership`) |
 | `/donations/` | Give → Donate (`/give/#donate`) |
 | `/items-needed/` | Give → Ship it, or bring it (`/give/#items`) |

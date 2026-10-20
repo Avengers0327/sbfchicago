@@ -1,0 +1,43 @@
+{{!< default}}
+{{!-- Where We Serve: two cities, one mission. Chicago and India sections built the same way
+     (band, title, what we do, impact, photos), then one shared "want to help?" ending.
+     Content comes from the Chicago Projects and India Projects pages; India's project list
+     becomes cards via assets/js/site.js. --}}
+{{#post}}
+<article class="band-page-plain">
+    <header class="page-hero">
+        <div class="container">
+            <p class="t-eyebrow">Two cities, one mission</p>
+            <h1 class="t-h1">Where We Serve</h1>
+            <p class="t-body-lg">Local hearts. Global impact.</p>
+            {{> "serve-cities"}}
+        </div>
+    </header>
+
+    <section class="page-section serve-city band-page-chicago" id="chicago" aria-labelledby="chicago-title">
+        <div class="serve-city-head band-chicago">
+            <div class="container">
+                <p class="t-eyebrow">Chicagoland</p>
+                <h2 class="t-h1" id="chicago-title">Chicago Projects</h2>
+            </div>
+        </div>
+        {{#get "pages" filter="slug:who-we-serve-chicago" limit="1"}}
+            {{#foreach pages}}<div class="gh-canvas gh-content">{{content}}</div>{{/foreach}}
+        {{/get}}
+    </section>
+
+    <section class="page-section serve-city band-page-india page-who-we-serve-india" id="india" aria-labelledby="india-title">
+        <div class="serve-city-head band-india">
+            <div class="container">
+                <p class="t-eyebrow">India</p>
+                <h2 class="t-h1" id="india-title">India Projects</h2>
+                <p class="t-body-lg">A blind school, two slum schools, Labor Chowk, Apna Ghar, an orphanage in Shirdi, feeding cows and an animal rescue shelter, across New Delhi, Gurugram, Pratapgarh and Shirdi.</p>
+            </div>
+        </div>
+        {{#get "pages" filter="slug:who-we-serve-india" limit="1"}}
+            {{#foreach pages}}<div class="gh-canvas gh-content">{{content}}</div>{{/foreach}}
+        {{/get}}
+    </section>
+</article>
+{{/post}}
+{{> "donate-panel"}}
