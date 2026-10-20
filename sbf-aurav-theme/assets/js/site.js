@@ -413,7 +413,15 @@
         if (!cards.length) return;
         if (summary) summary.remove(); // the cards now carry the same dates
         dropDividersBetween(cards, 'fund-card');
-        runs(content, function (c) { return has(c, 'fund-card'); }).forEach(function (r) { wrap(r, 'fund-list'); });
+        runs(content, function (c) { return has(c, 'fund-card'); }).forEach(function (r) {
+            var list = wrap(r, 'fund-list');
+            // Coming up first; past fundraisers follow under their own heading
+            var past = r.filter(function (c) { return !has(c, 'is-upcoming'); });
+            if (past.length && past.length < r.length) {
+                past.forEach(function (c) { list.appendChild(c); });
+                list.insertBefore(el('h3', 't-h3 fund-past-title', 'Past fundraisers'), past[0]);
+            }
+        });
     }
 
     // Get Involved page: social icon images become one row

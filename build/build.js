@@ -20,17 +20,30 @@ const PAGES = [
   { slug: 'team', title: 'SBF Vision and Team', eyebrow: 'Who we are' },
   { slug: 'who-we-serve-chicago', title: 'Chicago Projects', eyebrow: 'Chicagoland', band: 'chicago', donate: true },
   { slug: 'who-we-serve-india', title: 'India Projects', eyebrow: 'India', band: 'india' },
-  { slug: 'items-needed', title: 'Items Needed', layout: 'items' },
-  { slug: 'get-involved', title: 'Get Involved!', split: true, packing: true, youth: true },
-  { slug: 'in-the-news', title: 'In the news...', eyebrow: 'Milestones and press' },
-  { slug: 'sbf-fundraiser', title: 'SBF Fundraiser', eyebrow: 'Fundraisers' },
+  { slug: 'get-involved', title: 'Get Involved!', layout: 'involved', nocontent: true },
+  { slug: 'give', title: 'Give', layout: 'template', nocontent: true },
+  { slug: 'news-events', title: 'News &amp; Events', layout: 'template', nocontent: true },
   { slug: 'membership', title: 'Become a member', layout: 'membership', nocontent: true },
-  { slug: 'donations', title: 'Donations', layout: 'donations' },
   { slug: 'aug-event', title: 'August 9 Chicago Food Packing Event', post: true, band: 'chicago',
     date: 'Aug 10, 2026', readingTime: '3 min read',
     feature: 'https://sbfchicago.org/content/images/2026/08/WhatsApp-Image-2026-08-10-at-1.47.25-PM--2--1.jpeg' },
 ];
 const SLUGS = new Set(PAGES.map(p => p.slug).concat(['home']));
+
+// Pages folded into others: old address -> [page, section]
+const MOVED = {
+  'youth-leaders': ['get-involved', 'youth-leadership'],
+  donations: ['give', 'donate'],
+  'items-needed': ['give', 'items'],
+  'sbf-fundraiser': ['news-events', 'upcoming'],
+  'in-the-news': ['news-events', 'news'],
+};
+// Sections other pages link to, and the page each one lives on
+const SECTION_PAGE = {
+  'youth-leadership': 'get-involved', 'volunteer-hours': 'get-involved', 'sign-up': 'get-involved',
+  donate: 'give', items: 'give', 'items-form': 'give',
+  upcoming: 'news-events', news: 'news-events',
+};
 
 /* ---------- image localisation ---------- */
 const imgMap = new Map();
@@ -105,6 +118,17 @@ function transform(html, doc) {
   return box.innerHTML;
 }
 
+// A page's content, ready to drop into a template
+const contentOf = slug => transform(fs.readFileSync(path.join(__dirname, 'content', slug + '.html'), 'utf8'), doc);
+
+// Keep only the top-level blocks of some content that pass a test
+function blocks(html, keep) {
+  const box = doc.createElement('div');
+  box.innerHTML = html;
+  Array.from(box.children).forEach(c => { if (!keep(c)) c.remove(); });
+  return box.innerHTML;
+}
+
 /* ---------- page shells (mirror the Handlebars templates) ---------- */
 const donatePanel = `
 <section class="post-cta" aria-label="Donate">
@@ -115,20 +139,24 @@ const donatePanel = `
         <p class="t-body">Want to impact lives of people by helping us provide them meals? Donate money and the SBF team can buy items on your behalf.</p>
         <p class="t-small zelle">We also accept Zelle at sbfchicago@gmail.com</p>
       </div>
-      <div class="cta-actions"><a class="btn btn-primary" href="https://sbfchicago.org/donations/">Donate</a></div>
+      <div class="cta-actions"><a class="btn btn-primary" href="/give/#donate">Donate</a></div>
     </div>
   </div>
 </section>`;
 
 const STATS = [['6,100+', 'Meals from our Chicago food drives'], ['18,500+', 'Meals from our India food drives'], ['5,100+', 'Peanut butter sandwiches packed, Jan to Sept 2026']];
 
-// Minimal render of a theme partial for the preview: the page has no excerpt or
-// feature image, so every {{#if x}}a{{else}}b{{/if}} takes its else branch.
-function renderPartial(name, params) {
+// Minimal Handlebars for the static build. Pages have no excerpt or feature image, so every
+// {{#if x}}a{{else}}b{{/if}} takes its else branch, and {{#get ... slug:x}} blocks get page x's content
+// (or gets[x] when the caller passes a trimmed version).
+function fillHbs(h, params, gets, name) {
   const pkg = JSON.parse(readT('package.json'));
   const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
-  let h = readT('partials', name + '.hbs');
-  h = h.replace(/\{\{!--[\s\S]*?--\}\}/g, '');
+  h = h.replace(/\{\{!<[^}]*\}\}/g, '').replace(/\{\{!--[\s\S]*?--\}\}/g, '');
+  h = h.replace(/\{\{#get "\w+" filter="slug:([\w-]+)"[^}]*\}\}([\s\S]*?)\{\{\/get\}\}/g, (m, slug, inner) => {
+    const body = gets && gets[slug] != null ? gets[slug] : contentOf(slug);
+    return inner.replace(/\{\{#foreach \w+\}\}|\{\{\/foreach\}\}/g, '').replace('{{content}}', () => body);
+  });
   h = h.replace(/\{\{#if [^}]+\}\}[\s\S]*?\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, '$1');
   h = h.replace(/\{\{@custom\.(\w+)\}\}/g, (m, k) => defs[k] || '');
   h = h.split('{{@site.url}}').join('https://sbfchicago.org');
@@ -138,53 +166,58 @@ function renderPartial(name, params) {
   return h;
 }
 
-// Read the hash params a template passes to page-hero-split
-function splitParams(slug) {
-  const tpl = readT(`page-${slug}.hbs`);
-  const call = tpl.match(/\{\{> "page-hero-split"([^}]*)\}\}/)[1];
+function renderPartial(name, params, gets) {
+  return fillHbs(readT('partials', name + '.hbs'), params, gets, name);
+}
+
+// key="value" and key=@custom.x pairs from a partial call
+function hbsParams(args) {
   const pkg = JSON.parse(readT('package.json'));
   const out = {};
-  for (const m of call.matchAll(/(\w+)=(?:"([^"]*)"|@custom\.(\w+))/g)) out[m[1]] = m[2] != null ? m[2] : pkg.config.custom[m[3]].default;
+  for (const m of args.matchAll(/(\w+)=(?:"([^"]*)"|@custom\.(\w+))/g)) out[m[1]] = m[2] != null ? m[2] : pkg.config.custom[m[3]].default;
   return out;
 }
 
-// Params a template passes to any partial call
+// Params a page template passes to one of its partials
 function partialParams(slug, name) {
-  const tpl = readT(`page-${slug}.hbs`);
-  const m = tpl.match(new RegExp('\\{\\{> "' + name + '"([^}]*)\\}\\}'));
-  if (!m) return null;
-  const pkg = JSON.parse(readT('package.json'));
-  const out = {};
-  for (const x of m[1].matchAll(/(\w+)=(?:"([^"]*)"|@custom\.(\w+))/g)) out[x[1]] = x[2] != null ? x[2] : pkg.config.custom[x[3]].default;
-  return out;
+  const m = readT(`page-${slug}.hbs`).match(new RegExp('\\{\\{> "' + name + '"([^}]*)\\}\\}'));
+  return m ? hbsParams(m[1]) : null;
+}
+const splitParams = slug => partialParams(slug, 'page-hero-split');
+
+// A whole page template: its partials, then its {{#get}} content blocks
+function renderTemplate(p) {
+  let h = readT(`page-${p.slug}.hbs`).replace(/\{\{!--[\s\S]*?--\}\}/g, '').replace(/\{\{[#/]post\}\}/g, '');
+  h = h.replace(/\{\{> "([\w-]+)"([^}]*)\}\}/g, (m, name, args) => renderPartial(name, Object.assign({ title: p.title }, hbsParams(args))));
+  return fillHbs(h, {}, null, 'page-' + p.slug);
 }
 
-// The artifact sandbox can't frame other sites, so the embedded form shows as a labelled placeholder
+// Get Involved, from showing up to leading. Partners move below youth leadership, and only
+// the leader photos come over from the Youth Leaders page (its hours and roles have their own sections).
+function involvedPage(p) {
+  const gi = contentOf('get-involved');
+  const cut = gi.indexOf('<h2 id="collaborative-partners-sponsors"');
+  if (cut < 0) throw new Error('Get Involved: partners heading not found');
+  const leaders = blocks(contentOf('youth-leaders'), c => !/^(P|UL)$/.test(c.tagName) && !c.classList.contains('kg-button-card'));
+  return renderPartial('page-hero-split', Object.assign({ title: p.title }, splitParams(p.slug)))
+    + renderPartial('packing-day', {})
+    + `<article class="band-page-plain"><div class="gh-canvas gh-content">${gi.slice(0, cut)}${renderPartial('more-ways', {})}</div></article>`
+    + renderPartial('volunteer-hours', {})
+    + renderPartial('youth-lead', {}, { 'youth-leaders': leaders })
+    + `<article class="band-page-plain page-partners"><div class="gh-canvas gh-content">${gi.slice(cut)}</div></article>`
+    + signupSection(p.slug);
+}
+
+// The page's embedded sign-up form, with the heading and note its template passes
 function signupSection(slug) {
   const params = partialParams(slug, 'signup-form');
   if (!params) return '';
   return renderPartial('signup-form', params);
 }
 
-// Youth leadership section on Get Involved, filled with the Youth Leaders page content
-function youthSection(doc) {
-  const content = transform(fs.readFileSync(path.join(__dirname, 'content', 'youth-leaders.html'), 'utf8'), doc);
-  return readT('partials', 'youth-section.hbs')
-    .replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '')
-    .replace(/\{\{#get[\s\S]*?\{\{\/get\}\}/, () => `<div class="gh-canvas gh-content">${content}</div>`);
-}
-
 function shell(p, content, doc) {
-  if (p.split) {
-    const tpl = readT(`page-${p.slug}.hbs`);
-    const formFirst = tpl.indexOf('"signup-form"') < tpl.indexOf('"page-body"');
-    return renderPartial('page-hero-split', Object.assign({ title: p.title }, splitParams(p.slug)))
-      + (p.packing ? renderPartial('packing-day', {}) : '')
-      + (formFirst ? signupSection(p.slug) : '')
-      + `<article class="band-page-plain"><div class="gh-canvas gh-content">${content}</div></article>`
-      + (p.youth ? youthSection(doc) : '')
-      + (formFirst ? '' : signupSection(p.slug));
-  }
+  if (p.layout === 'template') return renderTemplate(p);
+  if (p.layout === 'involved') return involvedPage(p);
   const band = p.band || '';
   const hero = (extra = '') => `
     <header class="page-hero${band ? ' band-' + band : ''}">
@@ -196,43 +229,6 @@ function shell(p, content, doc) {
 
   if (p.layout === 'membership') {
     return `<article class="band-page-plain">${hero().replace('<p class="t-eyebrow"></p>', '<p class="t-eyebrow">Membership</p>')}${renderPartial('membership-tiers', {})}</article>`;
-  }
-  if (p.layout === 'donations') {
-    return `<article class="band-page-plain">${hero().replace('<p class="t-eyebrow"></p>', '<p class="t-eyebrow">Donate</p>')}
-      <div class="page-split"><div class="container page-split-grid">
-        <aside class="page-split-aside" aria-label="Your impact">
-          <div class="aside-card band-navy on-navy">
-            <p class="t-eyebrow">What your gifts have done in 2026</p>
-            <ul class="aside-stats" role="list">${STATS.map(([v, l]) => `<li><span class="t-stat">${v}</span><span class="t-small">${l}</span></li>`).join('')}</ul>
-          </div>
-          <div class="aside-card">
-            <p class="t-eyebrow">Other ways to give</p>
-            <ul>
-              <li>Zelle to sbfchicago@gmail.com</li>
-              <li><a href="https://www.amazon.com/hz/wishlist/ls/20JFGIHHFZVGK">Send items from our Amazon Wishlist</a></li>
-              <li><a href="https://sbfchicago.org/items-needed/">Sign up to bring items to the next food drive</a></li>
-            </ul>
-          </div>
-        </aside>
-        <div class="page-split-main gh-content">${content}</div>
-      </div></div></article>`;
-  }
-  if (p.layout === 'items') {
-    const amazon = transform(fs.readFileSync(path.join(__dirname, 'content', 'we-have-an-amazon-wish-list.html'), 'utf8'), doc);
-    // Mirrors page-items-needed.hbs: photo hero, two ways to give, shopping list + form
-    return renderPartial('page-hero-split', Object.assign({ title: p.title }, splitParams(p.slug)))
-      + renderPartial('give-items', {})
-      + `<article class="band-page-india">
-      <div class="page-split"><div class="container page-split-grid">
-        <aside class="page-split-aside" aria-label="Shopping list">
-          <div class="aside-card band-india gh-content shopping-list">
-            <p class="t-eyebrow">Shopping list</p>
-            <h3 class="t-h3">What one packing event needs</h3>
-            ${amazon}
-          </div>
-        </aside>
-        <div class="page-split-main gh-content" id="items-form">${content}</div>
-      </div></div></article>`;
   }
   const meta = p.post ? `
         <p class="t-small page-hero-meta"><span>By Anuj Saxena</span><span>${p.readingTime}</span></p>
@@ -300,10 +296,11 @@ let html = src
   .replace(/\{\{IMG:logo\}\}/g, 'img/logo.jpg');
 
 // Point internal links at the site's own routes
-html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\?[^"]*)?"/g, (m, slug) => {
-  if (slug === '') return 'href="#home"';
-  if (slug === 'youth-leaders') return 'href="#youth-leadership"';
-  return SLUGS.has(slug) ? `href="#${slug}"` : `href="https://sbfchicago.org/${slug}/"`;
+html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\?[^"#]*)?(?:#([a-z0-9-]+))?"/g, (m, slug, hash) => {
+  if (MOVED[slug]) return `href="#${MOVED[slug][1]}"`;
+  if (slug === '') return `href="#${hash || 'home'}"`;
+  if (SLUGS.has(slug)) return `href="#${hash || slug}"`;
+  return `href="https://sbfchicago.org/${slug}/${hash ? '#' + hash : ''}"`;
 });
 
 // Outputs: one real HTML file per page in dist/ (SEO block below), plus ../sbf-chicago-preview.html,
@@ -320,12 +317,10 @@ const SEO = {
   team: ['Team & Vision | SBF Chicago', "Meet the founders, junior board and executive team of SBF Chicago, a youth-led nonprofit in Chicago's Northwest suburbs fighting hunger."],
   'who-we-serve-chicago': ['Chicago Projects | SBF Chicago', 'Monthly Chicago food packing events with local partners provide lunches and packed meals for people facing homelessness and students in need.'],
   'who-we-serve-india': ['India Projects | SBF Chicago', "SBF's feeding projects in India: lunches for a blind school, slum schools and day laborers at Labor Chowk, and more across northern India and Shirdi."],
-  'items-needed': ['Items Needed | SBF Chicago', 'Sign up to bring bread, peanut butter, jelly, chips and other items for the next SBF Chicago food packing event.'],
   'get-involved': ['Get Involved | SBF Chicago', "Volunteer at SBF Chicago's monthly food packing event, or lead one as a student youth leader. Students, families and groups welcome; volunteer hours available."],
-  'in-the-news': ['In the News | SBF Chicago', 'News and milestones from SBF Chicago, including 10,200+ meals packed in Chicagoland and India by August 2026.'],
-  'sbf-fundraiser': ['Fundraiser | SBF Chicago', "Upcoming SBF Chicago fundraiser events, and ways to help if you can't make it."],
+  give: ['Give | SBF Chicago', 'Donate to SBF Chicago through Zeffy or Zelle, or give food items from our Amazon Wishlist. Zeffy is 100% free to the organization.'],
+  'news-events': ['News & Events | SBF Chicago', 'Upcoming SBF Chicago packing events and fundraisers, plus milestones, press and words from our partners.'],
   membership: ['Become a Member | SBF Chicago', 'Become an SBF Chicago member with Advocate and Champion plans: coaching, recognition and mentorship for youth leaders.'],
-  donations: ['Donate | SBF Chicago', 'Donate to SBF Chicago to help provide meals. Zeffy is 100% free to the organization, and we also accept Zelle.'],
   'aug-event': ['August 9 Food Packing Event | SBF Chicago', 'We packed 1,200+ sandwiches and 650 brown bags at our August 9 food packing event. Thanks to National India Hub for hosting.'],
 };
 const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -363,14 +358,19 @@ function pageDoc(slug) {
     else if (cap && cap.textContent.trim()) img.setAttribute('alt', clip(cap.textContent));
   });
   let body = d.body.innerHTML.replace(/<title>[\s\S]*?<\/title>/, '');
-  // Hash routes become real URLs; section anchors (#sign-up, #how-we-help) stay as they are
-  body = body.replace(/href="#([a-z0-9-]+)"/g, (m, id) => id === 'home' ? 'href="/"' : (SLUGS.has(id) ? `href="/${id}/"` : m));
-  // Youth leadership is a section of Get Involved; link to it from other pages
-  if (slug !== 'get-involved') body = body.split('href="#youth-leadership"').join('href="/get-involved/#youth-leadership"');
+  // Hash routes become real URLs; a section that lives on another page gets that page's address
+  body = body.replace(/href="#([a-z0-9-]+)"/g, (m, id) => {
+    if (id === 'home') return 'href="/"';
+    if (SLUGS.has(id)) return `href="/${id}/"`;
+    const owner = SECTION_PAGE[id];
+    return owner && owner !== slug ? `href="/${owner}/#${id}"` : m;
+  });
   body = body.replace(/(src|href)="img\//g, '$1="/img/');
   const [title, desc] = SEO[slug];
   const url = urlFor(slug);
-  const others = [...SLUGS].filter(x => x !== 'home');
+  // Old #team style links (shared before real URLs existed), including pages that have since moved
+  const oldHash = Object.fromEntries([...SLUGS].filter(x => x !== 'home').map(s => [s, `/${s}/`])
+    .concat(Object.entries(MOVED).map(([old, [pg, sec]]) => [old, `/${pg}/#${sec}`])));
   const head = [
     '<meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
@@ -391,8 +391,7 @@ function pageDoc(slug) {
     `<meta name="twitter:description" content="${esc(desc)}">`,
     `<meta name="twitter:image" content="${ogImage}">`,
     slug === 'home' ? `<script type="application/ld+json">${orgJsonLd}</script>` : '',
-    // Old #team style links (shared before real URLs existed) go to the real page
-    slug === 'home' ? `<script>(function(){var s=${JSON.stringify(others)},h=location.hash.slice(1);if(h==='youth-leaders')location.replace('/get-involved/#youth-leadership');else if(s.indexOf(h)>-1)location.replace('/'+h+'/');})();</script>` : '',
+    slug === 'home' ? `<script>(function(){var m=${JSON.stringify(oldHash)},h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>` : '',
     '<style>[hidden]{display:none!important}</style>',
   ].filter(Boolean).join('\n');
   return `<!doctype html>\n<html lang="en">\n<head>\n${head}\n</head>\n<body class="${bodyClass}">\n${body}\n</body>\n</html>\n`;
@@ -408,21 +407,25 @@ for (const slug of pageSlugs) {
   fs.mkdirSync(dest, { recursive: true });
   fs.writeFileSync(path.join(dest, 'index.html'), pageDoc(slug));
 }
-// The old Youth Leadership address forwards to its section on Get Involved
-fs.mkdirSync(path.join(OUT, 'youth-leaders'), { recursive: true });
-fs.writeFileSync(path.join(OUT, 'youth-leaders', 'index.html'), `<!doctype html>
+// Old addresses of pages folded into others forward to the right section
+for (const [old, [pg, sec]] of Object.entries(MOVED)) {
+  const to = `/${pg}/#${sec}`;
+  const name = SEO[pg][0].split(' | ')[0];
+  fs.mkdirSync(path.join(OUT, old), { recursive: true });
+  fs.writeFileSync(path.join(OUT, old, 'index.html'), `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Youth Leadership | SBF Chicago</title>
+<title>${esc(SEO[pg][0])}</title>
 <meta name="robots" content="noindex">
-<link rel="canonical" href="${urlFor('get-involved')}">
-<meta http-equiv="refresh" content="0; url=/get-involved/#youth-leadership">
-<script>location.replace('/get-involved/#youth-leadership');</script>
+<link rel="canonical" href="${urlFor(pg)}">
+<meta http-equiv="refresh" content="0; url=${to}">
+<script>location.replace('${to}');</script>
 </head>
-<body><p>Youth leadership is now part of <a href="/get-involved/#youth-leadership">Get Involved</a>.</p></body>
+<body><p>This page is now part of <a href="${to}">${esc(name)}</a>.</p></body>
 </html>
 `);
+}
 
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'),
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +

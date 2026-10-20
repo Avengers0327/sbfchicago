@@ -1,0 +1,45 @@
+{{!< default}}
+{{!-- News & Events: what's coming up (the next packing event and fundraisers), then what we've
+     done (milestones, press and partner quotes). Content comes from the SBF Fundraiser and
+     In the News pages; dated lists become event cards and a timeline via assets/js/site.js. --}}
+{{#post}}
+<article class="band-page-plain">
+    <header class="page-hero">
+        <div class="container">
+            <p class="t-eyebrow">News &amp; events</p>
+            <h1 class="t-h1">News &amp; Events</h1>
+            <p class="t-body-lg">What's coming up, and what we've been up to.</p>
+            <p class="page-jump"><a class="link-arrow" href="#upcoming">Coming up</a><a class="link-arrow" href="#news">In the news</a></p>
+        </div>
+    </header>
+
+    <section class="page-section events-upcoming page-sbf-fundraiser" id="upcoming" aria-labelledby="upcoming-title">
+        <div class="container">
+            <div class="section-head">
+                <div class="stack">
+                    <p class="t-eyebrow">Coming up</p>
+                    <h2 class="t-h1" id="upcoming-title">Upcoming events</h2>
+                </div>
+            </div>
+            {{> "coming-up"}}
+        </div>
+        {{#get "pages" filter="slug:sbf-fundraiser" limit="1"}}
+            {{#foreach pages}}<div class="gh-canvas gh-content">{{content}}</div>{{/foreach}}
+        {{/get}}
+    </section>
+
+    <section class="page-section events-news page-in-the-news" id="news" aria-labelledby="news-title">
+        <div class="container">
+            <div class="section-head">
+                <div class="stack">
+                    <p class="t-eyebrow">Milestones and press</p>
+                    <h2 class="t-h1" id="news-title">In the news</h2>
+                </div>
+            </div>
+        </div>
+        {{#get "pages" filter="slug:in-the-news" limit="1"}}
+            {{#foreach pages}}<div class="gh-canvas gh-content">{{content}}</div>{{/foreach}}
+        {{/get}}
+    </section>
+</article>
+{{/post}}

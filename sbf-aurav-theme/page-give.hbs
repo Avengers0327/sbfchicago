@@ -1,0 +1,49 @@
+{{!< default}}
+{{!-- Give: money or food, both become meals. The hero, a chooser for the three ways to give,
+     the Zeffy form beside what gifts have done, then the items list beside its sign-up form.
+     Content comes from the Donations and Items Needed pages and the Amazon Wishlist post. --}}
+{{#post}}
+{{> "page-hero-split" eyebrow="Give" sub="Donate money and the SBF team buys the food, or give the items yourself. Either way, it becomes meals at the next packing event." cta_label="Donate now" cta_url="#donate" photo="2026/03/WhatsApp-Image-2026-03-13-at-5.30.30-PM.jpeg" photo_alt="Cases of snacks and chocolate milk bought with donations, stacked and ready to pack"}}
+{{> "give-choices"}}
+
+<section class="page-section give-money" id="donate" aria-labelledby="donate-title">
+    <div class="container">
+        <div class="section-head">
+            <div class="stack">
+                <p class="t-eyebrow">Give money</p>
+                <h2 class="t-h1" id="donate-title">Donate</h2>
+            </div>
+        </div>
+    </div>
+    <div class="page-split">
+        <div class="container page-split-grid">
+            {{> "give-impact"}}
+            <div class="page-split-main gh-content">
+                {{#get "pages" filter="slug:donations" limit="1"}}{{#foreach pages}}{{content}}{{/foreach}}{{/get}}
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page-section give-food band-page-india band-india" id="items" aria-label="Give food items">
+    {{> "give-items"}}
+    <div class="page-split">
+        <div class="container page-split-grid">
+            <aside class="page-split-aside" aria-label="Shopping list">
+                {{#get "posts" filter="slug:we-have-an-amazon-wish-list" limit="1"}}
+                    {{#foreach posts}}
+                        <div class="aside-card gh-content shopping-list">
+                            <p class="t-eyebrow">Shopping list</p>
+                            <h3 class="t-h3">What one packing event needs</h3>
+                            {{content}}
+                        </div>
+                    {{/foreach}}
+                {{/get}}
+            </aside>
+            <div class="page-split-main gh-content" id="items-form">
+                {{#get "pages" filter="slug:items-needed" limit="1"}}{{#foreach pages}}{{content}}{{/foreach}}{{/get}}
+            </div>
+        </div>
+    </div>
+</section>
+{{/post}}

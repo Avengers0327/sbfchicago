@@ -1628,8 +1628,8 @@ input, select, textarea {
 /* Google Forms need a set height; Zeffy sizes its own iframe, so leave it alone */
 .page-split-main iframe[src*="docs.google.com/forms"] { width: 100%; min-height: 1100px; border: 0; }
 /* Items Needed: a two-page form; page 1 (details + wishlist choice) is ~2,000px */
-.page-items-needed .page-split-main iframe[src*="docs.google.com/forms"] { min-height: 2200px; }
-@media (max-width: 599px) { .page-items-needed .page-split-main iframe[src*="docs.google.com/forms"] { min-height: 2700px; } }
+#items-form iframe[src*="docs.google.com/forms"] { min-height: 2200px; }
+@media (max-width: 599px) { #items-form iframe[src*="docs.google.com/forms"] { min-height: 2700px; } }
 .aside-card {
     display: grid;
     gap: var(--space-3);
@@ -1658,7 +1658,7 @@ input, select, textarea {
 .aside-stats li { display: grid; gap: var(--space-1); padding-left: 0; }
 .aside-stats .t-stat { color: var(--marigold-400); } /* marigold on navy only */
 .aside-stats .t-small { color: var(--white); }
-.page-donations .header-donate { display: none; }
+.page-give .header-donate { display: none; }
 
 /* 15. Post footer / pagination */
 .post-cta { padding-bottom: var(--section-y); }
@@ -1744,7 +1744,33 @@ input, select, textarea {
 .membership-note p { margin: 0; }
 .membership-note .t-eyebrow { color: var(--navy-900); }
 
-/* Youth leadership section on Get Involved */
-.youth-section { padding-top: var(--section-y); border-top: 1px solid var(--line); }
-.youth-intro { display: grid; gap: var(--space-3); }
-.youth-intro .t-body-lg { max-width: 60ch; margin: 0; }
+/* Combined pages: each part is a section of one page, separated by a rule */
+.page-section { padding-top: var(--section-y); border-top: 1px solid var(--line); scroll-margin-top: 140px; }
+.page-section .section-head .stack > p { margin: 0; }
+.page-section .section-head .t-body-lg { max-width: 60ch; }
+.page-jump { display: flex; flex-wrap: wrap; gap: var(--space-6); margin: var(--space-4) 0 0; }
+
+/* Get Involved */
+.more-ways { display: grid; gap: var(--space-3); margin-top: var(--space-8) !important; }
+.more-ways .t-h3 { margin: 0; }
+.volunteer-hours { padding-bottom: var(--section-y); }
+.hours-tile.is-lead .link-arrow { color: var(--white); margin-top: var(--space-2); }
+.youth-lead .leader-wall { margin-bottom: var(--section-y); }
+.page-partners { border-top: 1px solid var(--line); padding-top: var(--space-12); }
+
+/* Give: how to give, then each way in full */
+.give-choose { padding-block: var(--space-12); }
+.give-choices { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.give-choice { display: grid; gap: var(--space-2); align-content: start; padding: var(--space-6); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+.give-choice > * { margin: 0; }
+.give-choice .t-eyebrow { color: var(--lake-600); }
+.give-choice p:not(.t-eyebrow) { color: var(--ink-muted); }
+.give-money .page-split { padding-top: 0; }
+.give-food { padding-top: 0; border-top: 0; }
+.give-food .give-items { padding-top: var(--section-y); }
+
+/* News & Events */
+.events-upcoming { padding-bottom: var(--space-8); }
+.next-packing { margin-bottom: var(--space-8); grid-template-columns: 1fr auto; align-items: center; }
+.events-news { padding-bottom: var(--space-8); }
+.fund-past-title { margin: var(--space-8) 0 0 !important; }

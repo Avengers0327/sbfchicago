@@ -39,7 +39,7 @@ Static. Fast. Free to host. Zero backend required.
 | **CSS** | Hand-written, token-based (`assets/css/screen.css`) — colors, type scale, spacing, radius and shadow all defined once at the top |
 | **JS** | ~500 lines, dependency-free, progressively enhances content into components (project cards, timelines, leader walls, item tiles) |
 | **Fonts** | Bricolage Grotesque (display) + Figtree (body), via Google Fonts |
-| **Pages** | 11 (home, 7 nav pages, membership, donations, a sample event post) |
+| **Pages** | 9 (home, Team & Vision, Chicago and India projects, Get Involved, Give, News & Events, Membership, a sample event post) |
 | **Images** | 132, sourced from the live site's real events |
 | **Forms** | Google Forms (sign-up) + Zeffy (donations), both embedded, both free, neither requires a backend |
 | **Hosting cost** | $0 — any static host works |
@@ -96,3 +96,17 @@ SITE_URL=https://sbfchicago.org INDEXABLE=1 node build.js
 ```
 
 On Cloudflare Pages, set `SITE_URL` and `INDEXABLE=1` under Settings → Variables and Secrets (build) instead, and redeploy. Page titles and descriptions live in the `SEO` table in `build/build.js`.
+
+## Combined pages
+
+Some old pages now live as sections of one page. Their old addresses forward to the right spot:
+
+| Old page | Now |
+| --- | --- |
+| `/youth-leaders/` | Get Involved → Lead an event (`/get-involved/#youth-leadership`) |
+| `/donations/` | Give → Donate (`/give/#donate`) |
+| `/items-needed/` | Give → Ship it, or bring it (`/give/#items`) |
+| `/sbf-fundraiser/` | News & Events → Upcoming events (`/news-events/#upcoming`) |
+| `/in-the-news/` | News & Events → In the news (`/news-events/#news`) |
+
+Their text and photos still come from the same files in `build/content/`, so editing those still updates the site.
