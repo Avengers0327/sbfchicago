@@ -1743,3 +1743,8 @@ input, select, textarea {
 .membership-note { display: grid; gap: var(--space-2); max-width: 70ch; margin-bottom: var(--space-8); padding: var(--space-4) var(--space-6); background: var(--lake-100); border-left: 4px solid var(--navy-700); border-radius: var(--radius-sm); }
 .membership-note p { margin: 0; }
 .membership-note .t-eyebrow { color: var(--navy-900); }
+
+/* Youth leadership section on Get Involved */
+.youth-section { padding-top: var(--section-y); border-top: 1px solid var(--line); }
+.youth-intro { display: grid; gap: var(--space-3); }
+.youth-intro .t-body-lg { max-width: 60ch; margin: 0; }

@@ -21,9 +21,8 @@ const PAGES = [
   { slug: 'who-we-serve-chicago', title: 'Chicago Projects', eyebrow: 'Chicagoland', band: 'chicago', donate: true },
   { slug: 'who-we-serve-india', title: 'India Projects', eyebrow: 'India', band: 'india' },
   { slug: 'items-needed', title: 'Items Needed', layout: 'items' },
-  { slug: 'get-involved', title: 'Get Involved!', split: true, packing: true },
+  { slug: 'get-involved', title: 'Get Involved!', split: true, packing: true, youth: true },
   { slug: 'in-the-news', title: 'In the news...', eyebrow: 'Milestones and press' },
-  { slug: 'youth-leaders', title: 'Youth Leaders', split: true },
   { slug: 'sbf-fundraiser', title: 'SBF Fundraiser', eyebrow: 'Fundraisers' },
   { slug: 'membership', title: 'Become a member', layout: 'membership', nocontent: true },
   { slug: 'donations', title: 'Donations', layout: 'donations' },
@@ -167,6 +166,14 @@ function signupSection(slug) {
   return renderPartial('signup-form', params);
 }
 
+// Youth leadership section on Get Involved, filled with the Youth Leaders page content
+function youthSection(doc) {
+  const content = transform(fs.readFileSync(path.join(__dirname, 'content', 'youth-leaders.html'), 'utf8'), doc);
+  return readT('partials', 'youth-section.hbs')
+    .replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '')
+    .replace(/\{\{#get[\s\S]*?\{\{\/get\}\}/, () => `<div class="gh-canvas gh-content">${content}</div>`);
+}
+
 function shell(p, content, doc) {
   if (p.split) {
     const tpl = readT(`page-${p.slug}.hbs`);
@@ -175,6 +182,7 @@ function shell(p, content, doc) {
       + (p.packing ? renderPartial('packing-day', {}) : '')
       + (formFirst ? signupSection(p.slug) : '')
       + `<article class="band-page-plain"><div class="gh-canvas gh-content">${content}</div></article>`
+      + (p.youth ? youthSection(doc) : '')
       + (formFirst ? '' : signupSection(p.slug));
   }
   const band = p.band || '';
@@ -294,6 +302,7 @@ let html = src
 // Point internal links at the site's own routes
 html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\?[^"]*)?"/g, (m, slug) => {
   if (slug === '') return 'href="#home"';
+  if (slug === 'youth-leaders') return 'href="#youth-leadership"';
   return SLUGS.has(slug) ? `href="#${slug}"` : `href="https://sbfchicago.org/${slug}/"`;
 });
 
@@ -312,9 +321,8 @@ const SEO = {
   'who-we-serve-chicago': ['Chicago Projects | SBF Chicago', 'Monthly Chicago food packing events with local partners provide lunches and packed meals for people facing homelessness and students in need.'],
   'who-we-serve-india': ['India Projects | SBF Chicago', "SBF's feeding projects in India: lunches for a blind school, slum schools and day laborers at Labor Chowk, and more across northern India and Shirdi."],
   'items-needed': ['Items Needed | SBF Chicago', 'Sign up to bring bread, peanut butter, jelly, chips and other items for the next SBF Chicago food packing event.'],
-  'get-involved': ['Get Involved | SBF Chicago', "Volunteer at SBF Chicago's monthly food packing event. Students, families and groups are welcome, and volunteer hours are available."],
+  'get-involved': ['Get Involved | SBF Chicago', "Volunteer at SBF Chicago's monthly food packing event, or lead one as a student youth leader. Students, families and groups welcome; volunteer hours available."],
   'in-the-news': ['In the News | SBF Chicago', 'News and milestones from SBF Chicago, including 10,200+ meals packed in Chicagoland and India by August 2026.'],
-  'youth-leaders': ['Youth Leadership | SBF Chicago', "Student youth leaders run SBF Chicago's monthly food packing events: presenting, recruiting, buying food and supervising. Leads earn 4 volunteer hours."],
   'sbf-fundraiser': ['Fundraiser | SBF Chicago', "Upcoming SBF Chicago fundraiser events, and ways to help if you can't make it."],
   membership: ['Become a Member | SBF Chicago', 'Become an SBF Chicago member with Advocate and Champion plans: coaching, recognition and mentorship for youth leaders.'],
   donations: ['Donate | SBF Chicago', 'Donate to SBF Chicago to help provide meals. Zeffy is 100% free to the organization, and we also accept Zelle.'],
@@ -357,6 +365,8 @@ function pageDoc(slug) {
   let body = d.body.innerHTML.replace(/<title>[\s\S]*?<\/title>/, '');
   // Hash routes become real URLs; section anchors (#sign-up, #how-we-help) stay as they are
   body = body.replace(/href="#([a-z0-9-]+)"/g, (m, id) => id === 'home' ? 'href="/"' : (SLUGS.has(id) ? `href="/${id}/"` : m));
+  // Youth leadership is a section of Get Involved; link to it from other pages
+  if (slug !== 'get-involved') body = body.split('href="#youth-leadership"').join('href="/get-involved/#youth-leadership"');
   body = body.replace(/(src|href)="img\//g, '$1="/img/');
   const [title, desc] = SEO[slug];
   const url = urlFor(slug);
@@ -382,7 +392,7 @@ function pageDoc(slug) {
     `<meta name="twitter:image" content="${ogImage}">`,
     slug === 'home' ? `<script type="application/ld+json">${orgJsonLd}</script>` : '',
     // Old #team style links (shared before real URLs existed) go to the real page
-    slug === 'home' ? `<script>(function(){var s=${JSON.stringify(others)},h=location.hash.slice(1);if(s.indexOf(h)>-1)location.replace('/'+h+'/');})();</script>` : '',
+    slug === 'home' ? `<script>(function(){var s=${JSON.stringify(others)},h=location.hash.slice(1);if(h==='youth-leaders')location.replace('/get-involved/#youth-leadership');else if(s.indexOf(h)>-1)location.replace('/'+h+'/');})();</script>` : '',
     '<style>[hidden]{display:none!important}</style>',
   ].filter(Boolean).join('\n');
   return `<!doctype html>\n<html lang="en">\n<head>\n${head}\n</head>\n<body class="${bodyClass}">\n${body}\n</body>\n</html>\n`;
@@ -398,6 +408,22 @@ for (const slug of pageSlugs) {
   fs.mkdirSync(dest, { recursive: true });
   fs.writeFileSync(path.join(dest, 'index.html'), pageDoc(slug));
 }
+// The old Youth Leadership address forwards to its section on Get Involved
+fs.mkdirSync(path.join(OUT, 'youth-leaders'), { recursive: true });
+fs.writeFileSync(path.join(OUT, 'youth-leaders', 'index.html'), `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Youth Leadership | SBF Chicago</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="${urlFor('get-involved')}">
+<meta http-equiv="refresh" content="0; url=/get-involved/#youth-leadership">
+<script>location.replace('/get-involved/#youth-leadership');</script>
+</head>
+<body><p>Youth leadership is now part of <a href="/get-involved/#youth-leadership">Get Involved</a>.</p></body>
+</html>
+`);
+
 fs.writeFileSync(path.join(OUT, 'sitemap.xml'),
   '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
   pageSlugs.map(s => `  <url><loc>${urlFor(s)}</loc></url>`).join('\n') + '\n</urlset>\n');

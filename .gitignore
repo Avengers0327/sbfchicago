@@ -4,3 +4,4 @@ node_modules/
 .claude/
 build/dist/
 sbf-chicago-preview.html
+.wrangler/

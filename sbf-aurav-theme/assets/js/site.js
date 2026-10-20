@@ -51,6 +51,16 @@
         });
     }
     function secondary(btn) { btn.classList.add('is-secondary'); }
+    // The hero and the embedded form already cover sign-up; drop the editor's duplicate button
+    function dropSignupButtons(content) {
+        var signup = document.getElementById('sign-up');
+        var formUrl = signup && (signup.getAttribute('data-form-url') || '').split('?')[0];
+        if (!formUrl) return;
+        Array.prototype.forEach.call(content.querySelectorAll(':scope > .kg-button-card'), function (b) {
+            var a = b.querySelector('a');
+            if (a && a.getAttribute('href').split('?')[0] === formUrl) b.remove();
+        });
+    }
 
     var ICON = {
         volunteer: '<path d="M5 8h14l-1.2 12.5H6.2L5 8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>',
@@ -286,8 +296,9 @@
         runs(content, function (c) { return has(c, 'quote-card'); }).forEach(function (r) { wrap(r, 'quote-grid'); });
     }
 
-    // Youth Leadership page: hours become tiles, other roles become chips, leaders go on a wall
+    // Youth leadership section: hours become tiles, other roles become chips, leaders go on a wall
     function youth(content) {
+        dropSignupButtons(content);
         var ul = content.querySelector(':scope > ul');
         if (ul) {
             var offer = el('div', 'youth-offer'), tiles = 0;
@@ -469,15 +480,7 @@
             }
         }
 
-        // The hero and the embedded form already cover sign-up; drop the editor's duplicate button
-        var signup = document.getElementById('sign-up');
-        var formUrl = signup && (signup.getAttribute('data-form-url') || '').split('?')[0];
-        if (formUrl) {
-            Array.prototype.forEach.call(content.querySelectorAll(':scope > .kg-button-card'), function (b) {
-                var a = b.querySelector('a');
-                if (a && a.getAttribute('href').split('?')[0] === formUrl) b.remove();
-            });
-        }
+        dropSignupButtons(content);
         Array.prototype.forEach.call(content.querySelectorAll('img[src*="combined_logos"]'), function (img) {
             img.closest('figure').classList.add('logo-panel');
             if (!img.alt) img.alt = 'Logos of SBF Chicago partners and sponsors';
@@ -515,9 +518,10 @@
             if (on('page-team')) team(content);
             if (on('page-who-we-serve-india')) india(content);
             if (on('page-in-the-news')) news(content);
+            // The youth section sits inside Get Involved, so check it first
             if (on('page-youth-leaders')) youth(content);
+            else if (on('page-get-involved')) involved(content);
             if (on('page-sbf-fundraiser')) fundraiser(content);
-            if (on('page-get-involved')) involved(content);
             if (has(content, 'shopping-list')) shoppingList(content);
             generic(content);
         } catch (e) {

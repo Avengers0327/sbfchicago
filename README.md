@@ -39,7 +39,7 @@ Static. Fast. Free to host. Zero backend required.
 | **CSS** | Hand-written, token-based (`assets/css/screen.css`) — colors, type scale, spacing, radius and shadow all defined once at the top |
 | **JS** | ~500 lines, dependency-free, progressively enhances content into components (project cards, timelines, leader walls, item tiles) |
 | **Fonts** | Bricolage Grotesque (display) + Figtree (body), via Google Fonts |
-| **Pages** | 12 (home, 8 nav pages, membership, tag/author archives, error page) |
+| **Pages** | 11 (home, 7 nav pages, membership, donations, a sample event post) |
 | **Images** | 132, sourced from the live site's real events |
 | **Forms** | Google Forms (sign-up) + Zeffy (donations), both embedded, both free, neither requires a backend |
 | **Hosting cost** | $0 — any static host works |
@@ -86,7 +86,7 @@ Paid memberships (Advocate and Champion, monthly or yearly) run through Zeffy, t
 
 ## Search (SEO)
 
-Every page is its own real URL (`/team/`, `/youth-leaders/`, ...) with its own title, description, canonical link, social-share tags, and a `sitemap.xml`. The homepage also carries `NonprofitOrganization` data.
+Every page is its own real URL (`/team/`, `/get-involved/`, ...) with its own title, description, canonical link, social-share tags, and a `sitemap.xml`. The homepage also carries `NonprofitOrganization` data.
 
 Until the real domain is ready, the build marks every page `noindex` so this preview can't compete with sbfchicago.org. At launch, build with the real address and indexing on:
 

@@ -50,7 +50,6 @@
         <li><a href="https://sbfchicago.org/items-needed/">Items Needed</a></li>
         <li><a href="https://sbfchicago.org/get-involved/">Get Involved</a></li>
         <li><a href="https://sbfchicago.org/in-the-news/">In the News</a></li>
-        <li><a href="https://sbfchicago.org/youth-leaders/">Youth Leadership</a></li>
         <li><a href="https://sbfchicago.org/sbf-fundraiser/">Fundraiser</a></li>
       </ul>
       <div class="nav-members"><a href="#membership">Become a member</a></div>
@@ -109,7 +108,7 @@
     // A section link (#how-we-help, #sign-up, #items-form): stay on the page that
     // holds that section and scroll to it, instead of treating it as a page name.
     if (ids.indexOf(id) < 0) {
-      // Prefer the section on the page you're on (Get Involved and Youth Leadership both have #sign-up)
+      // Prefer the section on the page you're on
       var current = pages.filter(function (p) { return !p.hidden; })[0];
       var anchor = (current && current.querySelector('#' + CSS.escape(id))) || document.getElementById(id);
       var owner = anchor && anchor.closest('[data-page]');
