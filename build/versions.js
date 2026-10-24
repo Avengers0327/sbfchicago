@@ -26,6 +26,10 @@ const MILESTONES = [
     note: 'Donations and Items Needed became Give; Fundraiser and In the News became News & Events.' },
   { id: 'where-we-serve', commit: 'da93c0d', date: '2026-10-20', type: 'pages', label: 'Where We Serve',
     note: 'Chicago and India Projects became one page, and the nav went to five plain links.' },
+  { id: 'phone-pass', commit: '42705d9', date: '2026-10-24', type: 'pages', label: 'Built for phones',
+    note: 'Donation form first on Give, swipeable rows, compact cards, "Read more" bios, readable timeline.' },
+  { id: 'homepage-events', commit: 'f043dc2', date: '2026-10-24', type: 'pages', label: 'Homepage: events and ways to help',
+    note: 'Facts strip, three ways to get involved, upcoming packing dates with Sign up buttons.' },
 ];
 
 fs.rmSync(OUT, { recursive: true, force: true });
