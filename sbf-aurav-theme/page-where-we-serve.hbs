@@ -24,6 +24,7 @@
         {{#get "pages" filter="slug:who-we-serve-chicago" limit="1"}}
             {{#foreach pages}}<div class="gh-canvas gh-content">{{content}}</div>{{/foreach}}
         {{/get}}
+        {{> "weekend-gap"}}
     </section>
 
     <section class="page-section serve-city band-page-india page-who-we-serve-india" id="india" aria-labelledby="india-title">

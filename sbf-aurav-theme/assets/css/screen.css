@@ -1921,3 +1921,17 @@ input, select, textarea {
 #how-we-help .step > * { margin: 0; }
 #how-we-help .step .t-eyebrow { margin: 0; }
 @media (max-width: 599px) { #how-we-help .step { padding: var(--space-4); } }
+
+/* Homepage hero: copy beside one real photo */
+.home-hero { border-bottom: 0; }
+
+/* Where We Serve, Chicago: the weekend gap for students (moved from the homepage) */
+.weekend-gap { padding-block: var(--space-12); }
+.weekend-gap .container { display: grid; gap: var(--space-6); }
+.weekend-gap .t-h2 { margin: 0; }
+.gap-story { display: grid; gap: var(--space-2); max-width: 720px; margin: 0; padding: var(--space-6); border-left: 4px solid var(--lake-600); background: var(--white); border-radius: 0 var(--radius-md) var(--radius-md) 0; }
+.gap-story > * { margin: 0; }
+.gap-story .t-eyebrow { color: var(--lake-600); }
+.gap-story-line { font: 800 28px/32px var(--font-display); letter-spacing: -0.01em; color: var(--navy-900); }
+.serve-city .gh-canvas:has(+ .weekend-gap) { padding-bottom: 0; }
+.weekend-gap + .gh-canvas { padding-top: var(--space-8); }

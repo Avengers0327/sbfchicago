@@ -155,6 +155,7 @@ function fillHbs(h, params, gets, name) {
   const pkg = JSON.parse(readT('package.json'));
   const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
   h = h.replace(/\{\{!<[^}]*\}\}/g, '').replace(/\{\{!--[\s\S]*?--\}\}/g, '');
+  h = h.replace(/\{\{> "([\w-]+)"\}\}/g, (m, n) => readT('partials', n + '.hbs').replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '').trim());
   h = h.replace(/\{\{#get "\w+" filter="slug:([\w-]+)"[^}]*\}\}([\s\S]*?)\{\{\/get\}\}/g, (m, slug, inner) => {
     const body = gets && gets[slug] != null ? gets[slug] : contentOf(slug);
     return inner.replace(/\{\{#foreach \w+\}\}|\{\{\/foreach\}\}/g, '').replace('{{content}}', () => body);
@@ -204,7 +205,9 @@ function servePage(p) {
   const head = city => fill(between('<div class="serve-city-head band-' + city + '">', '        {{#get'));
   return `<article class="band-page-plain">${fill(between('<header class="page-hero">', '    <section'))}
     <section class="page-section serve-city band-page-chicago" id="chicago" aria-labelledby="chicago-title">${head('chicago')}
-      <div class="gh-canvas gh-content">${chicago.slice(0, help)}${chicago.slice(past)}</div>
+      <div class="gh-canvas gh-content">${chicago.slice(0, help)}</div>
+      ${renderPartial('weekend-gap', {})}
+      <div class="gh-canvas gh-content">${chicago.slice(past)}</div>
     </section>
     <section class="page-section serve-city band-page-india page-who-we-serve-india" id="india" aria-labelledby="india-title">${head('india')}
       <div class="gh-canvas gh-content">${india.slice(0, indiaHelp)}</div>
@@ -274,15 +277,8 @@ function renderHome() {
   const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
   const partial = n => readT('partials', n + '.hbs').replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '').trim();
   let h = readT('home.hbs');
-  // Replace the text between two literal markers (inclusive)
-  const cut = (str, start, end, withText) => {
-    const a = str.indexOf(start), b = str.indexOf(end, a);
-    if (a < 0 || b < 0) throw new Error('marker not found: ' + start);
-    return str.slice(0, a) + withText + str.slice(b + end.length);
-  };
   h = h.replace(/\{\{!<[^}]*\}\}/g, '').replace(/\{\{!--[\s\S]*?--\}\}/g, '');
-  h = cut(h, '{{#if @custom.hero_image}}', '{{/get}}\n            {{/if}}',
-    '<figure class="tile-lead"><img src="' + localImg('https://sbfchicago.org/content/images/2026/09/IMG_6248-2.JPEG') + '" alt="Volunteers, youth leaders and families at the September 13 food packing event" loading="lazy"><figcaption>September 13 Chicago Food Packing Event</figcaption></figure>');
+  h = h.replace(/\{\{#if [^}]+\}\}[\s\S]*?\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, '$1');
   h = h.replace(/\{\{> "([\w-]+)"\}\}/g, (m, n) => partial(n));
   h = h.replace(/\{\{@custom\.(\w+)\}\}/g, (m, k) => defs[k] != null ? defs[k] : '');
   h = h.split('{{@site.url}}').join('https://sbfchicago.org');
