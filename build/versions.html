@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Compare Versions | SBF Chicago</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="/img/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Figtree:wght@400;500;700&display=swap">
+<style>
+/*TOKENS*/
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--cream-50); color: var(--navy-900); font: 400 16px/24px var(--font-sans); min-height: 100vh; display: flex; flex-direction: column; }
+button, select { font: inherit; color: inherit; }
+:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.eyebrow { margin: 0; font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--lake-600); }
+
+/* Bar: brand, page picker, view and scroll controls */
+.cv-bar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-4) var(--space-6); padding: var(--space-4) var(--gutter); background: var(--white); border-bottom: 1px solid var(--line); }
+.cv-brand { display: flex; align-items: center; gap: var(--space-3); margin-right: auto; color: inherit; text-decoration: none; }
+.cv-brand img { width: 40px; height: 40px; border-radius: 50%; }
+.cv-brand strong { display: block; font: 700 20px/24px var(--font-display); }
+.cv-controls { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-6); }
+.cv-field { display: flex; align-items: center; gap: var(--space-2); font-size: 14px; font-weight: 500; }
+.cv-field select { padding: 6px 32px 6px 12px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--white); }
+.cv-seg { display: inline-flex; padding: 3px; border: 1px solid var(--line-strong); border-radius: var(--radius-pill); background: var(--white); }
+.cv-seg button { padding: 4px 14px; border: 0; border-radius: var(--radius-pill); background: none; font-size: 14px; font-weight: 700; cursor: pointer; }
+.cv-seg button[aria-pressed="true"] { background: var(--navy-900); color: var(--white); }
+.cv-check { display: flex; align-items: center; gap: var(--space-2); font-size: 14px; font-weight: 500; cursor: pointer; }
+.cv-check input { width: 16px; height: 16px; accent-color: var(--lake-600); }
+.cv-back { font-size: 14px; font-weight: 700; color: var(--lake-600); }
+
+/* Timeline: every version in order; L and R mark what each side shows */
+.cv-timeline { padding: var(--space-6) var(--gutter) var(--space-4); }
+.cv-timeline ol { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(120px, 1fr); gap: var(--space-2); overflow-x: auto; }
+.cv-timeline ol::before { content: ""; position: absolute; left: 0; right: 0; top: 11px; height: 2px; background: var(--line); }
+.cv-stop { position: relative; display: grid; gap: 2px; justify-items: start; width: 100%; padding: 0 var(--space-2) var(--space-2) 0; border: 0; background: none; text-align: left; cursor: pointer; border-radius: var(--radius-sm); }
+.cv-dot { position: relative; display: grid; place-items: center; width: 24px; height: 24px; margin-bottom: var(--space-2); border: 2px solid var(--line-strong); border-radius: 50%; background: var(--cream-50); font-size: 11px; font-weight: 700; }
+.cv-stop:hover .cv-dot { border-color: var(--lake-600); }
+.cv-stop.is-left .cv-dot { background: var(--lake-600); border-color: var(--lake-600); color: var(--white); }
+.cv-stop.is-right .cv-dot { background: var(--navy-900); border-color: var(--navy-900); color: var(--white); }
+.cv-stop.is-left.is-right .cv-dot { background: linear-gradient(90deg, var(--lake-600) 50%, var(--navy-900) 50%); }
+.cv-stop-date { font-size: 12px; line-height: 16px; font-weight: 700; color: var(--ink-muted); }
+.cv-stop-label { font-size: 14px; line-height: 20px; font-weight: 700; }
+.cv-hint { margin: var(--space-2) 0 0; font-size: 14px; color: var(--ink-muted); }
+
+/* The two sides */
+.cv-panes { flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); padding: 0 var(--gutter) var(--space-6); }
+.cv-pane { display: flex; flex-direction: column; min-width: 0; background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); overflow: hidden; }
+.cv-pane.is-active { border-color: var(--lake-600); box-shadow: 0 0 0 1px var(--lake-600), var(--shadow-md); }
+.cv-pane-head { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: var(--space-1) var(--space-3); padding: var(--space-3) var(--space-4); border-bottom: 1px solid var(--line); cursor: pointer; }
+.cv-side { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; color: var(--white); font-size: 13px; font-weight: 700; }
+.cv-pane[data-side="left"] .cv-side { background: var(--lake-600); }
+.cv-pane[data-side="right"] .cv-side { background: var(--navy-900); }
+.cv-pane-head select { min-width: 0; padding: 6px 32px 6px 10px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: var(--white); font-weight: 700; }
+.cv-open { font-size: 14px; font-weight: 700; color: var(--lake-600); white-space: nowrap; }
+.cv-note { grid-column: 2 / -1; margin: 0; font-size: 13px; line-height: 18px; color: var(--ink-muted); }
+.cv-frame { position: relative; flex: 1; min-height: 520px; overflow: hidden; background: var(--cream-50); }
+.cv-frame iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: 0 0; background: var(--white); }
+.cv-frame.is-phone iframe { left: 50%; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+.cv-missing { position: absolute; inset: 0; display: grid; place-content: center; gap: var(--space-2); padding: var(--space-8); text-align: center; color: var(--ink-muted); }
+.cv-missing strong { font: 700 20px/28px var(--font-display); color: var(--navy-900); }
+
+@media (min-width: 960px) {
+    .cv-panes { min-height: 0; }
+    .cv-frame { min-height: 0; height: calc(100vh - 300px); min-height: 560px; }
+}
+@media (max-width: 899px) {
+    .cv-panes { grid-template-columns: minmax(0, 1fr); }
+    .cv-frame { height: 75vh; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<header class="cv-bar">
+    <a class="cv-brand" href="/">
+        <img src="/img/logo.jpg" alt="" width="40" height="40">
+        <span><span class="eyebrow">Site history</span><strong>Compare versions</strong></span>
+    </a>
+    <div class="cv-controls">
+        <label class="cv-field" for="cv-page">Page <select id="cv-page"></select></label>
+        <div class="cv-seg" role="group" aria-label="Screen size">
+            <button type="button" id="cv-desktop" aria-pressed="true">Desktop</button>
+            <button type="button" id="cv-phone" aria-pressed="false">Phone</button>
+        </div>
+        <label class="cv-check" for="cv-sync"><input type="checkbox" id="cv-sync" checked> Scroll together</label>
+        <a class="cv-back" href="/">Back to the site</a>
+    </div>
+</header>
+
+<section class="cv-timeline" aria-label="Versions, oldest first">
+    <ol id="cv-stops"></ol>
+    <p class="cv-hint">Click a version to show it on the highlighted side. Click a side to highlight it.</p>
+</section>
+
+<main class="cv-panes">
+    <section class="cv-pane" data-side="left" aria-label="Left side">
+        <div class="cv-pane-head">
+            <span class="cv-side" aria-hidden="true">L</span>
+            <select id="cv-left" aria-label="Version on the left"></select>
+            <a class="cv-open" target="_blank" rel="noopener">Open ↗</a>
+            <p class="cv-note"></p>
+        </div>
+        <div class="cv-frame"></div>
+    </section>
+    <section class="cv-pane is-active" data-side="right" aria-label="Right side">
+        <div class="cv-pane-head">
+            <span class="cv-side" aria-hidden="true">R</span>
+            <select id="cv-right" aria-label="Version on the right"></select>
+            <a class="cv-open" target="_blank" rel="noopener">Open ↗</a>
+            <p class="cv-note"></p>
+        </div>
+        <div class="cv-frame"></div>
+    </section>
+</main>
+
+<script>
+var DATA = /*DATA*/;
+(function () {
+    var versions = DATA.versions, pages = DATA.pages;
+    var byId = {};
+    versions.forEach(function (v) { byId[v.id] = v; });
+    var q = new URLSearchParams(location.search);
+
+    // Page from ?page= (the "Compare versions" button passes the page you were on)
+    function pageFor(slug) {
+        for (var i = 0; i < pages.length; i++) {
+            if (pages[i].key === slug) return pages[i];
+            for (var j = 0; j < pages[i].try.length; j++) if (pages[i].try[j].split('#')[0] === slug) return pages[i];
+        }
+        return pages[0];
+    }
+    var state = {
+        page: pageFor(q.get('page') || 'home'),
+        left: byId[q.get('left')] ? q.get('left') : versions[0].id,
+        right: byId[q.get('right')] ? q.get('right') : versions[versions.length - 1].id,
+        view: q.get('view') === 'phone' ? 'phone' : 'desktop',
+        active: 'right'
+    };
+
+    // Where a page lives in a version, or null if it didn't exist then
+    function urlFor(v, page) {
+        for (var i = 0; i < page.try.length; i++) {
+            var parts = page.try[i].split('#'), slug = parts[0], sec = parts[1];
+            if (v.pages.indexOf(slug) < 0) continue;
+            if (v.type === 'live') return v.origin + (slug === 'home' ? '/' : '/' + slug + '/') + (sec ? '#' + sec : '');
+            if (v.type === 'spa') return '/versions/' + v.id + '/#' + (sec || slug);
+            return v.base + (slug === 'home' ? '' : slug + '/') + (sec ? '#' + sec : '');
+        }
+        return null;
+    }
+
+    var $ = function (id) { return document.getElementById(id); };
+    var panes = { left: document.querySelector('[data-side="left"]'), right: document.querySelector('[data-side="right"]') };
+
+    // Controls
+    pages.forEach(function (p) { $('cv-page').add(new Option(p.label, p.key)); });
+    ['cv-left', 'cv-right'].forEach(function (id) {
+        versions.forEach(function (v) { $(id).add(new Option(v.label + ' · ' + v.date, v.id)); });
+    });
+    var ol = $('cv-stops');
+    versions.forEach(function (v) {
+        var li = document.createElement('li'), b = document.createElement('button');
+        b.type = 'button'; b.className = 'cv-stop'; b.dataset.id = v.id;
+        b.innerHTML = '<span class="cv-dot" aria-hidden="true"></span><span class="cv-stop-date"></span><span class="cv-stop-label"></span>';
+        b.querySelector('.cv-stop-date').textContent = v.date;
+        b.querySelector('.cv-stop-label').textContent = v.label;
+        b.title = v.note;
+        b.addEventListener('click', function () { state[state.active] = v.id; render(); });
+        li.appendChild(b); ol.appendChild(li);
+    });
+
+    $('cv-page').addEventListener('change', function () { state.page = pageFor(this.value); render(); });
+    $('cv-left').addEventListener('change', function () { state.left = this.value; state.active = 'left'; render(); });
+    $('cv-right').addEventListener('change', function () { state.right = this.value; state.active = 'right'; render(); });
+    $('cv-desktop').addEventListener('click', function () { state.view = 'desktop'; render(); });
+    $('cv-phone').addEventListener('click', function () { state.view = 'phone'; render(); });
+    Object.keys(panes).forEach(function (side) {
+        panes[side].querySelector('.cv-pane-head').addEventListener('click', function (e) {
+            if (e.target.closest('select, a')) return;
+            state.active = side; render(false);
+        });
+    });
+
+    // Each side shows a full-size page, scaled down to fit
+    function fit(frame) {
+        var iframe = frame.querySelector('iframe');
+        if (!iframe) return;
+        var w = state.view === 'phone' ? 390 : 1280;
+        var scale = Math.min(1, frame.clientWidth / w);
+        iframe.style.width = w + 'px';
+        iframe.style.height = (frame.clientHeight / scale) + 'px';
+        iframe.style.transform = (state.view === 'phone' ? 'translateX(-50%) ' : '') + 'scale(' + scale + ')';
+        iframe.style.transformOrigin = state.view === 'phone' ? '50% 0' : '0 0';
+    }
+
+    var syncing = false;
+    function sync(from, to) {
+        if (!$('cv-sync').checked || syncing) return;
+        try {
+            var a = from.contentWindow, b = to.contentWindow;
+            var max = a.document.documentElement.scrollHeight - a.innerHeight;
+            var ratio = max > 0 ? a.scrollY / max : 0;
+            syncing = true;
+            b.scrollTo(0, ratio * (b.document.documentElement.scrollHeight - b.innerHeight));
+            requestAnimationFrame(function () { syncing = false; });
+        } catch (e) { /* the original site is on another domain, so it scrolls on its own */ }
+    }
+
+    var shown = {};
+    function render(reload) {
+        $('cv-page').value = state.page.key;
+        $('cv-left').value = state.left;
+        $('cv-right').value = state.right;
+        $('cv-desktop').setAttribute('aria-pressed', String(state.view === 'desktop'));
+        $('cv-phone').setAttribute('aria-pressed', String(state.view === 'phone'));
+        Array.prototype.forEach.call(ol.querySelectorAll('.cv-stop'), function (b) {
+            var l = b.dataset.id === state.left, r = b.dataset.id === state.right;
+            b.classList.toggle('is-left', l); b.classList.toggle('is-right', r);
+            b.querySelector('.cv-dot').textContent = l && r ? '' : l ? 'L' : r ? 'R' : '';
+            b.setAttribute('aria-label', b.querySelector('.cv-stop-label').textContent + ', ' + b.querySelector('.cv-stop-date').textContent + (l ? ', on the left' : '') + (r ? ', on the right' : ''));
+        });
+
+        Object.keys(panes).forEach(function (side) {
+            var pane = panes[side], v = byId[state[side]], frame = pane.querySelector('.cv-frame');
+            pane.classList.toggle('is-active', state.active === side);
+            pane.querySelector('.cv-note').textContent = v.note;
+            frame.classList.toggle('is-phone', state.view === 'phone');
+            var url = urlFor(v, state.page), open = pane.querySelector('.cv-open');
+            open.hidden = !url;
+            if (url) open.href = url;
+            if (reload === false || shown[side] === url + state.view) { fit(frame); return; }
+            shown[side] = url + state.view;
+            frame.innerHTML = '';
+            if (!url) {
+                frame.innerHTML = '<div class="cv-missing"><strong></strong><span>This page didn’t exist in this version.</span></div>';
+                frame.querySelector('strong').textContent = state.page.label;
+                return;
+            }
+            var iframe = document.createElement('iframe');
+            iframe.title = state.page.label + ', ' + v.label;
+            iframe.src = url;
+            iframe.addEventListener('load', function () {
+                try {
+                    iframe.contentWindow.addEventListener('scroll', function () {
+                        sync(iframe, panes[side === 'left' ? 'right' : 'left'].querySelector('iframe') || iframe);
+                    }, { passive: true });
+                } catch (e) { /* other domain */ }
+            });
+            frame.appendChild(iframe);
+            fit(frame);
+        });
+
+        var p = new URLSearchParams({ page: state.page.key, left: state.left, right: state.right });
+        if (state.view === 'phone') p.set('view', 'phone');
+        history.replaceState(null, '', '?' + p.toString());
+    }
+
+    window.addEventListener('resize', function () { Object.keys(panes).forEach(function (s) { fit(panes[s].querySelector('.cv-frame')); }); });
+    render();
+})();
+</script>
+</body>
+</html>

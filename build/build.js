@@ -342,6 +342,9 @@ html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\
    Until then every page says noindex, so the preview domain can't compete with the live site. */
 const SITE_URL = (process.env.SITE_URL || 'https://sbfchicago.pages.dev').replace(/\/+$/, '');
 const INDEXABLE = process.env.INDEXABLE === '1';
+// Version history for previewing with the client: a "Compare versions" button on every page and
+// the compare page at /versions/ (snapshots made by `node versions.js`). Set to false to remove it all.
+const SHOW_VERSIONS = true;
 const SEO = {
   home: ['SBF Chicago: Youth-led hunger relief in Chicagoland & India', 'SBF Chicago: a youth-led nonprofit packing meals for neighbors facing hunger in Chicagoland and India.'],
   team: ['Team & Vision | SBF Chicago', "Meet the founders, junior board and executive team of SBF Chicago, a youth-led nonprofit in Chicago's Northwest suburbs fighting hunger."],
@@ -423,12 +426,20 @@ function pageDoc(slug) {
     slug === 'home' ? `<script>(function(){var m=${JSON.stringify(oldHash)},h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>` : '',
     '<style>[hidden]{display:none!important}</style>',
   ].filter(Boolean).join('\n');
-  return `<!doctype html>\n<html lang="en">\n<head>\n${head}\n</head>\n<body class="${bodyClass}">\n${body}\n</body>\n</html>\n`;
+  return `<!doctype html>\n<html lang="en">\n<head>\n${head}\n</head>\n<body class="${bodyClass}">\n${body}${SHOW_VERSIONS ? versionsButton(slug) : ''}\n</body>\n</html>\n`;
+}
+
+// "Compare versions" button on every page while the version history is on (not inside the compare page's frames)
+function versionsButton(slug) {
+  return `
+<a class="versions-pill" href="/versions/?page=${slug}">Compare versions</a>
+<style>.versions-pill{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;padding:10px 16px;border-radius:999px;background:var(--navy-900);color:var(--white);font:700 14px/20px var(--font-sans);text-decoration:none;box-shadow:var(--shadow-md)}.versions-pill:hover{background:var(--navy-700)}.versions-pill:focus-visible{outline:none;box-shadow:var(--shadow-focus)}</style>
+<script>if (window.top !== window.self) document.querySelector('.versions-pill').remove();</script>`;
 }
 
 const pageSlugs = ['home'].concat(PAGES.map(p => p.slug));
 for (const e of fs.readdirSync(OUT, { withFileTypes: true })) {
-  if (e.isDirectory() && e.name !== 'img') fs.rmSync(path.join(OUT, e.name), { recursive: true, force: true });
+  if (e.isDirectory() && e.name !== 'img' && !(e.name === 'versions' && SHOW_VERSIONS)) fs.rmSync(path.join(OUT, e.name), { recursive: true, force: true });
 }
 for (const slug of pageSlugs) {
   if (!SEO[slug]) throw new Error('No SEO entry for ' + slug);
@@ -463,6 +474,46 @@ fs.writeFileSync(path.join(OUT, 'robots.txt'), INDEXABLE
   ? `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`
   : 'User-agent: *\nAllow: /\n');
 console.log(`seo: ${pageSlugs.length} pages, ${INDEXABLE ? 'INDEXABLE' : 'noindex'}, ${SITE_URL}`);
+
+// Compare versions page: the original site (live), each saved snapshot, and today's site
+if (SHOW_VERSIONS) {
+  const snapsFile = path.join(OUT, 'versions', 'versions.json');
+  if (!fs.existsSync(snapsFile)) {
+    console.warn('versions: no snapshots yet; run `node versions.js` once to add the compare page');
+  } else {
+    const snaps = JSON.parse(fs.readFileSync(snapsFile, 'utf8'));
+    const versions = [
+      { id: 'before', type: 'live', origin: 'https://sbfchicago.org', date: 'Original', label: 'Before the redesign',
+        note: 'sbfchicago.org as it was, shown live.',
+        pages: ['home', 'team', 'who-we-serve-chicago', 'who-we-serve-india', 'get-involved', 'youth-leaders', 'items-needed', 'donations', 'sbf-fundraiser', 'in-the-news', 'aug-event'] },
+      ...snaps.map(s => Object.assign({ base: `/versions/${s.id}/` }, s)),
+      { id: 'today', type: 'pages', base: '/', date: 'Now', label: 'Today', note: 'The site as it is now.', pages: pageSlugs },
+    ];
+    // Pages to compare; each lists where it lives, oldest address first
+    const pages = [
+      ['home', 'Home', ['home']],
+      ['team', 'Team & Vision', ['team']],
+      ['chicago', 'Chicago projects', ['who-we-serve-chicago', 'where-we-serve#chicago']],
+      ['india', 'India projects', ['who-we-serve-india', 'where-we-serve#india']],
+      ['get-involved', 'Get Involved', ['get-involved']],
+      ['youth', 'Youth leadership', ['youth-leaders', 'get-involved#youth-leadership']],
+      ['donate', 'Donate', ['donations', 'give#donate']],
+      ['items', 'Items needed', ['items-needed', 'give#items']],
+      ['fundraisers', 'Fundraisers', ['sbf-fundraiser', 'news-events#upcoming']],
+      ['news', 'In the news', ['in-the-news', 'news-events#news']],
+      ['membership', 'Membership', ['membership']],
+      ['aug-event', 'August 9 event post', ['aug-event']],
+    ].map(([key, label, tries]) => ({ key, label, try: tries }));
+    const tokens = readT('assets/css/screen.css').match(/:root \{[\s\S]*?\n\}/)[0];
+    const page = fs.readFileSync(path.join(__dirname, 'versions.html'), 'utf8')
+      .replace('/*TOKENS*/', () => tokens)
+      .replace('/*DATA*/', () => JSON.stringify({ versions, pages }).replace(/</g, '\\u003c'));
+    fs.writeFileSync(path.join(OUT, 'versions', 'index.html'), page);
+    console.log(`versions: compare page with ${versions.length} versions`);
+  }
+} else {
+  fs.rmSync(path.join(OUT, 'versions'), { recursive: true, force: true });
+}
 
 // The Claude preview can't frame other sites, so its copy shows placeholders instead of the forms
 const holder = (name, href) => `<div class="embed-placeholder"><p>I need the ${name} embed code, so I cannot display the form right now.</p><a class="btn btn-secondary btn-sm" href="${href}">Open the form</a></div>`;

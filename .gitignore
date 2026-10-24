@@ -5,3 +5,5 @@ node_modules/
 build/dist/
 sbf-chicago-preview.html
 .wrangler/
+build/.cache/
+build/.versions-tmp/

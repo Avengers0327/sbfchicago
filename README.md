@@ -112,3 +112,17 @@ Some old pages now live as sections of one page. Their old addresses forward to 
 | `/in-the-news/` | News & Events → In the news (`/news-events/#news`) |
 
 Their text and photos still come from the same files in `build/content/`, so editing those still updates the site.
+
+## Compare versions (temporary)
+
+Every page has a **Compare versions** button that opens `/versions/`: two versions side by side (desktop or phone size, scrolling together), picked from a timeline that runs from the original sbfchicago.org (shown live) through each milestone to today.
+
+Past versions are rebuilt from git history once:
+
+```bash
+cd build
+node versions.js
+node build.js
+```
+
+Milestones are listed at the top of `build/versions.js`. To remove the feature, set `SHOW_VERSIONS = false` in `build/build.js` and rebuild; the button and `/versions/` disappear.
