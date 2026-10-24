@@ -216,7 +216,18 @@
                 if (bio) {
                     var b = el('div', 'person-bio');
                     while (bio.firstChild) b.appendChild(bio.firstChild);
-                    pc.append(b);
+                    b.id = 'bio-' + name.toLowerCase().replace(/[^a-z]+/g, '-');
+                    // Phones show the first few lines; the button opens the rest (CSS hides it on wider screens)
+                    var more = el('button', 'bio-toggle', 'Read more');
+                    more.type = 'button';
+                    more.setAttribute('aria-expanded', 'false');
+                    more.setAttribute('aria-controls', b.id);
+                    more.addEventListener('click', function () {
+                        var open = pc.classList.toggle('bio-open');
+                        more.setAttribute('aria-expanded', String(open));
+                        more.textContent = open ? 'Show less' : 'Read more';
+                    });
+                    pc.append(b, more);
                 }
             }
             card.replaceWith(pc);
@@ -415,9 +426,9 @@
         dropDividersBetween(cards, 'fund-card');
         runs(content, function (c) { return has(c, 'fund-card'); }).forEach(function (r) {
             var list = wrap(r, 'fund-list');
-            // Coming up first; past fundraisers follow under their own heading
-            var past = r.filter(function (c) { return !has(c, 'is-upcoming'); });
-            if (past.length && past.length < r.length) {
+            // Coming up first; past fundraisers follow, newest first, under their own heading
+            var past = r.filter(function (c) { return !has(c, 'is-upcoming'); }).reverse();
+            if (past.length) {
                 past.forEach(function (c) { list.appendChild(c); });
                 list.insertBefore(el('h3', 't-h3 fund-past-title', 'Past fundraisers'), past[0]);
             }

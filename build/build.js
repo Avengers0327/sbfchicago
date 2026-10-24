@@ -433,7 +433,7 @@ function pageDoc(slug) {
 function versionsButton(slug) {
   return `
 <a class="versions-pill" href="/versions/?page=${slug}">Compare versions</a>
-<style>.versions-pill{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;padding:10px 16px;border-radius:999px;background:var(--navy-900);color:var(--white);font:700 14px/20px var(--font-sans);text-decoration:none;box-shadow:var(--shadow-md)}.versions-pill:hover{background:var(--navy-700)}.versions-pill:focus-visible{outline:none;box-shadow:var(--shadow-focus)}</style>
+<style>.versions-pill{position:fixed;left:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;padding:10px 16px;border-radius:999px;background:var(--navy-900);color:var(--white);font:700 14px/20px var(--font-sans);text-decoration:none;box-shadow:var(--shadow-md)}.versions-pill:hover{background:var(--navy-700)}.versions-pill:focus-visible{outline:none;box-shadow:var(--shadow-focus)}@media (max-width:599px){.versions-pill{left:12px;padding:6px 12px;font-size:12px;line-height:16px;opacity:.92}}</style>
 <script>if (window.top !== window.self) document.querySelector('.versions-pill').remove();</script>`;
 }
 

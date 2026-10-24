@@ -1790,3 +1790,76 @@ input, select, textarea {
 .events-news { padding-bottom: var(--space-8); }
 .fund-past-title { margin: var(--space-8) 0 0 !important; }
 
+
+/* Section headings on combined pages already give the content room above it */
+.page-section .gh-canvas { padding-top: 0; }
+
+/* Team bios: "Read more" only matters on phones */
+.bio-toggle { display: none; }
+
+/* ---------- Phones: everything on the site, easy to reach with a thumb ---------- */
+@media (max-width: 599px) {
+    :root { --section-y: var(--space-12); }
+
+    /* Next-event bar: one line; the full details are in each page's "Next event" box */
+    .announcement { padding-block: 6px !important; }
+    .announcement .t-small { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px !important; }
+
+    /* Hero photos: shorter, so the page's main action stays near the top */
+    .page-hero-split { padding-block: var(--space-8); }
+    .page-hero-split .hero-photo { aspect-ratio: 16 / 10; }
+    .page-give .page-hero-split .next-chip { display: none; }
+
+    /* Rows of cards swipe sideways instead of stacking a screen each */
+    .day-steps, .leader-wall {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 84%;
+        grid-template-columns: none;
+        gap: var(--space-3);
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+        padding-bottom: var(--space-3);
+        scrollbar-width: thin;
+    }
+    .day-steps > *, .leader-wall > * { scroll-snap-align: start; }
+    .packing-day .steps { margin-top: var(--space-6); }
+
+    /* Ways to help: compact rows with the icon beside the text */
+    .way-card { display: grid; grid-template-columns: 40px 1fr; column-gap: var(--space-4); row-gap: var(--space-1); padding: var(--space-4); }
+    .way-card > :not(.way-icon) { grid-column: 2; }
+    .way-card .way-icon { grid-row: 1 / span 3; width: 40px; height: 40px; }
+    .way-card .way-icon svg { width: 20px; height: 20px; }
+
+    /* Give: the donation form comes before the impact numbers, and forms get the full width */
+    .give-choose { padding-block: var(--space-6); }
+    .give-choice { padding: var(--space-4); }
+    .give-money .page-split-main { order: -1; }
+    .page-split-main { padding: var(--space-3); border-radius: var(--radius-md); }
+    .aside-stats .t-stat { font-size: 40px; line-height: 44px; }
+    .signup-frame { padding: 0; border-radius: var(--radius-md); }
+
+    /* News & Events */
+    .next-packing { grid-template-columns: 1fr; gap: var(--space-3); }
+    .next-packing .btn { justify-self: start; }
+    .timeline-item { padding-left: var(--space-8); }
+    .timeline-item .timeline-text { font-size: 17px; line-height: 24px; }
+
+    /* Team: bios open on request */
+    .person-card .person-bio { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+    .person-card.bio-open .person-bio { display: block; -webkit-line-clamp: none; }
+    .bio-toggle { display: inline-block; justify-self: start; padding: var(--space-2) 0; border: 0; background: none; font: 700 15px/20px var(--font-sans); color: var(--lake-600); text-decoration: underline; cursor: pointer; }
+
+    /* Where We Serve: section headings closer to their content */
+    .serve-city-head { padding-block: var(--space-8); margin-bottom: var(--space-6); }
+}
+
+/* Timeline entries stay one column, even when a wide gallery sits inside one */
+.timeline-item { grid-template-columns: minmax(0, 1fr); }
+.timeline-item > * { grid-column: 1 / -1 !important; }
+
+/* Spacing on combined pages: no doubled gaps around the leader wall and partners */
+.youth-lead .leader-wall { margin-bottom: 0; }
+.page-partners .gh-canvas { padding-top: 0; }
+.fund-list > .fund-past-title:first-child { margin-top: 0 !important; }
