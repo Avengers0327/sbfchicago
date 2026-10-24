@@ -1,0 +1,23 @@
+{{!-- Upcoming packing events, each with a Sign up button. The dates come from @custom.packing_dates;
+     assets/js/site.js lists the next three that haven't passed. Without JS, the next event shows. --}}
+<section class="section upcoming" aria-labelledby="upcoming-title">
+    <div class="container">
+        <div class="section-head">
+            <div class="stack">
+                <p class="t-eyebrow">Coming up</p>
+                <h2 class="t-h1" id="upcoming-title">Pack with us</h2>
+            </div>
+            <a class="link-arrow" href="{{@site.url}}/news-events/">Fundraisers, news and past events</a>
+        </div>
+        <ol class="upcoming-list" role="list" data-dates="{{@custom.packing_dates}}">
+            <li class="upcoming-item is-next">
+                <div class="upcoming-info">
+                    <p class="t-eyebrow">Next food packing event</p>
+                    <h3 class="t-h3">{{@custom.next_event_title}}</h3>
+                    <p class="t-small">{{@custom.next_event_details}}</p>
+                </div>
+                <a class="btn btn-secondary btn-sm" href="{{@site.url}}/get-involved/#sign-up">Sign up</a>
+            </li>
+        </ol>
+    </div>
+</section>

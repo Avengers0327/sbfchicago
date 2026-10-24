@@ -1,0 +1,22 @@
+{{!-- SBF at a glance: a slow loop of real facts. The second copy only makes the loop seamless,
+     so screen readers skip it; with reduced motion the strip stands still as one wrapped line. --}}
+<section class="facts-strip" aria-label="SBF Chicago at a glance">
+    <div class="facts-track">
+        <ul class="facts" role="list">
+            <li><strong>{{@custom.stat_1_value}}</strong> {{@custom.stat_1_label}}</li>
+            <li><strong>{{@custom.stat_2_value}}</strong> {{@custom.stat_2_label}}</li>
+            <li><strong>{{@custom.stat_3_value}}</strong> {{@custom.stat_3_label}}</li>
+            <li>Youth-led</li>
+            <li>Chicagoland &amp; India</li>
+            <li>Packing every month</li>
+        </ul>
+        <ul class="facts" role="list" aria-hidden="true">
+            <li><strong>{{@custom.stat_1_value}}</strong> {{@custom.stat_1_label}}</li>
+            <li><strong>{{@custom.stat_2_value}}</strong> {{@custom.stat_2_label}}</li>
+            <li><strong>{{@custom.stat_3_value}}</strong> {{@custom.stat_3_label}}</li>
+            <li>Youth-led</li>
+            <li>Chicagoland &amp; India</li>
+            <li>Packing every month</li>
+        </ul>
+    </div>
+</section>

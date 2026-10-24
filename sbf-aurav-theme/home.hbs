@@ -3,7 +3,7 @@
      1. See the problem   (who goes hungry near us: homelessness first, then students, then India)
      2. Feel the problem  (what partners told us, in their words)
      3. See the solution  (the same week, with the gap filled; how it works; impact)
-     4. Feel the solution (the people who pack; the next event)
+     4. Feel the solution (the people who pack; the next events; the "can't make it" path)
      Every claim comes from sbfchicago.org's own pages and posts; sources are noted inline. --}}
 
 {{!-- ACT 1 · SEE THE PROBLEM ------------------------------------------------ --}}
@@ -47,6 +47,8 @@
 </section>
 
 {{!-- ACT 2 · FEEL THE PROBLEM ----------------------------------------------- --}}
+{{> "facts-strip"}}
+
 <section class="act act-dark" aria-labelledby="feel-title">
     <div class="container">
         <div class="act-head">
@@ -149,34 +151,12 @@
                     <span class="t-small">{{@custom.stat_3_label}}</span>
                 </div>
             </div>
+            <a class="link-arrow solve-more" href="{{@site.url}}/where-we-serve/">See where we serve</a>
         </div>
     </div>
 </section>
 
-<section class="act act-tight-top" aria-labelledby="cities-title">
-    <div class="container">
-        <div class="section-head">
-            <div class="stack">
-                <p class="t-eyebrow t-muted">Two cities, one mission</p>
-                <h2 class="t-h2" id="cities-title">Local hearts. Global impact.</h2>
-            </div>
-        </div>
-        <div class="cities">
-            <article class="city band-chicago">
-                <p class="t-eyebrow">Chicagoland</p>
-                <h3 class="t-h2">Monthly food packing events</h3>
-                <p>Sandwiches and brown bags for people facing homelessness, and weekend meal bags for Palatine and Hoffman Estates High School students.</p>
-                <a class="link-arrow" href="{{@site.url}}/who-we-serve-chicago/">See Chicago projects</a>
-            </article>
-            <article class="city band-india">
-                <p class="t-eyebrow">India</p>
-                <h3 class="t-h2">Seven feeding projects</h3>
-                <p>A blind school, two slum schools, Labor Chowk, Apna Ghar, an orphanage in Shirdi, feeding cows and an animal rescue shelter, across New Delhi, Gurugram, Pratapgarh and Shirdi.</p>
-                <a class="link-arrow" href="{{@site.url}}/who-we-serve-india/">See India projects</a>
-            </article>
-        </div>
-    </div>
-</section>
+{{> "home-ways"}}
 
 {{!-- ACT 4 · FEEL THE SOLUTION ---------------------------------------------- --}}
 <section class="act band-chicago" aria-labelledby="together-title">
@@ -226,31 +206,15 @@
     </div>
 </section>
 
-<section class="section" aria-labelledby="events-title">
-    <div class="container">
-        <div class="section-head">
-            <div class="stack">
-                <p class="t-eyebrow eyebrow-chicago">From the packing table</p>
-                <h2 class="t-h2" id="events-title">Recent events</h2>
-            </div>
-            <a class="link-arrow" href="{{@site.url}}/who-we-serve-chicago/">All Chicago projects</a>
-        </div>
-        <div class="card-grid">
-            {{#foreach posts limit="3"}}
-                {{> "event-card"}}
-            {{/foreach}}
-        </div>
-    </div>
-</section>
+{{> "upcoming-events"}}
 
 <section class="post-cta next-event" aria-labelledby="next-title">
     <div class="container">
         <div class="cta-panel band-navy on-navy">
             <div class="stack">
-                <p class="t-eyebrow">Next food packing event</p>
-                <h2 class="t-h1" id="next-title">{{@custom.next_event_title}}</h2>
-                <p class="event-when">{{@custom.next_event_details}}</p>
-                <p class="t-body">Can't make it? Your donation still fills the weekend. We also accept Zelle at sbfchicago@gmail.com, or <a class="wishlist-link" href="{{@custom.wishlist_url}}">send items from the Amazon Wishlist</a>.</p>
+                <p class="t-eyebrow">Can't make it?</p>
+                <h2 class="t-h1" id="next-title">Your donation still fills the weekend.</h2>
+                <p class="t-body">We also accept Zelle at sbfchicago@gmail.com, or <a class="wishlist-link" href="{{@custom.wishlist_url}}">send items from the Amazon Wishlist</a>.</p>
             </div>
             <div class="cta-actions">
                 <a class="btn btn-primary" href="{{@custom.donate_url}}">Donate</a>

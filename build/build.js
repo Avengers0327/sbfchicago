@@ -269,10 +269,10 @@ function shell(p, content, doc) {
 
 
 // Homepage: render the real home.hbs with the theme's default settings
-function renderHome(cardHtml) {
+function renderHome() {
   const pkg = JSON.parse(readT('package.json'));
   const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
-  const partial = n => readT('partials', n + '.hbs').trim();
+  const partial = n => readT('partials', n + '.hbs').replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '').trim();
   let h = readT('home.hbs');
   // Replace the text between two literal markers (inclusive)
   const cut = (str, start, end, withText) => {
@@ -283,7 +283,6 @@ function renderHome(cardHtml) {
   h = h.replace(/\{\{!<[^}]*\}\}/g, '').replace(/\{\{!--[\s\S]*?--\}\}/g, '');
   h = cut(h, '{{#if @custom.hero_image}}', '{{/get}}\n            {{/if}}',
     '<figure class="tile-lead"><img src="' + localImg('https://sbfchicago.org/content/images/2026/09/IMG_6248-2.JPEG') + '" alt="Volunteers, youth leaders and families at the September 13 food packing event" loading="lazy"><figcaption>September 13 Chicago Food Packing Event</figcaption></figure>');
-  h = cut(h, '{{#foreach posts', '{{/foreach}}', cardHtml);
   h = h.replace(/\{\{> "([\w-]+)"\}\}/g, (m, n) => partial(n));
   h = h.replace(/\{\{@custom\.(\w+)\}\}/g, (m, k) => defs[k] != null ? defs[k] : '');
   h = h.split('{{@site.url}}').join('https://sbfchicago.org');
@@ -304,24 +303,11 @@ for (const p of PAGES) {
   pagesHtml += `\n<div data-page="${p.slug}" data-bodyclass="${cls}" class="${cls}" hidden>${shell(p, transform(raw, doc), doc)}</div>`;
 }
 
-// Homepage cards from the first preview, pointed at local images
-const homeCards = require('./home-cards.json');
-const cardHtml = homeCards.slice(0, 3).map(c => `
-      <article class="event-card">
-        <div class="event-card-media"><img src="${localImg(c.img)}" alt="${c.title}" loading="lazy"></div>
-        <div class="event-card-body">
-          <p class="t-eyebrow event-card-date">${c.date}</p>
-          <h3 class="t-h3 event-card-title"><a href="https://sbfchicago.org/${c.slug}/">${c.title}</a></h3>
-          <p class="event-card-excerpt">${c.excerpt}</p>
-          <p class="t-small event-card-meta">${c.kind} &middot; ${c.rt}</p>
-        </div>
-      </article>`).join('');
-
 let html = src
   .replace('/*CARDS_CSS*/', () => fs.readFileSync(path.join(__dirname, 'ghost', 'cards.min.css'), 'utf8'))
   .replace('/*CSS*/', () => readT('assets/css/screen.css'))
   .replace('/*JS*/', () => readT('assets/js/site.js'))
-  .replace('<!--HOME-->', () => renderHome(cardHtml))
+  .replace('<!--HOME-->', () => renderHome())
   .replace('<!--PAGES-->', () => pagesHtml)
   .replace(/\{\{IMG:logo\}\}/g, 'img/logo.jpg');
 

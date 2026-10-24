@@ -642,6 +642,37 @@
         Array.prototype.forEach.call(document.querySelectorAll('main .btn-primary, main .kg-btn-accent:not(.is-secondary)'), function (b) { io.observe(b); });
     }
 
+    // Homepage: the next three packing dates that haven't passed, each with a Sign up button
+    Array.prototype.forEach.call(document.querySelectorAll('.upcoming-list[data-dates]'), function (list) {
+        var today = new Date(); today.setHours(0, 0, 0, 0);
+        var dates = list.getAttribute('data-dates').split(',').map(function (s) {
+            var m = s.trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+        }).filter(function (d) { return d && d >= today; }).slice(0, 3);
+        if (!dates.length) return;
+        var first = list.querySelector('.upcoming-item');
+        var details = txt(first && first.querySelector('.t-small'));
+        var nextDate = parseDate(details);
+        var link = first && first.querySelector('a');
+        var href = link ? link.getAttribute('href') : '#sign-up';
+        list.innerHTML = '';
+        dates.forEach(function (d, i) {
+            var li = el('li', 'upcoming-item' + (i === 0 ? ' is-next' : ''));
+            var block = el('time', 'date-block');
+            block.dateTime = isoDate(d);
+            block.append(el('span', 't-eyebrow', d.toLocaleString('en-US', { month: 'short' })), el('span', 'date-day', String(d.getDate())));
+            var info = el('div', 'upcoming-info');
+            info.append(el('p', 't-eyebrow', d.toLocaleString('en-US', { weekday: 'long' }) + (i === 0 ? ' · Next' : '')), el('h3', 't-h3', 'Food packing event'));
+            // The venue and time are only known for the next event
+            if (nextDate && +nextDate === +d) info.append(el('p', 't-small', details));
+            var a = el('a', 'btn btn-secondary btn-sm', 'Sign up');
+            a.href = href;
+            a.setAttribute('aria-label', 'Sign up for the ' + d.toLocaleString('en-US', { month: 'long', day: 'numeric' }) + ' packing event');
+            li.append(block, info, a);
+            list.appendChild(li);
+        });
+    });
+
     /* Membership: monthly / yearly price toggle (both prices show without JS) */
     Array.prototype.forEach.call(document.querySelectorAll('.membership'), function (m) {
         var buttons = m.querySelectorAll('[data-billing]');
