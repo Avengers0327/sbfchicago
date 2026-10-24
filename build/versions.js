@@ -24,6 +24,8 @@ const MILESTONES = [
     note: 'Real page addresses, and Youth Leadership became a section of Get Involved.' },
   { id: 'give-news', commit: '4e450f5', date: '2026-10-20', type: 'pages', label: 'Give, and News & Events',
     note: 'Donations and Items Needed became Give; Fundraiser and In the News became News & Events.' },
+  { id: 'where-we-serve', commit: 'da93c0d', date: '2026-10-20', type: 'pages', label: 'Where We Serve',
+    note: 'Chicago and India Projects became one page, and the nav went to five plain links.' },
 ];
 
 fs.rmSync(OUT, { recursive: true, force: true });
