@@ -633,12 +633,12 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 @media (min-width: 900px) {
-    .mosaic { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(2, 260px); }
-    .mosaic .tile-lead { grid-column: span 2; grid-row: span 2; }
+    .mosaic { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); grid-template-rows: repeat(2, 240px); }
+    .mosaic .tile-lead { grid-column: 1; grid-row: span 2; }
 }
 .mosaic figure { margin: 0; position: relative; border-radius: var(--radius-md); overflow: hidden; background: var(--lake-100); min-height: 200px; }
 .mosaic .tile-lead { grid-column: 1 / -1; min-height: 260px; }
-@media (min-width: 900px) { .mosaic .tile-lead { grid-column: span 2; } }
+@media (min-width: 900px) { .mosaic .tile-lead { grid-column: 1; } }
 .mosaic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .mosaic figcaption {
     position: absolute;
@@ -1880,7 +1880,7 @@ input, select, textarea {
     .facts li { white-space: normal; }
 }
 
-.solve-more { justify-self: start; margin-top: var(--space-2); }
+.solve-more { margin: var(--space-6) 0 0; }
 
 /* Follows the "Once a month" act on the same background, so no second gap above */
 .home-ways { padding-top: 0; }
@@ -1914,3 +1914,10 @@ input, select, textarea {
     .upcoming-item .date-block { width: 60px; height: 60px; }
     .upcoming-item .date-block .date-day { font-size: 28px; line-height: 32px; }
 }
+
+/* Homepage steps: text only, as numbered cards (Get Involved keeps its photo steps) */
+#how-we-help .steps { margin-top: var(--space-12); gap: var(--space-4); }
+#how-we-help .step { gap: var(--space-2); padding: var(--space-6); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+#how-we-help .step > * { margin: 0; }
+#how-we-help .step .t-eyebrow { margin: 0; }
+@media (max-width: 599px) { #how-we-help .step { padding: var(--space-4); } }
