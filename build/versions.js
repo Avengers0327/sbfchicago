@@ -32,7 +32,8 @@ const MILESTONES = [
     note: 'Facts strip, three ways to get involved, upcoming packing dates with Sign up buttons.' },
   { id: 'homepage-simple', commit: '93f348c', date: '2026-10-24', type: 'pages', label: 'Simple homepage',
     note: 'Hero, scrolling facts strip, how it works, ways in, upcoming dates and donate; the weekend gap moved to Where We Serve.',
-    // Shown with the sandwich-making photo the current homepage uses
+    // Shown with the later fix for stretched gallery photos, and the sandwich-making photo the current homepage uses
+    patches: ['ec204e0'],
     edits: [['sbf-aurav-theme/home.hbs', [
       ['2026/09/IMG_6248-2.JPEG', '2026/08/WhatsApp-Image-2026-06-14-at-4.00.31-PM.jpeg'],
       ['alt="Volunteers, youth leaders and families together at the September 13 food packing event"', 'alt="SBF volunteers making peanut butter and jelly sandwiches at a long table"'],
@@ -69,6 +70,12 @@ for (const m of MILESTONES) {
   // That commit's files, unpacked without touching the working copy
   const archive = execFileSync('git', ['archive', '--format=tar', m.commit], { cwd: ROOT, maxBuffer: 1 << 28 });
   execFileSync('tar', ['-xf', '-'], { cwd: tmp, input: archive });
+
+  // Later commits applied on top (must apply cleanly)
+  for (const c of m.patches || []) {
+    const diff = execFileSync('git', ['diff', `${c}^`, c], { cwd: ROOT, maxBuffer: 1 << 26 });
+    execFileSync('git', ['apply', `--directory=${path.relative(ROOT, tmp).split(path.sep).join('/')}`], { cwd: ROOT, input: diff });
+  }
 
   // Small changes to that commit before building (each replacement must match)
   for (const [file, swaps] of m.edits || []) {
