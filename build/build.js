@@ -50,11 +50,12 @@ const SECTION_PAGE = {
 /* ---------- image localisation ---------- */
 const imgMap = new Map();
 let imgCount = 0;
-function localImg(src) {
+// Wide images (full-width cards) are fetched at 1000px so they stay sharp; everything else at 600px
+function localImg(src, wide) {
   if (!src || !/sbfchicago\.org\/content\/(images|media)\//.test(src)) return null;
   if (/\.ico$/i.test(src)) return null;
   let url = src.replace(/\/content\/images\/size\/w\d+\//, '/content/images/');
-  if (/\/content\/images\/20\d\d\//.test(url)) url = url.replace('/content/images/', '/content/images/size/w600/');
+  if (/\/content\/images\/20\d\d\//.test(url)) url = url.replace('/content/images/', `/content/images/size/${wide ? 'w1000' : 'w600'}/`);
   if (imgMap.has(url)) return imgMap.get(url);
   const ext = (url.match(/\.(jpe?g|png|gif|webp)$/i) || [, 'jpg'])[1].toLowerCase().replace('jpeg', 'jpg');
   const name = `img/${String(++imgCount).padStart(3, '0')}.${ext}`;
@@ -112,7 +113,7 @@ function transform(html, doc) {
     img.removeAttribute('srcset'); img.removeAttribute('sizes'); img.removeAttribute('onerror');
     const src = img.getAttribute('src');
     if (/meet_our_/.test(src)) return; // theme JS swaps these for live headings
-    const local = localImg(src);
+    const local = localImg(src, !!img.closest('.kg-image-card.kg-width-wide, .kg-image-card.kg-width-full'));
     if (local) img.setAttribute('src', local); else if (/sbfchicago\.org/.test(src)) img.remove();
     img.setAttribute('loading', 'lazy');
   });

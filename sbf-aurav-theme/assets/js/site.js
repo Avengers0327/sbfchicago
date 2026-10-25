@@ -549,6 +549,16 @@
     }
     Array.prototype.forEach.call(document.querySelectorAll('.gh-content'), enhance);
 
+    // Galleries: each photo's width follows its own shape, so photos in a row share one height
+    // instead of being stretched into equal boxes (what Ghost's own gallery script does)
+    Array.prototype.forEach.call(document.querySelectorAll('.kg-gallery-image img'), function (img) {
+        function size() {
+            var w = +img.getAttribute('width') || img.naturalWidth, h = +img.getAttribute('height') || img.naturalHeight;
+            if (w && h) img.parentNode.style.flex = (w / h).toFixed(4) + ' 1 0%';
+        }
+        if (img.getAttribute('width') || img.complete) size(); else img.addEventListener('load', size);
+    });
+
     // Chrome: menu, sticky header, one marigold CTA per screen
     var header = document.getElementById('site-header');
     var toggle = document.querySelector('.nav-toggle');

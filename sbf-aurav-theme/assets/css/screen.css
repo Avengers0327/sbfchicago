@@ -869,8 +869,11 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .gh-content .kg-image-card:not(.kg-width-full) img { margin-inline: 0; }
 .gh-content .kg-gallery-container { gap: var(--space-2); }
 .gh-content .kg-gallery-row { gap: var(--space-2); }
-/* Rows fill the width even before (or without) Ghost's gallery script sets each photo's ratio */
-.gh-content .kg-gallery-image { flex: 1 1 0; }
+/* Rows fill the width even before (or without) Ghost's gallery script sets each photo's ratio.
+   site.js then gives each photo a width in proportion to its shape, so a row shares one height;
+   object-fit means a photo can be cropped slightly but never squashed. */
+.gh-content .kg-gallery-image { flex: 1 1 0; min-width: 0; }
+.gh-content .kg-gallery-image img { object-fit: cover; }
 .gh-content iframe { border: 0; border-radius: var(--radius-md); }
 .gh-content .kg-video-card, .gh-content .kg-video-container { border-radius: var(--radius-md); overflow: hidden; }
 
@@ -1021,7 +1024,7 @@ input, select, textarea {
     display: block;
     width: 100%;
     max-height: 260px;
-    object-fit: contain;
+    object-fit: scale-down; /* small partner logos keep their real size instead of blowing up blurry */
     padding: var(--space-6);
     background: var(--white);
 }
