@@ -30,6 +30,14 @@ const MILESTONES = [
     note: 'Donation form first on Give, swipeable rows, compact cards, "Read more" bios, readable timeline.' },
   { id: 'homepage-events', commit: 'f043dc2', date: '2026-10-24', type: 'pages', label: 'Homepage: events and ways to help',
     note: 'Facts strip, three ways to get involved, upcoming packing dates with Sign up buttons.' },
+  { id: 'homepage-simple', commit: '93f348c', date: '2026-10-24', type: 'pages', label: 'Simple homepage',
+    note: 'Hero, scrolling facts strip, how it works, ways in, upcoming dates and donate; the weekend gap moved to Where We Serve.',
+    // Shown with the sandwich-making photo the current homepage uses
+    edits: [['sbf-aurav-theme/home.hbs', [
+      ['2026/09/IMG_6248-2.JPEG', '2026/08/WhatsApp-Image-2026-06-14-at-4.00.31-PM.jpeg'],
+      ['alt="Volunteers, youth leaders and families together at the September 13 food packing event"', 'alt="SBF volunteers making peanut butter and jelly sandwiches at a long table"'],
+      ['<figcaption>September 13 Chicago food packing event</figcaption>', '<figcaption>Making sandwiches at an SBF food packing event</figcaption>'],
+    ]]] },
 ];
 
 fs.rmSync(OUT, { recursive: true, force: true });
@@ -61,6 +69,17 @@ for (const m of MILESTONES) {
   // That commit's files, unpacked without touching the working copy
   const archive = execFileSync('git', ['archive', '--format=tar', m.commit], { cwd: ROOT, maxBuffer: 1 << 28 });
   execFileSync('tar', ['-xf', '-'], { cwd: tmp, input: archive });
+
+  // Small changes to that commit before building (each replacement must match)
+  for (const [file, swaps] of m.edits || []) {
+    const p = path.join(tmp, file);
+    let s = fs.readFileSync(p, 'utf8');
+    for (const [from, to] of swaps) {
+      if (!s.includes(from)) throw new Error(`${m.id}: "${from}" not found in ${file}`);
+      s = s.split(from).join(to);
+    }
+    fs.writeFileSync(p, s);
+  }
 
   let src;
   if (m.type === 'spa') {
