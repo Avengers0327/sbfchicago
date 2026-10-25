@@ -1,32 +1,47 @@
 {{!< default}}
-{{!-- Homepage: only what a first-time visitor needs. Who we feed, how it works, how to join,
-     when to show up, and a way to give. The detail lives on the other pages:
-     Where We Serve (the cities, the weekend gap, partners), Get Involved, Give, News & Events. --}}
+{{!-- Homepage: who we feed (with the numbers), how to get involved, the weekend gap we fill,
+     and when to show up. The detail lives on the other pages. --}}
 
-<header class="page-hero page-hero-split home-hero" aria-labelledby="hero-title">
+<section class="story-hero" aria-labelledby="hero-title">
     <div class="container">
-        <div class="hero-copy">
-            <p class="t-eyebrow">Who goes hungry near us</p>
-            <h1 class="t-display" id="hero-title">{{@custom.hero_headline}}</h1>
-            <p class="t-body-lg">{{@custom.hero_subcopy}}</p>
-            <div class="hero-actions">
-                <a class="btn btn-primary" href="{{@custom.donate_url}}">Donate now</a>
-                <a class="scroll-cue" href="#how-we-help">See how we help</a>
-            </div>
-            <p class="t-small t-muted">Short on time? Donate, and the SBF team buys the food on your behalf.</p>
+        <p class="t-eyebrow">Who goes hungry near us</p>
+        <h1 class="t-display" id="hero-title">{{@custom.hero_headline}}</h1>
+        <p class="t-body-lg">{{@custom.hero_subcopy}}</p>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="{{@custom.donate_url}}">Donate now</a>
+            <a class="btn btn-secondary" href="#ways-to-help">Get involved</a>
         </div>
-        <figure class="hero-photo">
-            {{#if @custom.hero_image}}
-                <img src="{{img_url @custom.hero_image size="l"}}" alt="SBF Chicago volunteers handing out meals">
-            {{else}}
-                <img src="{{@site.url}}/content/images/size/w1000/2026/09/IMG_6248-2.JPEG" alt="Volunteers, youth leaders and families together at the September 13 food packing event">
-            {{/if}}
-            <figcaption>September 13 Chicago food packing event</figcaption>
-        </figure>
-    </div>
-</header>
+        <p class="t-small t-muted hero-note">Short on time? Donate, and the SBF team buys the food on your behalf.</p>
 
-{{> "facts-strip"}}
+        <div class="who-feed">
+            <article class="who who-lead band-chicago">
+                <img src="{{@site.url}}/content/images/size/w1000/2026/04/WhatsApp-Image-2026-04-18-at-8.30.08-AM.jpeg" alt="Two SBF students wheeling boxes of packed meal bags into a school" loading="lazy">
+                <div class="who-body">
+                    <p class="t-eyebrow">Chicagoland &middot; most of what we pack</p>
+                    <h2 class="t-h2">Neighbors facing homelessness</h2>
+                    <p class="who-stat"><span class="t-stat">5,100+</span> <span>sandwiches</span></p>
+                    <p class="who-stat"><span class="t-stat">2,600+</span> <span>brown bags</span></p>
+                    <p class="t-small">Through the Night Ministry, Food For Friends, Wayside Cross Ministries and other partners.</p>
+                </div>
+            </article>
+            <article class="who band-chicago">
+                <p class="t-eyebrow">Palatine &amp; Hoffman Estates</p>
+                <h2 class="t-h3">Students with no school meal on weekends</h2>
+                <span aria-hidden="true"></span>
+                <p class="who-stat"><span class="t-stat">1,000+</span> <span>weekend meal bags</span></p>
+            </article>
+            <article class="who band-india">
+                <p class="t-eyebrow">India</p>
+                <h2 class="t-h3">Families, daily laborers and children</h2>
+                <span aria-hidden="true"></span>
+                <p class="who-stat"><span class="t-stat">18,500+</span> <span>meals</span></p>
+            </article>
+        </div>
+        <p class="t-small t-muted">January to September 2026.</p>
+    </div>
+</section>
+
+{{> "home-ways"}}
 
 <section class="act" id="how-we-help" aria-labelledby="solve-title">
     <div class="container">
@@ -34,45 +49,9 @@
             <p class="t-eyebrow">How SBF closes the gap</p>
             <h2 class="t-h1" id="solve-title">Once a month, we pack the meals that reach all of them.</h2>
         </div>
-
-        <ol class="steps" aria-label="How it works">
-            <li class="step">
-                <p class="t-eyebrow">Step 1 &middot; You give</p>
-                <h3 class="t-h3">Donations become groceries</h3>
-                <p>Give through our donation form or Zelle, or send items from our <a href="{{@custom.wishlist_url}}">Amazon Wishlist</a>. The SBF team buys food on your behalf.</p>
-            </li>
-            <li class="step">
-                <p class="t-eyebrow">Step 2 &middot; We pack</p>
-                <h3 class="t-h3">Up to 1,200+ meals in one afternoon</h3>
-                <p>At our recent events, 45 to 60+ volunteers pack sandwiches, brown bags and weekend meal bags at National India Hub in Schaumburg.</p>
-            </li>
-            <li class="step">
-                <p class="t-eyebrow">Step 3 &middot; Partners deliver</p>
-                <h3 class="t-h3">Meals reach people who need them</h3>
-                <p>The Night Ministry, Food For Friends and Blessings in a Backpack bring the meals to people facing homelessness and to students at Palatine and Hoffman Estates High Schools.</p>
-            </li>
-        </ol>
-
+        {{> "weekend-week"}}
         <p class="solve-more"><a class="link-arrow" href="{{@site.url}}/where-we-serve/">See where we serve</a></p>
     </div>
 </section>
 
-{{> "home-ways"}}
-
 {{> "upcoming-events"}}
-
-<section class="post-cta next-event" aria-labelledby="next-title">
-    <div class="container">
-        <div class="cta-panel band-navy on-navy">
-            <div class="stack">
-                <p class="t-eyebrow">Can't make it?</p>
-                <h2 class="t-h1" id="next-title">Your donation still fills the weekend.</h2>
-                <p class="t-body">We also accept Zelle at sbfchicago@gmail.com, or <a class="wishlist-link" href="{{@custom.wishlist_url}}">send items from the Amazon Wishlist</a>.</p>
-            </div>
-            <div class="cta-actions">
-                <a class="btn btn-primary" href="{{@custom.donate_url}}">Donate</a>
-                <a class="btn btn-secondary" href="{{@custom.volunteer_url}}">Sign up to pack</a>
-            </div>
-        </div>
-    </div>
-</section>

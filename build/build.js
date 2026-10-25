@@ -155,7 +155,7 @@ function fillHbs(h, params, gets, name) {
   const pkg = JSON.parse(readT('package.json'));
   const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
   h = h.replace(/\{\{!<[^}]*\}\}/g, '').replace(/\{\{!--[\s\S]*?--\}\}/g, '');
-  h = h.replace(/\{\{> "([\w-]+)"\}\}/g, (m, n) => readT('partials', n + '.hbs').replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '').trim());
+  while (/\{\{> "[\w-]+"\}\}/.test(h)) h = h.replace(/\{\{> "([\w-]+)"\}\}/g, (m, n) => readT('partials', n + '.hbs').replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '').trim());
   h = h.replace(/\{\{#get "\w+" filter="slug:([\w-]+)"[^}]*\}\}([\s\S]*?)\{\{\/get\}\}/g, (m, slug, inner) => {
     const body = gets && gets[slug] != null ? gets[slug] : contentOf(slug);
     return inner.replace(/\{\{#foreach \w+\}\}|\{\{\/foreach\}\}/g, '').replace('{{content}}', () => body);
@@ -279,7 +279,7 @@ function renderHome() {
   let h = readT('home.hbs');
   h = h.replace(/\{\{!<[^}]*\}\}/g, '').replace(/\{\{!--[\s\S]*?--\}\}/g, '');
   h = h.replace(/\{\{#if [^}]+\}\}[\s\S]*?\{\{else\}\}([\s\S]*?)\{\{\/if\}\}/g, '$1');
-  h = h.replace(/\{\{> "([\w-]+)"\}\}/g, (m, n) => partial(n));
+  while (/\{\{> "[\w-]+"\}\}/.test(h)) h = h.replace(/\{\{> "([\w-]+)"\}\}/g, (m, n) => partial(n));
   h = h.replace(/\{\{@custom\.(\w+)\}\}/g, (m, k) => defs[k] != null ? defs[k] : '');
   h = h.split('{{@site.url}}').join('https://sbfchicago.org');
   h = h.replace(/src="(https:\/\/sbfchicago\.org\/content\/images\/[^"]+)"/g, (m, u) => 'src="' + localImg(u) + '"');

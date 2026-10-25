@@ -1,31 +1,7 @@
-{{!-- Chicago students: the weekend gap that SBF's weekend bags fill, what's in a bag,
-     and what a school told us when the bags arrived (moved here from the homepage) --}}
-<section class="weekend-gap" aria-labelledby="gap-title">
+{{!-- Where We Serve, Chicago students: the weekend gap and what a school told us when the bags arrived --}}
+<section class="weekend-gap" aria-label="Weekend meal bags for students">
     <div class="container">
-        <h3 class="t-h2" id="gap-title">For students: the weekend gap, filled</h3>
-        <div class="solve-grid">
-            <div class="week-wrap">
-                <ol class="week will-fill" aria-label="A school week for a student who relies on school lunch, with SBF weekend bags on Saturday and Sunday">
-                    <li class="day is-lunch"><span class="t-eyebrow">Mon</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
-                    <li class="day is-lunch"><span class="t-eyebrow">Tue</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
-                    <li class="day is-lunch"><span class="t-eyebrow">Wed</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
-                    <li class="day is-lunch"><span class="t-eyebrow">Thu</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
-                    <li class="day is-lunch"><span class="t-eyebrow">Fri</span>{{> "icon-plate"}}<span class="day-label">School lunch</span></li>
-                    <li class="day is-sbf"><span class="t-eyebrow">Sat</span>{{> "icon-bag"}}<span class="day-label">SBF weekend bag</span></li>
-                    <li class="day is-sbf"><span class="t-eyebrow">Sun</span>{{> "icon-bag"}}<span class="day-label">SBF weekend bag</span></li>
-                </ol>
-                <p class="week-legend"><span><i class="k-lunch"></i>School lunch</span><span><i class="k-sbf"></i>SBF weekend meal bag (where there used to be no meal)</span></p>
-            </div>
-            <div class="bag-card">
-                <p class="t-eyebrow">What's in a weekend bag</p>
-                <dl>
-                    <div><dt>2 proteins</dt><dd>Mac and cheese, ramen</dd></div>
-                    <div><dt>2 healthy snacks</dt><dd>Skinny Pop, Goldfish</dd></div>
-                    <div><dt>2 breakfasts</dt><dd>Chocolate milk, granola</dd></div>
-                </dl>
-                <p class="t-small t-muted">Packed with Blessings in a Backpack for Hoffman Estates High School students, Feb 2026.</p>
-            </div>
-        </div>
+        {{> "weekend-week"}}
         <blockquote class="gap-story">
             <p class="t-eyebrow">Palatine High School &middot; March 2026</p>
             <p class="gap-story-line">Their shelf was completely empty.</p>
