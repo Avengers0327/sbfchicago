@@ -14,6 +14,32 @@ fs.mkdirSync(IMG, { recursive: true });
 
 // Theme files may have Windows line endings after a git checkout; read them as LF
 const readT = (...a) => fs.readFileSync(path.join(T, ...a), 'utf8').replace(/\r\n/g, '\n');
+// Theme settings, with the next-event lines written from the packing schedule as of today
+function customDefs() {
+  const pkg = JSON.parse(readT('package.json'));
+  const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const next = packingEvents(defs).find(e => e.date >= today);
+  if (next) Object.assign(defs, nextEventText(next));
+  return defs;
+}
+// packing_dates: "YYYY-MM-DD" entries, each optionally "YYYY-MM-DD 10:00 AM @ Place" (mirrors assets/js/site.js)
+function packingEvents(defs) {
+  return defs.packing_dates.split(',').map(s => {
+    const m = s.trim().match(/^(\d{4})-(\d{2})-(\d{2})(?:\s+([^@]*?))?\s*(?:@\s*(.+))?$/);
+    return m && { date: new Date(+m[1], +m[2] - 1, +m[3]), time: (m[4] || '').trim() || defs.packing_time, place: (m[5] || '').trim() || defs.packing_place };
+  }).filter(Boolean);
+}
+function nextEventText(e) {
+  const on = o => e.date.toLocaleDateString('en-US', o);
+  const full = on({ month: 'long', day: 'numeric', year: 'numeric' });
+  return {
+    next_event_title: `Pack with us on ${on({ month: 'long', day: 'numeric' })}`,
+    next_event_details: `${on({ weekday: 'long' })}, ${full} · ${e.time} · ${e.place}`,
+    next_event_announce: `Next Food Packing Event: ${full} at ${e.time} at ${e.place}`,
+  };
+}
+
 const snippet = f => readT('content-snippets', f).replace(/<!--[\s\S]*?-->/g, '').trim();
 
 const PAGES = [
@@ -153,8 +179,7 @@ const STATS = [['6,100+', 'Meals from our Chicago food drives'], ['18,500+', 'Me
 // {{#if x}}a{{else}}b{{/if}} takes its else branch, and {{#get ... slug:x}} blocks get page x's content
 // (or gets[x] when the caller passes a trimmed version).
 function fillHbs(h, params, gets, name) {
-  const pkg = JSON.parse(readT('package.json'));
-  const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
+  const defs = customDefs();
   h = h.replace(/\{\{!<[^}]*\}\}/g, '').replace(/\{\{!--[\s\S]*?--\}\}/g, '');
   while (/\{\{> "[\w-]+"\}\}/.test(h)) h = h.replace(/\{\{> "([\w-]+)"\}\}/g, (m, n) => readT('partials', n + '.hbs').replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '').trim());
   h = h.replace(/\{\{#get "\w+" filter="slug:([\w-]+)"[^}]*\}\}([\s\S]*?)\{\{\/get\}\}/g, (m, slug, inner) => {
@@ -176,9 +201,9 @@ function renderPartial(name, params, gets) {
 
 // key="value" and key=@custom.x pairs from a partial call
 function hbsParams(args) {
-  const pkg = JSON.parse(readT('package.json'));
+  const defs = customDefs();
   const out = {};
-  for (const m of args.matchAll(/(\w+)=(?:"([^"]*)"|@custom\.(\w+))/g)) out[m[1]] = m[2] != null ? m[2] : pkg.config.custom[m[3]].default;
+  for (const m of args.matchAll(/(\w+)=(?:"([^"]*)"|@custom\.(\w+))/g)) out[m[1]] = m[2] != null ? m[2] : defs[m[3]];
   return out;
 }
 
@@ -274,8 +299,7 @@ function shell(p, content, doc) {
 
 // Homepage: render the real home.hbs with the theme's default settings
 function renderHome() {
-  const pkg = JSON.parse(readT('package.json'));
-  const defs = Object.fromEntries(Object.entries(pkg.config.custom).map(([k, v]) => [k, v.default || '']));
+  const defs = customDefs();
   const partial = n => readT('partials', n + '.hbs').replace(/\{\{!--[\s\S]*?--\}\}\n?/g, '').trim();
   let h = readT('home.hbs');
   h = h.replace(/\{\{!<[^}]*\}\}/g, '').replace(/\{\{!--[\s\S]*?--\}\}/g, '');
@@ -307,6 +331,14 @@ let html = src
   .replace('<!--HOME-->', () => renderHome())
   .replace('<!--PAGES-->', () => pagesHtml)
   .replace(/\{\{IMG:logo\}\}/g, 'img/logo.jpg');
+
+// Header bar: the same schedule, so it moves to the next event on its own
+{
+  const defs = customDefs();
+  const attr = s => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+  html = html.replace('{{PACKING_DATES}}', attr(defs.packing_dates)).replace('{{PACKING_TIME}}', attr(defs.packing_time))
+    .replace('{{PACKING_PLACE}}', attr(defs.packing_place)).replace('{{NEXT_ANNOUNCE}}', attr(defs.next_event_announce || ''));
+}
 
 // Point internal links at the site's own routes
 html = html.replace(/href="(?:https?:\/\/sbfchicago\.org)?\/+([a-z0-9-]*)\/?(?:\?[^"#]*)?(?:#([a-z0-9-]+))?"/g, (m, slug, hash) => {

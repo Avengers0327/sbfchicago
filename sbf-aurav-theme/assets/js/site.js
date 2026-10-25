@@ -652,29 +652,54 @@
         Array.prototype.forEach.call(document.querySelectorAll('main .btn-primary, main .kg-btn-accent:not(.is-secondary)'), function (b) { io.observe(b); });
     }
 
-    // Homepage: the next three packing dates that haven't passed, each with a Sign up button
-    Array.prototype.forEach.call(document.querySelectorAll('.upcoming-list[data-dates]'), function (list) {
+    // Packing schedule: one list of dates (with the usual time and place) keeps the header bar,
+    // "Pack with us" and every next-event line current, with no rebuild after each event.
+    // An entry is "YYYY-MM-DD", or "YYYY-MM-DD 10:00 AM @ Place" for a one-off (mirrors build/build.js).
+    var schedule = document.querySelector('[data-dates]');
+    var packing = [];
+    if (schedule) {
         var today = new Date(); today.setHours(0, 0, 0, 0);
-        var dates = list.getAttribute('data-dates').split(',').map(function (s) {
-            var m = s.trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
-            return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
-        }).filter(function (d) { return d && d >= today; }).slice(0, 3);
-        if (!dates.length) return;
+        packing = schedule.getAttribute('data-dates').split(',').map(function (s) {
+            var m = s.trim().match(/^(\d{4})-(\d{2})-(\d{2})(?:\s+([^@]*?))?\s*(?:@\s*(.+))?$/);
+            return m && {
+                date: new Date(+m[1], +m[2] - 1, +m[3]),
+                time: (m[4] || '').trim() || schedule.getAttribute('data-time'),
+                place: (m[5] || '').trim() || schedule.getAttribute('data-place')
+            };
+        }).filter(function (e) { return e && e.date >= today; });
+    }
+    if (packing.length) {
+        var next = packing[0];
+        var on = function (o) { return next.date.toLocaleDateString('en-US', o); };
+        var full = on({ month: 'long', day: 'numeric', year: 'numeric' });
+        var lines = {
+            announce: 'Next Food Packing Event: ' + full + ' at ' + next.time + ' at ' + next.place,
+            title: 'Pack with us on ' + on({ month: 'long', day: 'numeric' }),
+            details: on({ weekday: 'long' }) + ', ' + full + ' · ' + next.time + ' · ' + next.place
+        };
+        Array.prototype.forEach.call(document.querySelectorAll('[data-next]'), function (n) {
+            var line = lines[n.getAttribute('data-next')];
+            if (line) n.textContent = line;
+        });
+    }
+
+    // Homepage: the next three packing dates that haven't passed, each with a Sign up button
+    Array.prototype.forEach.call(document.querySelectorAll('.upcoming-list'), function (list) {
+        var events = packing.slice(0, 3);
+        if (!events.length) return;
         var first = list.querySelector('.upcoming-item');
-        var details = txt(first && first.querySelector('.t-small'));
-        var nextDate = parseDate(details);
         var link = first && first.querySelector('a');
         var href = link ? link.getAttribute('href') : '#sign-up';
         list.innerHTML = '';
-        dates.forEach(function (d, i) {
+        events.forEach(function (e, i) {
+            var d = e.date;
             var li = el('li', 'upcoming-item' + (i === 0 ? ' is-next' : ''));
             var block = el('time', 'date-block');
             block.dateTime = isoDate(d);
             block.append(el('span', 't-eyebrow', d.toLocaleString('en-US', { month: 'short' })), el('span', 'date-day', String(d.getDate())));
             var info = el('div', 'upcoming-info');
             info.append(el('p', 't-eyebrow', d.toLocaleString('en-US', { weekday: 'long' }) + (i === 0 ? ' · Next' : '')), el('h3', 't-h3', 'Food packing event'));
-            // The venue and time are only known for the next event
-            if (nextDate && +nextDate === +d) info.append(el('p', 't-small', details));
+            info.append(el('p', 't-small', e.time + ' · ' + e.place));
             var a = el('a', 'btn btn-secondary btn-sm', 'Sign up');
             a.href = href;
             a.setAttribute('aria-label', 'Sign up for the ' + d.toLocaleString('en-US', { month: 'long', day: 'numeric' }) + ' packing event');

@@ -1,5 +1,6 @@
-{{!-- Upcoming packing events, each with a Sign up button. The dates come from @custom.packing_dates;
-     assets/js/site.js lists the next three that haven't passed. Without JS, the next event shows. --}}
+{{!-- Upcoming packing events, each with a Sign up button. The dates come from @custom.packing_dates
+     (with the usual time and place); assets/js/site.js lists the next three that haven't passed.
+     Without JS, the next event shows. --}}
 <section class="section upcoming" aria-labelledby="upcoming-title">
     <div class="container">
         <div class="section-head">
@@ -9,12 +10,12 @@
             </div>
             <a class="link-arrow" href="{{@site.url}}/news-events/">Fundraisers, news and past events</a>
         </div>
-        <ol class="upcoming-list" role="list" data-dates="{{@custom.packing_dates}}">
+        <ol class="upcoming-list" role="list" data-dates="{{@custom.packing_dates}}" data-time="{{@custom.packing_time}}" data-place="{{@custom.packing_place}}">
             <li class="upcoming-item is-next">
                 <div class="upcoming-info">
                     <p class="t-eyebrow">Next food packing event</p>
-                    <h3 class="t-h3">{{@custom.next_event_title}}</h3>
-                    <p class="t-small">{{@custom.next_event_details}}</p>
+                    <h3 class="t-h3" data-next="title">{{@custom.next_event_title}}</h3>
+                    <p class="t-small" data-next="details">{{@custom.next_event_details}}</p>
                 </div>
                 <a class="btn btn-secondary btn-sm" href="{{@site.url}}/get-involved/#sign-up">Sign up</a>
             </li>

@@ -85,7 +85,7 @@
         "type": "text",
         "default": "Pack with us on October 25",
         "group": "homepage",
-        "description": "Closing call to action. Update after each event."
+        "description": "Fallback; the site writes this from the next packing date."
       },
       "next_event_details": {
         "type": "text",
@@ -96,7 +96,19 @@
         "type": "text",
         "default": "2026-10-25, 2026-11-15, 2026-12-06, 2027-01-17, 2027-02-07, 2027-03-07",
         "group": "homepage",
-        "description": "Upcoming packing event dates (YYYY-MM-DD, comma separated). The homepage lists the next three."
+        "description": "Packing dates, YYYY-MM-DD, comma separated. One-off: 2027-01-17 10:00 AM @ Place"
+      },
+      "packing_time": {
+        "type": "text",
+        "default": "9:30 AM",
+        "group": "homepage",
+        "description": "Usual start time of a packing event."
+      },
+      "packing_place": {
+        "type": "text",
+        "default": "National India Hub, 930 National Pkwy, Schaumburg, IL 60173",
+        "group": "homepage",
+        "description": "Usual place of a packing event."
       },
       "donate_url": {
         "type": "text",

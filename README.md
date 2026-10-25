@@ -72,7 +72,8 @@ node build.js
 
 ## Where to edit common things
 
-- **Homepage copy, stats, next event:** `sbf-aurav-theme/home.hbs` and the defaults in `sbf-aurav-theme/package.json` (`config.custom`)
+- **Homepage copy and stats:** `sbf-aurav-theme/home.hbs` and the defaults in `sbf-aurav-theme/package.json` (`config.custom`)
+- **Packing event dates:** `packing_dates` in `sbf-aurav-theme/package.json`, with the usual `packing_time` and `packing_place`. The header bar, "Pack with us" and every next-event line pick the first date that hasn't passed, in the visitor's browser, so nothing needs changing after an event. Add dates ahead of time; a one-off time or place is written `2027-01-17 10:00 AM @ Place`.
 - **Colors, fonts, spacing:** top of `sbf-aurav-theme/assets/css/screen.css` (design-system tokens)
 - **Page layouts:** `sbf-aurav-theme/page-*.hbs` and `sbf-aurav-theme/partials/`
 

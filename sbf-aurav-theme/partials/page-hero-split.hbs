@@ -10,7 +10,7 @@
             <div class="hero-actions">
                 <a class="btn btn-primary" href="{{cta_url}}">{{cta_label}}</a>
             </div>
-            <p class="next-chip"><span class="t-eyebrow">Next event</span><span>{{@custom.next_event_details}}</span></p>
+            <p class="next-chip"><span class="t-eyebrow">Next event</span><span data-next="details">{{@custom.next_event_details}}</span></p>
         </div>
         <figure class="hero-photo">
             <img src="{{#if feature_image}}{{img_url feature_image size="l"}}{{else}}{{@site.url}}/content/images/size/w1000/{{photo}}{{/if}}" alt="{{photo_alt}}">
