@@ -1885,8 +1885,6 @@ input, select, textarea {
 
 .solve-more { margin: var(--space-6) 0 0; }
 
-/* Follows the "Once a month" act on the same background, so no second gap above */
-.home-ways { padding-top: 0; }
 .home-ways .t-eyebrow { color: var(--lake-600); }
 .ways-home { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
 .way-home { display: flex; flex-direction: column; overflow: hidden; border-radius: var(--radius-md); background: var(--navy-900); box-shadow: var(--shadow-sm); }
