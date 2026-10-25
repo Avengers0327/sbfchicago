@@ -514,7 +514,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 .who:not(.who-lead) { grid-template-rows: auto auto 1fr auto; } /* eyebrow, title, spacer, stat */
 .who:not(.who-lead) .who-stat { align-self: end; }
 .who-lead { padding: 0; overflow: hidden; }
-.who-lead img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: center 40%; } /* keeps the students, the box and the cart in the wide crop */
+.who-lead img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .who-lead .who-body { display: grid; gap: var(--space-3); padding: var(--space-6); }
 .who-stat { display: flex; align-items: baseline; gap: var(--space-2); flex-wrap: wrap; }
 .who-stat .t-stat { color: var(--navy-900); } /* stat: navy on light grounds */
