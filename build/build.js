@@ -360,6 +360,9 @@ const INDEXABLE = process.env.INDEXABLE === '1';
 // Version history for previewing with the client: a "Compare versions" button on every page and
 // the compare page at /versions/ (snapshots made by `node versions.js`). Set to false to remove it all.
 const SHOW_VERSIONS = true;
+// Headline font switch for the client review (Bricolage Grotesque or Schibsted Grotesk), remembered
+// across pages in the visitor's browser. Set to false once a font is chosen.
+const SHOW_FONT_TOGGLE = true;
 const SEO = {
   home: ['SBF Chicago: Youth-led hunger relief in Chicagoland & India', 'SBF Chicago: a youth-led nonprofit packing meals for neighbors facing hunger in Chicagoland and India.'],
   team: ['Team & Vision | SBF Chicago', "Meet the founders, junior board and executive team of SBF Chicago, a youth-led nonprofit in Chicago's Northwest suburbs fighting hunger."],
@@ -441,10 +444,31 @@ function pageDoc(slug) {
     slug === 'home' ? `<script>(function(){var m=${JSON.stringify(oldHash)},h=location.hash.slice(1);if(m[h])location.replace(m[h]);})();</script>` : '',
     '<style>[hidden]{display:none!important}</style>',
   ].filter(Boolean).join('\n');
-  return `<!doctype html>\n<html lang="en">\n<head>\n${head}\n</head>\n<body class="${bodyClass}">\n${body}${SHOW_VERSIONS ? versionsButton(slug) : ''}\n</body>\n</html>\n`;
+  return `<!doctype html>\n<html lang="en">\n<head>\n${head}${SHOW_FONT_TOGGLE ? fontToggleHead() : ''}\n</head>\n<body class="${bodyClass}">\n${body}${SHOW_VERSIONS ? versionsButton(slug) : ''}${SHOW_FONT_TOGGLE ? fontToggle() : ''}\n</body>\n</html>\n`;
 }
 
 // "Compare versions" button on every page while the version history is on (not inside the compare page's frames)
+// Applied in <head> so the chosen font shows from the first paint (also inside the compare page's frames)
+function fontToggleHead() {
+  return `
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@700;800&display=swap">
+<style>html[data-headline="schibsted"]{--font-display:"Schibsted Grotesk","Figtree",system-ui,sans-serif}</style>
+<script>try{if(localStorage.getItem('sbf-headline')==='schibsted')document.documentElement.setAttribute('data-headline','schibsted')}catch(e){}</script>`;
+}
+function fontToggle() {
+  return `
+<div class="font-pill" role="group" aria-label="Headline font">
+  <span class="font-pill-label">Headline font</span>
+  <button type="button" data-font="bricolage">Bricolage</button>
+  <button type="button" data-font="schibsted">Schibsted</button>
+</div>
+<style>.font-pill{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:4px;padding:4px 4px 4px 14px;border-radius:999px;background:var(--navy-900);color:var(--white);font:500 13px/20px var(--font-sans);box-shadow:var(--shadow-md)}.font-pill button{padding:6px 12px;border:0;border-radius:999px;background:transparent;color:var(--white);font:700 13px/20px var(--font-sans);cursor:pointer}.font-pill button[data-font="bricolage"]{font-family:"Bricolage Grotesque",var(--font-sans)}.font-pill button[data-font="schibsted"]{font-family:"Schibsted Grotesk",var(--font-sans)}.font-pill button[aria-pressed="true"]{background:var(--white);color:var(--navy-900)}.font-pill button:focus-visible{outline:none;box-shadow:var(--shadow-focus)}@media (max-width:599px){.font-pill{right:12px;padding-left:4px;font-size:12px}.font-pill-label{display:none}.font-pill button{padding:4px 10px;font-size:12px}}</style>
+<script>(function(){var pill=document.querySelector('.font-pill');if(window.top!==window.self){pill.remove();return;}
+var root=document.documentElement,btns=pill.querySelectorAll('button');
+function show(){var f=root.getAttribute('data-headline')==='schibsted'?'schibsted':'bricolage';btns.forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-font')===f))})}
+btns.forEach(function(b){b.addEventListener('click',function(){var f=b.getAttribute('data-font');if(f==='schibsted')root.setAttribute('data-headline','schibsted');else root.removeAttribute('data-headline');try{localStorage.setItem('sbf-headline',f)}catch(e){}show()})});show();})();</script>`;
+}
+
 function versionsButton(slug) {
   return `
 <a class="versions-pill" href="/versions/?page=${slug}">Compare versions</a>
