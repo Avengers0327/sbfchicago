@@ -452,7 +452,7 @@ function pageDoc(slug) {
 function fontToggleHead() {
   return `
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@700;800&display=swap">
-<style>html[data-headline="schibsted"]{--font-display:"Schibsted Grotesk","Figtree",system-ui,sans-serif}</style>
+<style>html[data-headline="schibsted"]{--font-display:"Schibsted Grotesk","Figtree",system-ui,sans-serif}html[data-headline="schibsted"] :is(.t-stat,.sbf-drives li strong,.need-qty){font-variant-numeric:normal}</style>
 <script>try{if(localStorage.getItem('sbf-headline')==='schibsted')document.documentElement.setAttribute('data-headline','schibsted')}catch(e){}</script>`;
 }
 function fontToggle() {
