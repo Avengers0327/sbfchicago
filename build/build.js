@@ -47,7 +47,8 @@ const PAGES = [
   { slug: 'where-we-serve', title: 'Where We Serve', layout: 'serve', nocontent: true },
   { slug: 'get-involved', title: 'Get Involved!', layout: 'involved', nocontent: true },
   { slug: 'give', title: 'Give', layout: 'template', nocontent: true },
-  { slug: 'news-events', title: 'News &amp; Events', layout: 'template', nocontent: true },
+  { slug: 'events', title: 'Events', layout: 'template', nocontent: true },
+  { slug: 'news', title: 'News', layout: 'template', nocontent: true },
   { slug: 'membership', title: 'Become a member', layout: 'membership', nocontent: true },
   { slug: 'aug-event', title: 'August 9 Chicago Food Packing Event', post: true, band: 'chicago',
     date: 'Aug 10, 2026', readingTime: '3 min read',
@@ -62,15 +63,16 @@ const MOVED = {
   'youth-leaders': ['get-involved', 'youth-leadership'],
   donations: ['give', 'donate'],
   'items-needed': ['give', 'items'],
-  'sbf-fundraiser': ['news-events', 'upcoming'],
-  'in-the-news': ['news-events', 'news'],
+  'sbf-fundraiser': ['events', 'upcoming'],
+  'in-the-news': ['news', 'milestones'],
+  'news-events': ['events', 'upcoming'],
 };
 // Sections other pages link to, and the page each one lives on
 const SECTION_PAGE = {
   chicago: 'where-we-serve', india: 'where-we-serve',
   'youth-leadership': 'get-involved', 'volunteer-hours': 'get-involved', 'sign-up': 'get-involved',
   donate: 'give', items: 'give', 'items-form': 'give',
-  upcoming: 'news-events', news: 'news-events',
+  upcoming: 'events', milestones: 'news',
 };
 
 /* ---------- image localisation ---------- */
@@ -258,8 +260,8 @@ function involvedPage(p) {
   if (cut < 0) throw new Error('Get Involved: partners heading not found');
   const leaders = blocks(contentOf('youth-leaders'), c => !/^(P|UL)$/.test(c.tagName) && !c.classList.contains('kg-button-card'));
   return renderPartial('page-hero-split', Object.assign({ title: p.title }, splitParams(p.slug)))
-    + renderPartial('packing-day', {})
     + `<article class="band-page-plain"><div class="gh-canvas gh-content">${gi.slice(0, cut)}${renderPartial('more-ways', {})}</div></article>`
+    + renderPartial('packing-day', {})
     + renderPartial('volunteer-hours', {})
     + renderPartial('youth-lead', {}, { 'youth-leaders': leaders })
     + `<article class="band-page-plain page-partners"><div class="gh-canvas gh-content">${gi.slice(cut)}</div></article>`
@@ -369,7 +371,8 @@ const SEO = {
   'where-we-serve': ['Where We Serve | SBF Chicago', 'Monthly food packing events in Chicagoland for people facing homelessness and students in need, and seven feeding projects across India.'],
   'get-involved': ['Get Involved | SBF Chicago', "Volunteer at SBF Chicago's monthly food packing event, or lead one as a student youth leader. Students, families and groups welcome; volunteer hours available."],
   give: ['Give | SBF Chicago', 'Donate to SBF Chicago through Zeffy or Zelle, or give food items from our Amazon Wishlist. Zeffy is 100% free to the organization.'],
-  'news-events': ['News & Events | SBF Chicago', 'Upcoming SBF Chicago packing events and fundraisers, plus milestones, press and words from our partners.'],
+  events: ['Events | SBF Chicago', 'Upcoming SBF Chicago food packing events and fundraisers, and photos from the fundraisers we have held.'],
+  news: ['News | SBF Chicago', 'Milestones, press and words from our partners: what SBF Chicago has been up to.'],
   membership: ['Become a Member | SBF Chicago', 'Become an SBF Chicago member with Advocate and Champion plans: coaching, recognition and mentorship for youth leaders.'],
   'aug-event': ['August 9 Food Packing Event | SBF Chicago', 'We packed 1,200+ sandwiches and 650 brown bags at our August 9 food packing event. Thanks to National India Hub for hosting.'],
 };
@@ -538,8 +541,8 @@ if (SHOW_VERSIONS) {
       ['youth', 'Youth leadership', ['youth-leaders', 'get-involved#youth-leadership']],
       ['donate', 'Donate', ['donations', 'give#donate']],
       ['items', 'Items needed', ['items-needed', 'give#items']],
-      ['fundraisers', 'Fundraisers', ['sbf-fundraiser', 'news-events#upcoming']],
-      ['news', 'In the news', ['in-the-news', 'news-events#news']],
+      ['fundraisers', 'Fundraisers', ['sbf-fundraiser', 'news-events#upcoming', 'events#upcoming']],
+      ['news', 'In the news', ['in-the-news', 'news-events#news', 'news#milestones']],
       ['membership', 'Membership', ['membership']],
       ['aug-event', 'August 9 event post', ['aug-event']],
     ].map(([key, label, tries]) => ({ key, label, try: tries }));
