@@ -23,8 +23,8 @@
                 <div class="who-body">
                     <p class="t-eyebrow">Chicagoland &middot; most of what we pack</p>
                     <h2 class="t-h2">Neighbors facing homelessness</h2>
-                    <p class="who-stat"><span class="t-stat">5,100+</span> <span>sandwiches</span></p>
-                    <p class="who-stat"><span class="t-stat">2,600+</span> <span>brown bags</span></p>
+                    <p class="who-stat"><span class="t-stat">{{stats.sandwiches}}</span> <span>sandwiches</span></p>
+                    <p class="who-stat"><span class="t-stat">{{stats.brown_bags}}</span> <span>brown bags</span></p>
                     <p class="t-small">Through the Night Ministry, Food For Friends, Wayside Cross Ministries and other partners.</p>
                 </div>
             </article>
@@ -32,16 +32,16 @@
                 <p class="t-eyebrow">Palatine &amp; Hoffman Estates</p>
                 <h2 class="t-h3">Students with no school meal on weekends</h2>
                 <span aria-hidden="true"></span>
-                <p class="who-stat"><span class="t-stat">1,000+</span> <span>weekend meal bags</span></p>
+                <p class="who-stat"><span class="t-stat">{{stats.weekend_bags}}</span> <span>weekend meal bags</span></p>
             </article>
             <article class="who band-india">
                 <p class="t-eyebrow">India</p>
                 <h2 class="t-h3">Families, daily laborers and children</h2>
                 <span aria-hidden="true"></span>
-                <p class="who-stat"><span class="t-stat">18,500+</span> <span>meals</span></p>
+                <p class="who-stat"><span class="t-stat">{{stats.india_meals}}</span> <span>meals</span></p>
             </article>
         </div>
-        <p class="t-small t-muted">January to September 2026.</p>
+        <p class="t-small t-muted">{{stats.period}}.</p>
     </div>
 </section>
 

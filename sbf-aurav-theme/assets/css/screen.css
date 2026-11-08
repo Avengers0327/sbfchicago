@@ -1940,3 +1940,24 @@ input, select, textarea {
 #ways-to-help { scroll-margin-top: 90px; }
 /* Homepage: the calendar section sits between two sections that already give it room */
 .home-template #how-we-help { padding-block: 0; }
+
+/* Where We Serve, Chicago: the two kinds of projects, where the food goes, partner voices, ways to help */
+.serve-cat-head { padding-top: var(--section-y); }
+.serve-cat-head .container { display: grid; gap: var(--space-3); }
+.serve-cat-head .t-eyebrow { color: var(--lake-600); margin: 0; }
+.serve-cat-head .t-h1 { margin: 0; }
+.serve-cat-head .t-body-lg { margin: 0; max-width: 40em; color: var(--ink-muted); }
+.deliveries { display: grid; gap: var(--space-4); margin-top: var(--space-8) !important; }
+.deliveries .t-h3 { margin: 0; }
+.delivery-list { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
+.delivery-list li { margin: 0 !important; display: grid; gap: var(--space-1); align-content: start; padding: var(--space-4) var(--space-6); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); }
+.delivery-list strong { color: var(--navy-900); }
+.delivery-list span { color: var(--ink-muted); font-size: 15px; line-height: 22px; }
+.partner-voices { display: grid; gap: var(--space-4); margin-top: var(--space-12) !important; }
+.partner-voices .t-h3 { margin: 0; }
+.partner-voices .voices, .partner-voices .voices-media { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); align-items: start; }
+.partner-voices .kg-callout-card, .partner-voices .sbf-video { margin: 0 !important; }
+.fb-embed iframe { display: block; width: 100%; max-width: 500px; border: 0; border-radius: var(--radius-md); background: var(--white); }
+.sbf-video video { display: block; width: 100%; max-height: 640px; border-radius: var(--radius-md); background: var(--navy-900); }
+.help-cards { padding-block: var(--section-y); }
+.help-cards .ways-head { margin-top: 0 !important; }

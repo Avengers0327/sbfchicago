@@ -13,7 +13,13 @@ fs.rmSync(IMG, { recursive: true, force: true });
 fs.mkdirSync(IMG, { recursive: true });
 
 // Theme files may have Windows line endings after a git checkout; read them as LF
-const readT = (...a) => fs.readFileSync(path.join(T, ...a), 'utf8').replace(/\r\n/g, '\n');
+// The impact numbers live in one place, build/stats.json; theme files use {{stats.name}}
+const STAT = JSON.parse(fs.readFileSync(path.join(__dirname, 'stats.json'), 'utf8'));
+const fillStats = s => s.replace(/\{\{stats\.(\w+)\}\}/g, (m, k) => {
+  if (!(k in STAT)) throw new Error('build/stats.json has no "' + k + '"');
+  return STAT[k];
+});
+const readT = (...a) => fillStats(fs.readFileSync(path.join(T, ...a), 'utf8').replace(/\r\n/g, '\n'));
 // Theme settings, with the next-event lines written from the packing schedule as of today
 function customDefs() {
   const pkg = JSON.parse(readT('package.json'));
@@ -21,6 +27,10 @@ function customDefs() {
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const next = packingEvents(defs).find(e => e.date >= today);
   if (next) Object.assign(defs, nextEventText(next));
+  Object.assign(defs, {
+    stat_1_value: STAT.chicago_meals, stat_2_value: STAT.india_meals, stat_3_value: STAT.sandwiches,
+    stat_3_label: `Peanut butter sandwiches packed, ${STAT.period_short}`,
+  });
   return defs;
 }
 // packing_dates: "YYYY-MM-DD" entries, each optionally "YYYY-MM-DD 10:00 AM @ Place" (mirrors assets/js/site.js)
@@ -91,6 +101,26 @@ function localImg(src, wide) {
   return name;
 }
 
+// Videos: copied next to the site when small enough for Cloudflare (25 MB a file), otherwise played
+// from their current address
+const MEDIA = path.join(OUT, 'media');
+const mediaMap = new Map();
+function localMedia(src) {
+  if (mediaMap.has(src)) return mediaMap.get(src);
+  const name = 'media/' + path.basename(new URL(src).pathname);
+  let use = src;
+  if (fs.existsSync(path.join(OUT, name))) use = name;
+  else {
+    try {
+      const head = execFileSync('curl', ['-sIL', src], { encoding: 'utf8' });
+      const sizes = [...head.matchAll(/content-length:\s*(\d+)/gi)].map(m => +m[1]);
+      if (sizes.length && sizes[sizes.length - 1] <= 25 * 1024 * 1024) use = name;
+    } catch (e) { /* offline: leave it on its current address */ }
+  }
+  mediaMap.set(src, use);
+  return use;
+}
+
 function decodeCf(hx) {
   const k = parseInt(hx.substr(0, 2), 16); let o = '';
   for (let j = 2; j < hx.length; j += 2) o += String.fromCharCode(parseInt(hx.substr(j, 2), 16) ^ k);
@@ -128,10 +158,13 @@ function transform(html, doc) {
     const w = doc.createElement('div'); w.className = 'form-embed'; f.replaceWith(w); w.appendChild(f);
   });
   box.querySelectorAll('.kg-video-card').forEach(v => {
-    const thumb = v.getAttribute('data-kg-thumbnail');
+    const video = v.querySelector('video');
+    const src = video && video.getAttribute('src');
+    const poster = localImg(v.getAttribute('data-kg-thumbnail'));
     const cap = v.querySelector('figcaption');
-    const local = localImg(thumb);
-    replaceWith(v, `<figure class="kg-card kg-image-card kg-card-hascaption">${local ? `<img class="kg-image" src="${local}" alt="Video thumbnail">` : ''}<figcaption>Video plays on sbfchicago.org${cap ? ': ' + cap.textContent.trim() : ''}</figcaption></figure>`);
+    const capText = cap && cap.textContent.trim();
+    if (!src) return;
+    replaceWith(v, `<figure class="kg-card kg-image-card sbf-video${capText ? ' kg-card-hascaption' : ''}"><video controls playsinline preload="none"${poster ? ` poster="${poster}"` : ''} src="${localMedia(src)}"></video>${capText ? `<figcaption>${capText}</figcaption>` : ''}</figure>`);
   });
   box.querySelectorAll('.kg-bookmark-icon, .kg-bookmark-publisher').forEach(n => n.remove());
   box.querySelectorAll('script').forEach(n => n.remove());
@@ -175,7 +208,7 @@ const donatePanel = `
   </div>
 </section>`;
 
-const STATS = [['6,100+', 'Meals from our Chicago food drives'], ['18,500+', 'Meals from our India food drives'], ['5,100+', 'Peanut butter sandwiches packed, Jan to Sept 2026']];
+const STATS = [[STAT.chicago_meals, 'Meals from our Chicago food drives'], [STAT.india_meals, 'Meals from our India food drives'], [STAT.sandwiches, `Peanut butter sandwiches packed, ${STAT.period_short}`]];
 
 // Minimal Handlebars for the static build. Pages have no excerpt or feature image, so every
 // {{#if x}}a{{else}}b{{/if}} takes its else branch, and {{#get ... slug:x}} blocks get page x's content
@@ -220,29 +253,62 @@ const splitParams = slug => partialParams(slug, 'page-hero-split');
 // Chicago's help block (CTA + links to the wish list, items, donations, get involved) becomes that
 // ending; India's shorter copy of it (CTA + donations link) is dropped as a duplicate.
 function servePage(p) {
-  const chicago = contentOf('who-we-serve-chicago');
-  const help = chicago.indexOf('<div class="kg-card kg-cta-card');
-  const past = chicago.indexOf('<h2 id="details-of-our-past-events');
+  const box = doc.createElement('div');
+  box.innerHTML = contentOf('who-we-serve-chicago');
+  const kids = Array.from(box.children);
+  const at = test => { const i = kids.findIndex(test); if (i < 0) throw new Error('Where We Serve: Chicago block not found: ' + test); return i; };
+  const html = list => list.map(e => e.outerHTML).join('');
+  const impactAt = at(e => e.classList.contains('sbf-impact'));
+  const pastAt = at(e => (e.id || '').startsWith('details-of-our-past-events'));
+  const intro = html(kids.slice(0, impactAt));
+  const impact = kids[impactAt].outerHTML;
+  const gallery = kids[at(e => e.classList.contains('kg-gallery-card'))].outerHTML;
+  const past = html(kids.slice(pastAt));
+  // The partner list and the old link previews are replaced by "Where the food goes" and the help cards
   const india = contentOf('who-we-serve-india');
   const indiaHelp = india.indexOf('<div class="kg-card kg-cta-card');
-  if (help < 0 || past < help || indiaHelp < 0) throw new Error('Where We Serve: help or past-events block not found');
-  // Hero and city headings come straight from the template, so the two can't drift apart
+  if (indiaHelp < 0) throw new Error('Where We Serve: India help block not found');
+  // Hero, city headings and category headings come straight from the template, so they can't drift apart
   const tpl = readT('page-where-we-serve.hbs');
   const between = (from, to) => { const i = tpl.indexOf(from); return tpl.slice(i, tpl.indexOf(to, i)); };
   const fill = h => fillHbs(h.replace('{{> "serve-cities"}}', readT('partials', 'serve-cities.hbs')), {}, null, 'page-where-we-serve');
-  const head = city => fill(between('<div class="serve-city-head band-' + city + '">', '        {{#get'));
+  const head = city => fill(between('<div class="serve-city-head band-' + city + '">', '\n        </div>\n') + '\n        </div>');
+  const category = id => {
+    const m = tpl.match(new RegExp('\\{\\{> "serve-category"([^}]*id="' + id + '"[^}]*)\\}\\}'));
+    if (!m) throw new Error('Where We Serve: category ' + id + ' not in the template');
+    return renderPartial('serve-category', hbsParams(m[1]));
+  };
   return `<article class="band-page-plain">${fill(between('<header class="page-hero">', '    <section'))}
     <section class="page-section serve-city band-page-chicago" id="chicago" aria-labelledby="chicago-title">${head('chicago')}
-      <div class="gh-canvas gh-content">${chicago.slice(0, help)}</div>
+      <div class="gh-canvas gh-content">${intro}</div>
+      ${category('homeless-meals')}
+      <div class="gh-canvas gh-content">${impact}${renderPartial('chicago-deliveries', {})}${gallery}${partnerVoices()}</div>
+      ${category('weekend-meals')}
       ${renderPartial('weekend-gap', {})}
-      <div class="gh-canvas gh-content">${chicago.slice(past)}</div>
+      <div class="gh-canvas gh-content">${past}</div>
+      ${renderPartial('upcoming-events', {})}
+      ${renderPartial('help-cards', {})}
     </section>
     <section class="page-section serve-city band-page-india page-who-we-serve-india" id="india" aria-labelledby="india-title">${head('india')}
       <div class="gh-canvas gh-content">${india.slice(0, indiaHelp)}</div>
-    </section>
-    <section class="page-section serve-help" aria-label="Help with our mission">
-      <div class="gh-canvas gh-content">${chicago.slice(help, past)}</div>
     </section></article>${donatePanel}`;
+}
+
+// Partner quotes and video (from the News page) and the Facebook post from the August 9 event
+function partnerVoices() {
+  const news = doc.createElement('div');
+  news.innerHTML = contentOf('in-the-news');
+  const quotes = Array.from(news.querySelectorAll('.kg-callout-card')).filter(c => /Chancez NFP|FOOD FOR FRIENDS/.test(c.textContent));
+  const video = news.querySelector('.sbf-video');
+  const post = doc.createElement('div');
+  post.innerHTML = contentOf('aug-event');
+  const fb = post.querySelector('iframe[src*="facebook.com"]');
+  if (quotes.length !== 2 || !video || !fb) throw new Error('Where We Serve: partner quotes, video or Facebook post not found');
+  return `<div class="partner-voices sbf-wide">
+  <h3 class="t-h3">From our partners</h3>
+  <div class="voices">${quotes.map(q => q.outerHTML).join('')}</div>
+  <div class="voices-media">${video.outerHTML}<div class="fb-embed">${fb.outerHTML}</div></div>
+</div>`;
 }
 
 // A whole page template: its partials, then its {{#get}} content blocks
@@ -418,7 +484,7 @@ function pageDoc(slug) {
     const owner = SECTION_PAGE[id];
     return owner && owner !== slug ? `href="/${owner}/#${id}"` : m;
   });
-  body = body.replace(/(src|href)="img\//g, '$1="/img/');
+  body = body.replace(/(src|href|poster)="(img|media)\//g, '$1="/$2/');
   const [title, desc] = SEO[slug];
   const url = urlFor(slug);
   // Old #team style links (shared before real URLs existed), including pages that have since moved
@@ -481,7 +547,7 @@ function versionsButton(slug) {
 
 const pageSlugs = ['home'].concat(PAGES.map(p => p.slug));
 for (const e of fs.readdirSync(OUT, { withFileTypes: true })) {
-  if (e.isDirectory() && e.name !== 'img' && !(e.name === 'versions' && SHOW_VERSIONS)) fs.rmSync(path.join(OUT, e.name), { recursive: true, force: true });
+  if (e.isDirectory() && e.name !== 'img' && e.name !== 'media' && !(e.name === 'versions' && SHOW_VERSIONS)) fs.rmSync(path.join(OUT, e.name), { recursive: true, force: true });
 }
 for (const slug of pageSlugs) {
   if (!SEO[slug]) throw new Error('No SEO entry for ' + slug);
@@ -567,6 +633,14 @@ const previewHtml = html.replace(/<iframe[^>]*src="([^"]+)"[^>]*>[\s\S]*?<\/ifra
 });
 fs.writeFileSync(path.join(ROOT, 'sbf-chicago-preview.html'), previewHtml);
 fs.copyFileSync(path.join(T, 'assets/images/sbf-logo.jpg'), path.join(IMG, 'logo.jpg'));
+
+// Download videos that ship with the site
+fs.mkdirSync(MEDIA, { recursive: true });
+for (const [src, use] of mediaMap) {
+  const dest = path.join(OUT, use);
+  if (use === src || (fs.existsSync(dest) && fs.statSync(dest).size > 0)) continue;
+  try { execFileSync('curl', ['-sfL', src, '-o', dest]); } catch (e) { console.warn('FAILED', src); }
+}
 
 // Download images
 let got = 0;
