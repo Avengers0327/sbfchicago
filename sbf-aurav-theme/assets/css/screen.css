@@ -1961,3 +1961,56 @@ input, select, textarea {
 .serve-cat-head + .weekend-gap { padding-top: 0; }
 .serve-city .weekend-gap { padding-bottom: 0; }
 .serve-city + .upcoming, .serve-city + .help-cards, .upcoming + .help-cards { padding-top: 0; }
+
+/* Chicago Projects: numbers in the hero, then one section per program (text beside photos) */
+.hero-stats { display: grid; gap: var(--space-3); width: 100%; margin-top: var(--space-4); }
+.hero-stat-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4) var(--space-6); grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+.hero-stat-list li { display: grid; gap: var(--space-1); align-content: start; padding-top: var(--space-3); border-top: 2px solid var(--navy-900); }
+.hero-stat-list .t-stat { color: var(--navy-900); }
+.hero-stat-list li > span:last-child { font-size: 15px; line-height: 22px; color: var(--ink-muted); }
+.hero-stats .t-small { margin: 0; }
+
+.chicago-page .program { padding-block: var(--section-y); }
+.chicago-page .program > .container { display: grid; gap: var(--space-12); }
+.program-head { display: grid; gap: var(--space-3); }
+.program-head > * { margin: 0; }
+.program-head .t-eyebrow { color: var(--lake-600); }
+.program-head .t-body-lg { max-width: 36em; color: var(--ink-muted); }
+.program-split { display: grid; gap: var(--space-8); align-items: start; }
+@media (min-width: 900px) { .program-split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-12); } }
+.program-text { display: grid; gap: var(--space-8); min-width: 0; }
+.chicago-page .deliveries { margin: 0 !important; gap: var(--space-2); }
+.chicago-page .delivery-list { display: block; }
+.chicago-page .delivery-list li { padding: var(--space-3) 0; background: none; border: 0; border-top: 1px solid var(--line); border-radius: 0; }
+
+.photo-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.photo-grid li { margin: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius-md); background: var(--lake-100); }
+.photo-grid img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.photo-grid.is-row { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); margin-top: var(--space-4); }
+.more-photos { margin-top: calc(var(--space-8) * -1); }
+.more-photos summary { cursor: pointer; font-weight: 700; color: var(--lake-600); width: fit-content; }
+.more-photos summary:focus-visible { outline: none; box-shadow: var(--shadow-focus); border-radius: 2px; }
+
+.chicago-page .partner-voices { margin: 0 !important; gap: var(--space-6); }
+.voice { margin: 0; padding: 0 0 0 var(--space-6); border-left: 3px solid var(--lake-600); display: grid; gap: var(--space-3); }
+.voice p { margin: 0; font-size: 18px; line-height: 28px; color: var(--navy-900); }
+.voice cite { font-style: normal; font-weight: 700; font-size: 14px; color: var(--ink-muted); }
+
+.chicago-page .weekend-gap { padding-block: 0; }
+.past-events { display: grid; gap: var(--space-4); }
+.past-events .t-h3 { margin: 0; }
+.past-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.past-item { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: var(--space-4); align-items: center; padding: var(--space-3); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); color: inherit; text-decoration: none; }
+.past-item:hover strong { color: var(--lake-600); text-decoration: underline; }
+.past-item:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.past-item img { width: 96px; height: 72px; object-fit: cover; border-radius: var(--radius-sm); }
+.past-text { display: grid; gap: 2px; min-width: 0; }
+.past-text strong { color: var(--navy-900); }
+.past-text > span { color: var(--ink-muted); font-size: 14px; line-height: 20px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.chicago-page .upcoming { padding-top: var(--section-y); }
+.chicago-page .upcoming + .help-cards { padding-top: 0; }
+
+/* India Projects: room between the hero band and the impact panel */
+.page-who-we-serve-india .serve-city > .gh-canvas:first-child { padding-top: var(--section-y); }
+.chicago-page #weekend-meals > * + * { margin-top: var(--space-12); }
+@media (max-width: 599px) { .hero-stat-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); } .hero-stat-list .t-stat { font-size: 32px; line-height: 36px; } .hero-stat-list li > span:last-child { font-size: 13px; line-height: 18px; } }

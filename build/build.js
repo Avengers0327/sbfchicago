@@ -259,7 +259,8 @@ function templateHero(slug) {
   return fillHbs(tpl.slice(i, tpl.indexOf('</header>', i)) + '</header>', {}, null, 'page-' + slug);
 }
 
-// Chicago Projects: meals for neighbors facing homelessness, then weekend meals for two high schools.
+// Chicago Projects: the year's numbers in the hero, then each program as its own section with its
+// text beside its photos, the past events as a compact list, upcoming dates and the ways to help.
 // The page's intro is in the hero; its partner list and link previews are replaced by
 // "Where the food goes" and the help cards.
 function chicagoPage(p) {
@@ -267,22 +268,43 @@ function chicagoPage(p) {
   box.innerHTML = contentOf('who-we-serve-chicago');
   const kids = Array.from(box.children);
   const at = test => { const i = kids.findIndex(test); if (i < 0) throw new Error('Chicago Projects: block not found: ' + test); return i; };
-  const impact = kids[at(e => e.classList.contains('sbf-impact'))].outerHTML;
-  const gallery = kids[at(e => e.classList.contains('kg-gallery-card'))].outerHTML;
-  const past = kids.slice(at(e => (e.id || '').startsWith('details-of-our-past-events'))).map(e => e.outerHTML).join('');
+  const photos = Array.from(kids[at(e => e.classList.contains('kg-gallery-card'))].querySelectorAll('img')).map(img =>
+    `<li><img src="${img.getAttribute('src')}" alt="Volunteers at an SBF Chicago food packing event" loading="lazy"></li>`);
+  const pastAt = at(e => (e.id || '').startsWith('details-of-our-past-events'));
+  const past = kids.slice(pastAt + 1).filter(e => e.classList.contains('kg-bookmark-card')).map(card => {
+    const a = card.querySelector('a');
+    const title = card.querySelector('.kg-bookmark-title').textContent.trim();
+    const desc = (card.querySelector('.kg-bookmark-description') || { textContent: '' }).textContent.trim();
+    const thumb = card.querySelector('.kg-bookmark-thumbnail img');
+    return `<li><a class="past-item" href="${a.getAttribute('href')}">${thumb ? `<img src="${thumb.getAttribute('src')}" alt="" loading="lazy">` : ''}<span class="past-text"><strong>${title}</strong><span>${desc}</span></span></a></li>`;
+  });
+  if (photos.length < 4 || !past.length) throw new Error('Chicago Projects: photos or past events missing');
   const tpl = readT('page-who-we-serve-chicago.hbs');
   const category = id => {
     const m = tpl.match(new RegExp('\\{\\{> "serve-category"([^}]*id="' + id + '"[^}]*)\\}\\}'));
     if (!m) throw new Error('Chicago Projects: category ' + id + ' not in the template');
-    return renderPartial('serve-category', hbsParams(m[1]));
+    return hbsParams(m[1]);
   };
-  return `<article class="band-page-chicago">${templateHero(p.slug)}
-    <section class="page-section serve-city" id="chicago" aria-label="Chicago projects">
-      ${category('homeless-meals')}
-      <div class="gh-canvas gh-content">${impact}${renderPartial('chicago-deliveries', {})}${gallery}${partnerVoices()}</div>
-      ${category('weekend-meals')}
+  const head = c => `<div class="program-head"><p class="t-eyebrow">${c.eyebrow}</p><h2 class="t-h1">${c.title}</h2><p class="t-body-lg">${c.sub}</p></div>`;
+  const a = category('homeless-meals'), b = category('weekend-meals');
+  return `<article class="band-page-chicago chicago-page">${templateHero(p.slug)}
+    <section class="program" id="homeless-meals" aria-label="${a.title}">
+      <div class="container">
+        <div class="program-split">
+          <div class="program-text">${head(a)}${renderPartial('chicago-deliveries', {})}</div>
+          <ul class="photo-grid" role="list">${photos.slice(0, 4).join('')}</ul>
+        </div>
+        ${photos.length > 4 ? `<details class="more-photos"><summary>More photos (${photos.length - 4})</summary><ul class="photo-grid is-row" role="list">${photos.slice(4).join('')}</ul></details>` : ''}
+        ${partnerVoices()}
+      </div>
+    </section>
+    <section class="program band-chicago" id="weekend-meals" aria-label="${b.title}">
+      <div class="container">${head(b)}</div>
       ${renderPartial('weekend-gap', {})}
-      <div class="gh-canvas gh-content">${past}</div>
+      <div class="container past-events">
+        <h3 class="t-h3">Past food packing events</h3>
+        <ul class="past-list" role="list">${past.join('')}</ul>
+      </div>
     </section>
     ${renderPartial('upcoming-events', {})}
     ${renderPartial('help-cards', {})}</article>${donatePanel}`;
@@ -304,15 +326,19 @@ function indiaPage(p) {
 function partnerVoices() {
   const news = doc.createElement('div');
   news.innerHTML = contentOf('in-the-news');
-  const quotes = Array.from(news.querySelectorAll('.kg-callout-card')).filter(c => /Chancez NFP|FOOD FOR FRIENDS/.test(c.textContent));
+  const quotes = Array.from(news.querySelectorAll('.kg-callout-card')).filter(c => /Chancez NFP|FOOD FOR FRIENDS/.test(c.textContent)).map(c => {
+    const t = c.textContent.replace(/\s+/g, ' ').trim();
+    const cut = t.lastIndexOf(' - ');
+    return `<blockquote class="voice"><p>${t.slice(0, cut)}</p><cite>${t.slice(cut + 3)}</cite></blockquote>`;
+  });
   const video = news.querySelector('.sbf-video');
   const post = doc.createElement('div');
   post.innerHTML = contentOf('aug-event');
   const fb = post.querySelector('iframe[src*="facebook.com"]');
-  if (quotes.length !== 2 || !video || !fb) throw new Error('Where We Serve: partner quotes, video or Facebook post not found');
-  return `<div class="partner-voices sbf-wide">
+  if (quotes.length !== 2 || !video || !fb) throw new Error('Chicago Projects: partner quotes, video or Facebook post not found');
+  return `<div class="partner-voices">
   <h3 class="t-h3">From our partners</h3>
-  <div class="voices">${quotes.map(q => q.outerHTML).join('')}</div>
+  <div class="voices">${quotes.join('')}</div>
   <div class="voices-media">${video.outerHTML}<div class="fb-embed">${fb.outerHTML}</div></div>
 </div>`;
 }
