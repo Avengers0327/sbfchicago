@@ -1,21 +1,12 @@
 {{!< default}}
-{{!-- Events: the next packing event, then fundraisers (upcoming and past) and ways to help if you
+{{!-- Events: the next packing event (in the hero), then fundraisers (upcoming and past) and ways to help if you
      can't make it. Content comes from the SBF Fundraiser page; dated lists become event cards via
      assets/js/site.js. --}}
 {{#post}}
 <article class="band-page-plain">
-    <header class="page-hero">
-        <div class="container">
-            <p class="t-eyebrow">Coming up</p>
-            <h1 class="t-h1">Events</h1>
-            <p class="t-body-lg">Packing events and fundraisers: what's coming up, and the ones we've held.</p>
-        </div>
-    </header>
+    {{> "page-hero-split" eyebrow="Packing events and fundraisers" sub="What's coming up, and the fundraisers we've held. Come pack with us, or eat out for a good cause." cta_label="Sign up to volunteer" cta_url="/get-involved/#sign-up" photo="2026/08/DQ-2.jpg" photo_alt="SBF volunteers and families outside Dairy Queen in Palatine at the August 28 fundraiser"}}
 
     <section class="page-section events-upcoming page-sbf-fundraiser" id="upcoming" aria-label="Upcoming events and fundraisers">
-        <div class="container">
-            {{> "coming-up"}}
-        </div>
         {{#get "pages" filter="slug:sbf-fundraiser" limit="1"}}
             {{#foreach pages}}<div class="gh-canvas gh-content">{{content}}</div>{{/foreach}}
         {{/get}}

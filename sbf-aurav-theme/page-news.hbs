@@ -3,13 +3,7 @@
      page; dated entries become the timeline via assets/js/site.js. --}}
 {{#post}}
 <article class="band-page-plain">
-    <header class="page-hero">
-        <div class="container">
-            <p class="t-eyebrow">Milestones and press</p>
-            <h1 class="t-h1">News</h1>
-            <p class="t-body-lg">What we've been up to.</p>
-        </div>
-    </header>
+    {{> "page-hero-split" eyebrow="Milestones and press" sub="What we've been up to: milestones, press, and words from our partners." cta_label="Get involved" cta_url="/get-involved/" photo="2026/09/739ae187-f330-4f9e-9179-74f482379257.jpeg" photo_alt="Families with their SBF India ration kits at the September drive near New Delhi"}}
 
     <section class="page-section events-news page-in-the-news" id="milestones" aria-label="Milestones and press">
         {{#get "pages" filter="slug:in-the-news" limit="1"}}
