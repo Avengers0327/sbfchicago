@@ -1,0 +1,26 @@
+{{!< default}}
+{{!-- Chicago Projects: two kinds of projects (meals for neighbors facing homelessness, weekend meals
+     for two high schools), then upcoming dates and the four ways to help. The static build
+     (build/build.js) places each block of the page's content under the right heading. --}}
+{{#post}}
+<article class="band-page-chicago">
+    <header class="page-hero band-chicago">
+        <div class="container">
+            <p class="t-eyebrow">Chicagoland &middot; monthly food packing event</p>
+            <h1 class="t-h1">Chicago Projects</h1>
+            <p class="t-body-lg">In-person events with the local Chicago community, providing lunches and packed meals for people facing homelessness, students in need and others.</p>
+        </div>
+    </header>
+
+    <section class="page-section serve-city" id="chicago" aria-label="Chicago projects">
+        {{> "serve-category" id="homeless-meals" eyebrow="Chicagoland · most of what we pack" title="Meals for neighbors facing homelessness" sub="Sandwiches and brown bags for people facing homelessness, poverty or crisis in Chicagoland, delivered with our partners."}}
+        <div class="gh-canvas gh-content">{{content}}</div>
+        {{> "chicago-deliveries"}}
+        {{> "serve-category" id="weekend-meals" eyebrow="Palatine & Hoffman Estates" title="Weekend meals for two high schools" sub="Weekend meal bags for students at Palatine and Hoffman Estates High Schools, who have school lunch on weekdays and no school meal on weekends."}}
+        {{> "weekend-gap"}}
+    </section>
+    {{> "upcoming-events"}}
+    {{> "help-cards"}}
+</article>
+{{/post}}
+{{> "donate-panel"}}

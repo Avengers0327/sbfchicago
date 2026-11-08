@@ -1,0 +1,20 @@
+{{!< default}}
+{{!-- India Projects: impact, the food drives and the project list (cards via assets/js/site.js),
+     then the four ways to help --}}
+{{#post}}
+<article class="band-page-india page-who-we-serve-india">
+    <header class="page-hero band-india">
+        <div class="container">
+            <p class="t-eyebrow">India</p>
+            <h1 class="t-h1">India Projects</h1>
+            <p class="t-body-lg">A blind school, two slum schools, Labor Chowk, Apna Ghar, an orphanage in Shirdi, feeding cows and an animal rescue shelter, across New Delhi, Gurugram, Pratapgarh and Shirdi.</p>
+        </div>
+    </header>
+
+    <section class="page-section serve-city" id="india" aria-label="India projects">
+        <div class="gh-canvas gh-content">{{content}}</div>
+    </section>
+    {{> "help-cards"}}
+</article>
+{{/post}}
+{{> "donate-panel"}}

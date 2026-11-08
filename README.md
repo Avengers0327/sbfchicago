@@ -39,7 +39,7 @@ Static. Fast. Free to host. Zero backend required.
 | **CSS** | Hand-written, token-based (`assets/css/screen.css`) — colors, type scale, spacing, radius and shadow all defined once at the top |
 | **JS** | ~500 lines, dependency-free, progressively enhances content into components (project cards, timelines, leader walls, item tiles) |
 | **Fonts** | Bricolage Grotesque (display) + Figtree (body), via Google Fonts |
-| **Pages** | 9 (home, Team & Vision, Where We Serve, Get Involved, Give, Events, News, Membership, a sample event post) |
+| **Pages** | 10 (home, Team & Vision, Chicago Projects, India Projects, Get Involved, Give, Events, News, Membership, a sample event post) |
 | **Images** | 132, sourced from the live site's real events |
 | **Forms** | Google Forms (sign-up) + Zeffy (donations), both embedded, both free, neither requires a backend |
 | **Hosting cost** | $0 — any static host works |
@@ -73,7 +73,7 @@ node build.js
 ## Where to edit common things
 
 - **Homepage copy and stats:** `sbf-aurav-theme/home.hbs` and the defaults in `sbf-aurav-theme/package.json` (`config.custom`)
-- **Impact numbers (update monthly):** `build/stats.json` — meals, sandwiches, brown bags, weekend bags and the period they cover. The homepage, Where We Serve, Give and the scrolling facts strip all read from it.
+- **Impact numbers (update monthly):** `build/stats.json` — meals, sandwiches, brown bags, weekend bags and the period they cover. The homepage, Chicago and India Projects, Give and the scrolling facts strip all read from it.
 - **Packing event dates:** `packing_dates` in `sbf-aurav-theme/package.json`, with the usual `packing_time` and `packing_place`. The header bar, "Pack with us" and every next-event line pick the first date that hasn't passed, in the visitor's browser, so nothing needs changing after an event. Add dates ahead of time; a one-off time or place is written `2027-01-17 10:00 AM @ Place`.
 - **Colors, fonts, spacing:** top of `sbf-aurav-theme/assets/css/screen.css` (design-system tokens)
 - **Page layouts:** `sbf-aurav-theme/page-*.hbs` and `sbf-aurav-theme/partials/`
@@ -105,8 +105,7 @@ Some old pages now live as sections of one page. Their old addresses forward to 
 
 | Old page | Now |
 | --- | --- |
-| `/who-we-serve-chicago/` | Where We Serve → Chicago Projects (`/where-we-serve/#chicago`) |
-| `/who-we-serve-india/` | Where We Serve → India Projects (`/where-we-serve/#india`) |
+| `/where-we-serve/` | Chicago Projects (`/who-we-serve-chicago/`); its `#india` links go to India Projects |
 | `/youth-leaders/` | Get Involved → Lead an event (`/get-involved/#youth-leadership`) |
 | `/donations/` | Give → Donate (`/give/#donate`) |
 | `/items-needed/` | Give → Ship it, or bring it (`/give/#items`) |

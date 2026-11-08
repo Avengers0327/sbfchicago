@@ -26,7 +26,7 @@
     --marigold-400-hover: #E6A822;
 
     /* type families */
-    --font-display: "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+    --font-display: "Schibsted Grotesk", "Figtree", system-ui, sans-serif;
     --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
 
     /* spacing */
@@ -143,7 +143,6 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
     font-size: 48px; line-height: 48px;
     font-weight: 800;
     letter-spacing: -0.02em;
-    font-variant-numeric: tabular-nums;
 }
 .t-h1 {
     font-family: var(--font-display);
@@ -1153,7 +1152,7 @@ input, select, textarea {
     padding-block: var(--space-3);
     border-bottom: 1px solid var(--line);
 }
-.sbf-drives li strong { font: 700 20px/28px var(--font-display); font-variant-numeric: tabular-nums; }
+.sbf-drives li strong { font: 700 20px/28px var(--font-display); }
 
 .sbf-partners { display: grid; gap: var(--space-4); }
 .sbf-partners h2 { margin: 0 !important; }
@@ -1607,7 +1606,7 @@ input, select, textarea {
     background: var(--white);
     border-radius: var(--radius-sm);
 }
-.need-qty { font: 800 32px/36px var(--font-display); color: var(--navy-900); font-variant-numeric: tabular-nums; }
+.need-qty { font: 800 32px/36px var(--font-display); color: var(--navy-900); }
 .need-what { font-weight: 700; font-size: 15px; line-height: 20px; }
 .need-size { color: var(--ink-muted); font-size: 13px; line-height: 18px; font-weight: 500; }
 
@@ -1773,13 +1772,6 @@ input, select, textarea {
 .give-food .give-items { padding-top: var(--section-y); }
 
 /* Where We Serve: the two cities side by side, then a section each */
-.serve-cities { justify-self: stretch; width: 100%; max-width: 760px; list-style: none; margin: var(--space-8) 0 0; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
-.serve-city-tile { display: grid; gap: var(--space-1); align-content: start; padding: var(--space-6); border-radius: var(--radius-md); }
-.serve-city-tile > * { margin: 0; }
-.serve-city-tile .t-eyebrow { color: var(--navy-900); }
-.serve-city-tile .t-stat { color: var(--navy-900); }
-.serve-city-tile .t-small { color: var(--ink-muted); }
-.serve-city-tile .link-arrow { margin-top: var(--space-2); }
 .serve-city { padding-top: 0; border-top: 0; }
 .serve-city-head { padding-block: var(--space-12); margin-bottom: var(--space-8); }
 .serve-city-head .container { display: grid; gap: var(--space-2); }
@@ -1961,3 +1953,11 @@ input, select, textarea {
 .sbf-video video { display: block; width: 100%; max-height: 640px; border-radius: var(--radius-md); background: var(--navy-900); }
 .help-cards { padding-block: var(--section-y); }
 .help-cards .ways-head { margin-top: 0 !important; }
+
+/* Project pages: one even gap (the section spacing) between blocks, tighter spacing inside a category.
+   The content above each block already ends with that gap, so the blocks add no top padding of their own. */
+.serve-city > .serve-cat-head { padding-top: 0; padding-bottom: var(--space-8); }
+.serve-city > .serve-cat-head:first-child { padding-top: var(--space-8); }
+.serve-cat-head + .weekend-gap { padding-top: 0; }
+.serve-city .weekend-gap { padding-bottom: 0; }
+.serve-city + .upcoming, .serve-city + .help-cards, .upcoming + .help-cards { padding-top: 0; }
