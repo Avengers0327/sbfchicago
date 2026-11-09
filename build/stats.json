@@ -1,9 +1,29 @@
 {
   "period": "January to September 2026",
   "period_short": "Jan to Sept 2026",
+
   "chicago_meals": "6,100+",
   "sandwiches": "5,100+",
   "brown_bags": "2,600+",
   "weekend_bags": "1,000+",
-  "india_meals": "18,500+"
+
+  "india_meals": "18,500+",
+  "india_drives": "43",
+  "india_orgs": "7",
+  "india_ration_kits": "101",
+  "india_ration_meals": "13,000+",
+  "india_differently_abled": "2,000+",
+  "india_laborers": "1,400+",
+  "india_orphanage_children": "1,000+",
+  "india_slum_children": "640+",
+  "india_blind_students": "360+",
+  "india_animals": "100+",
+
+  "drives_blind_school": "9",
+  "drives_orphanage": "8",
+  "drives_labor_chowk": "8",
+  "drives_slum_school": "8",
+  "drives_apna_ghar": "4",
+  "drives_feeding_cows": "4",
+  "drives_animal_shelter": "2"
 }

@@ -2014,3 +2014,12 @@ input, select, textarea {
 .page-who-we-serve-india .serve-city > .gh-canvas:first-child { padding-top: var(--section-y); }
 .chicago-page #weekend-meals > * + * { margin-top: var(--space-12); }
 @media (max-width: 599px) { .hero-stat-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); } .hero-stat-list .t-stat { font-size: 32px; line-height: 36px; } .hero-stat-list li > span:last-child { font-size: 13px; line-height: 18px; } }
+
+/* India Projects: same section rhythm as Chicago */
+.india-page .program { padding-block: var(--section-y); }
+.india-page .program > .container { display: grid; gap: var(--space-12); }
+.india-page .program > .container + .gh-canvas { margin-top: var(--space-8); }
+.india-page .serve-city > .gh-canvas:first-child { padding-top: 0; }
+.india-page #india .gh-content > :first-child { margin-top: 0 !important; }
+.india-page .program + .help-cards { padding-top: 0; }
+.kit-card dl { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }

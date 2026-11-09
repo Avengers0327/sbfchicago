@@ -310,14 +310,45 @@ function chicagoPage(p) {
     ${renderPartial('help-cards', {})}</article>${donatePanel}`;
 }
 
-// India Projects: impact, food drives and the project list, then the help cards
+// India Projects: the year's numbers in the hero, the 7 projects first, then special projects (the India
+// Ration Drive, from the News page), impact by project with photos, and the ways to help
 function indiaPage(p) {
-  const india = contentOf('who-we-serve-india');
-  const help = india.indexOf('<div class="kg-card kg-cta-card');
-  if (help < 0) throw new Error('India Projects: help block not found');
-  return `<article class="band-page-india page-who-we-serve-india">${templateHero(p.slug)}
-    <section class="page-section serve-city" id="india" aria-label="India projects">
-      <div class="gh-canvas gh-content">${india.slice(0, help)}</div>
+  const box = doc.createElement('div');
+  box.innerHTML = contentOf('who-we-serve-india');
+  const kids = Array.from(box.children);
+  const at = test => { const i = kids.findIndex(test); if (i < 0) throw new Error('India Projects: block not found: ' + test); return i; };
+  const impact = kids[at(e => e.classList.contains('sbf-impact'))].outerHTML;
+  const drives = kids[at(e => e.classList.contains('sbf-drives'))].outerHTML;
+  const gallery = kids[at(e => e.classList.contains('kg-gallery-card'))].outerHTML;
+  const first = at(e => /^Project\s*1\s*:/i.test(e.textContent.trim()));
+  const help = at(e => e.classList.contains('kg-cta-card'));
+  const projects = kids.slice(first, help).map(e => e.outerHTML).join('');
+
+  // The ration drive's photos, from its News entry
+  const news = doc.createElement('div');
+  news.innerHTML = contentOf('in-the-news');
+  const entry = Array.from(news.children).find(e => /SBF India provided .* meals/.test(e.textContent));
+  let fig = entry && entry.nextElementSibling;
+  if (!fig || !fig.classList.contains('kg-gallery-card')) throw new Error('India Projects: ration drive photos not found');
+  const photos = Array.from(fig.querySelectorAll('img')).map(img =>
+    `<li><img src="${img.getAttribute('src')}" alt="Families receiving SBF India meal kits near New Delhi" loading="lazy"></li>`);
+
+  return `<article class="band-page-india page-who-we-serve-india india-page">${templateHero(p.slug)}
+    <section class="program serve-city" id="india" aria-label="India projects">
+      <div class="gh-canvas gh-content">${projects}</div>
+    </section>
+    <section class="program band-india" id="special-projects" aria-label="Special projects">
+      <div class="container">
+        <div class="program-split">
+          <div class="program-text">${renderPartial('india-ration', {})}</div>
+          <ul class="photo-grid" role="list">${photos.slice(0, 4).join('')}</ul>
+        </div>
+        ${photos.length > 4 ? `<details class="more-photos"><summary>More photos (${photos.length - 4})</summary><ul class="photo-grid is-row" role="list">${photos.slice(4).join('')}</ul></details>` : ''}
+      </div>
+    </section>
+    <section class="program" id="impact" aria-labelledby="impact-title">
+      <div class="container"><div class="program-head"><p class="t-eyebrow">Impact by project</p><h2 class="t-h1" id="impact-title">Who we fed this year</h2></div></div>
+      <div class="gh-canvas gh-content">${impact}${drives}${gallery}</div>
     </section>
     ${renderPartial('help-cards', {})}</article>${donatePanel}`;
 }

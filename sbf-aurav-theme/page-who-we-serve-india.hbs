@@ -1,18 +1,23 @@
 {{!< default}}
-{{!-- India Projects: impact, the food drives and the project list (cards via assets/js/site.js),
-     then the four ways to help --}}
+{{!-- India Projects: the year's numbers, the 7 projects (cards via assets/js/site.js), special
+     projects (the India Ration Drive), impact by project and photos, then the ways to help.
+     The static build (build/build.js) places each block of the page's content in this order. --}}
 {{#post}}
-<article class="band-page-india page-who-we-serve-india">
+<article class="band-page-india page-who-we-serve-india india-page">
     <header class="page-hero band-india">
         <div class="container">
             <p class="t-eyebrow">India</p>
             <h1 class="t-h1">India Projects</h1>
             <p class="t-body-lg">A blind school, two slum schools, Labor Chowk, Apna Ghar, an orphanage in Shirdi, feeding cows and an animal rescue shelter, across New Delhi, Gurugram, Pratapgarh and Shirdi.</p>
+            {{> "india-stats"}}
         </div>
     </header>
 
-    <section class="page-section serve-city" id="india" aria-label="India projects">
+    <section class="program serve-city" id="india" aria-label="India projects">
         <div class="gh-canvas gh-content">{{content}}</div>
+    </section>
+    <section class="program band-india" id="special-projects" aria-label="Special projects">
+        <div class="container">{{> "india-ration"}}</div>
     </section>
     {{> "help-cards"}}
 </article>
