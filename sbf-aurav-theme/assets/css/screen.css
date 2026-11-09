@@ -545,7 +545,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 }
 .day svg { width: 28px; height: 28px; }
 .day-label { font-size: 13px; line-height: 16px; font-weight: 500; }
-.day.is-lunch { background: var(--lake-100); color: var(--navy-900); }
+.day.is-lunch { background: var(--white); color: var(--navy-900); border: 1px solid var(--lake-600); } /* white so the weekdays read on the light-blue band too */
 .day.is-empty { background: transparent; border: 2px dashed var(--line-strong); color: var(--ink-muted); }
 .day.is-sbf { background: var(--navy-900); color: var(--white); border: 2px solid var(--navy-900); }
 .day.is-sbf .t-eyebrow { color: var(--lake-500); }
@@ -563,7 +563,7 @@ a:hover { color: var(--navy-700); text-decoration-thickness: 2px; }
 }
 .week-legend span { display: inline-flex; align-items: center; gap: var(--space-2); }
 .week-legend i { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
-.week-legend .k-lunch { background: var(--lake-100); border: 1px solid var(--lake-600); }
+.week-legend .k-lunch { background: var(--white); border: 1px solid var(--lake-600); }
 .week-legend .k-empty { border: 2px dashed var(--line-strong); }
 .week-legend .k-sbf { background: var(--navy-900); }
 /* The gap fills in when act 3 scrolls into view (resting state = filled) */
