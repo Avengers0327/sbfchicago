@@ -2023,3 +2023,25 @@ input, select, textarea {
 .india-page #india .gh-content > :first-child { margin-top: 0 !important; }
 .india-page .program + .help-cards { padding-top: 0; }
 .kit-card dl { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+
+/* Get Involved: the ways open the page (no hero), so they get the top room a hero would have */
+.ways-first .ways-head { margin-top: var(--space-16) !important; }
+.ways-first .ways-head .t-h1 { font-size: clamp(40px, 6vw, 64px); line-height: 1.05; }
+.youth-hours { display: grid; gap: var(--space-3); margin-top: var(--space-8); }
+.youth-hours > .t-h3, .youth-hours > p { margin: 0; }
+.youth-hours + .gh-canvas { margin-top: var(--space-8); }
+.packing-donate { margin: var(--space-8) 0 0; max-width: 60em; padding: var(--space-4) var(--space-6); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); }
+.packing-donate .link-arrow { margin-left: var(--space-2); white-space: nowrap; }
+
+/* Give: Zelle address and the volunteer sign-up */
+.zelle-address { margin: 0; font-weight: 700; font-size: 18px; color: var(--navy-900); user-select: all; overflow-wrap: anywhere; }
+.give-time .signup-form { padding-top: var(--section-y); }
+
+/* Events: upcoming packing dates under the hero; the list links to Events, so hide that link here */
+.page-events .upcoming .section-head .link-arrow { display: none; }
+.event-flyer { margin: 0 auto var(--section-y); max-width: 560px; padding-inline: var(--gutter); }
+.event-flyer img { display: block; width: 100%; border-radius: var(--radius-md); box-shadow: var(--shadow-md); }
+/* Give: all five ways to give in one row on wide screens */
+@media (min-width: 1100px) { .give-choices { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+/* Events: less space between the packing dates and the fundraisers */
+.page-events .upcoming { padding-bottom: var(--space-8); }

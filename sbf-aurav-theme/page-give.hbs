@@ -1,6 +1,7 @@
 {{!< default}}
-{{!-- Give: money or food, both become meals. The hero, a chooser for the three ways to give,
-     the Zeffy form beside what gifts have done, then the items list beside its sign-up form.
+{{!-- Give: money, Zelle, food or time. The hero, a chooser for the ways to give, the Zeffy form
+     beside what gifts have done (with Zeffy details and Zelle), the items list beside its sign-up
+     form, then the volunteer sign-up form.
      Content comes from the Donations and Items Needed pages and the Amazon Wishlist post. --}}
 {{#post}}
 {{> "page-hero-split" eyebrow="Every gift becomes a meal" sub="Donate money and the SBF team buys the food, or give the items yourself. Either way, it becomes meals at the next packing event." cta_label="Donate now" cta_url="#donate" photo="2026/03/WhatsApp-Image-2026-03-13-at-5.30.30-PM.jpeg" photo_alt="Cases of snacks and chocolate milk bought with donations, stacked and ready to pack"}}
@@ -46,4 +47,8 @@
         </div>
     </div>
 </section>
+
+<div class="give-time" id="time">
+    {{> "signup-form" eyebrow="Give time" heading="Volunteer at a packing event" note="Tell us you are coming, whether you need volunteer hours, and if you would like to donate food items."}}
+</div>
 {{/post}}

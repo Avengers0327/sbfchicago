@@ -445,7 +445,7 @@
         if (ol) {
             var picks = [[/donat/i, 'donate'], [/youth leader|lead/i, 'lead'], [/buy|items/i, 'buy'], [/spread|word/i, 'spread'], [/volunteer|pack/i, 'volunteer']];
             var cards = {
-                volunteer: { title: 'Pack food', action: 'Sign up to pack', href: '#sign-up' },
+                volunteer: { title: 'Volunteer time', action: 'Sign up to volunteer', href: '#sign-up' },
                 buy: { title: 'Bring items', action: 'See items needed' },
                 donate: { title: 'Donate', action: 'Donate' },
                 lead: { title: 'Lead an event', action: 'Youth leadership' },
@@ -473,7 +473,9 @@
             // Intro sentence becomes the section heading
             var intro = ol.previousElementSibling;
             var head = el('div', 'ways-head sbf-wide');
-            head.append(el('p', 't-eyebrow', 'More ways to help'), el('h2', 't-h1', ol.children.length + ' ways to get involved'));
+            // The ways open the page, so they carry its main heading when there is no other
+            var level = document.querySelector('main h1, h1.t-display, h1.t-h1') ? 'h2' : 'h1';
+            head.append(el('p', 't-eyebrow', 'Get involved'), el(level, 't-h1', ol.children.length + ' ways to get involved'));
             if (intro && intro.tagName === 'P') {
                 head.append(el('p', 't-body-lg', txt(intro).replace(/:\s*$/, '.')));
                 intro.remove();
