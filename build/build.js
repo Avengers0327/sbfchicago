@@ -90,6 +90,15 @@ const imgMap = new Map();
 let imgCount = 0;
 // Wide images (full-width cards) are fetched at 1000px so they stay sharp; everything else at 600px
 function localImg(src, wide) {
+  // Photos we keep in the repo (build/photos), written in content as photo:name.jpg
+  if (/^photo:/.test(src || '')) {
+    const file = src.slice(6);
+    const from = path.join(__dirname, 'photos', file);
+    if (!fs.existsSync(from)) throw new Error('Missing photo: build/photos/' + file);
+    fs.mkdirSync(IMG, { recursive: true });
+    fs.copyFileSync(from, path.join(IMG, file));
+    return 'img/' + file;
+  }
   if (!src || !/sbfchicago\.org\/content\/(images|media)\//.test(src)) return null;
   if (/\.ico$/i.test(src)) return null;
   let url = src.replace(/\/content\/images\/size\/w\d+\//, '/content/images/');
