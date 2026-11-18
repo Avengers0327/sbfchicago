@@ -385,7 +385,7 @@ function renderTemplate(p) {
   return fillHbs(h, {}, null, 'page-' + p.slug);
 }
 
-// Get Involved in three parts: the ways to get involved (the page's opener), what a packing day looks
+// Get Involved: the header, then three parts: the ways to get involved, what a packing day looks
 // like, and youth leadership with the volunteer hours. Then partners and the sign-up form. Partners move below youth leadership, and only
 // the leader photos come over from the Youth Leaders page (its hours and roles have their own sections).
 function involvedPage(p) {
@@ -393,7 +393,8 @@ function involvedPage(p) {
   const cut = gi.indexOf('<h2 id="collaborative-partners-sponsors"');
   if (cut < 0) throw new Error('Get Involved: partners heading not found');
   const leaders = blocks(contentOf('youth-leaders'), c => !/^(P|UL)$/.test(c.tagName) && !c.classList.contains('kg-button-card'));
-  return `<article class="band-page-plain ways-first"><div class="gh-canvas gh-content">${gi.slice(0, cut)}${renderPartial('more-ways', {})}</div></article>`
+  return renderPartial('page-hero-split', Object.assign({ title: p.title }, splitParams(p.slug)))
+    + `<article class="band-page-plain ways-first"><div class="gh-canvas gh-content">${gi.slice(0, cut)}${renderPartial('more-ways', {})}</div></article>`
     + renderPartial('packing-day', {})
     + renderPartial('youth-lead', {}, { 'youth-leaders': leaders })
     + `<article class="band-page-plain page-partners"><div class="gh-canvas gh-content">${gi.slice(cut)}</div></article>`

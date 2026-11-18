@@ -473,9 +473,9 @@
             // Intro sentence becomes the section heading
             var intro = ol.previousElementSibling;
             var head = el('div', 'ways-head sbf-wide');
-            // The ways open the page, so they carry its main heading when there is no other
+            // The page header normally carries the h1; if it's ever removed, the ways take it
             var level = document.querySelector('main h1, h1.t-display, h1.t-h1') ? 'h2' : 'h1';
-            head.append(el('p', 't-eyebrow', 'Get involved'), el(level, 't-h1', ol.children.length + ' ways to get involved'));
+            head.append(el('p', 't-eyebrow', 'Ways to help'), el(level, 't-h1', ol.children.length + ' ways to get involved'));
             if (intro && intro.tagName === 'P') {
                 head.append(el('p', 't-body-lg', txt(intro).replace(/:\s*$/, '.')));
                 intro.remove();

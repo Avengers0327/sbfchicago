@@ -2026,7 +2026,6 @@ input, select, textarea {
 
 /* Get Involved: the ways open the page (no hero), so they get the top room a hero would have */
 .ways-first .ways-head { margin-top: var(--space-16) !important; }
-.ways-first .ways-head .t-h1 { font-size: clamp(40px, 6vw, 64px); line-height: 1.05; }
 .youth-hours { display: grid; gap: var(--space-3); margin-top: var(--space-8); }
 .youth-hours > .t-h3, .youth-hours > p { margin: 0; }
 .youth-hours + .gh-canvas { margin-top: var(--space-8); }
@@ -2045,3 +2044,16 @@ input, select, textarea {
 @media (min-width: 1100px) { .give-choices { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 /* Events: less space between the packing dates and the fundraisers */
 .page-events .upcoming { padding-bottom: var(--space-8); }
+
+/* Give: every card puts its link at the bottom, so the five line up */
+.give-choice { display: flex; flex-direction: column; gap: var(--space-2); }
+.give-choice .link-arrow { margin-top: auto; padding-top: var(--space-2); }
+
+/* Give time: what volunteering involves, then the sign-up form */
+.give-time-intro { padding-top: var(--section-y); border-top: 1px solid var(--line); }
+.time-facts { list-style: none; margin: var(--space-8) 0 0; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.time-facts li { display: grid; gap: var(--space-2); align-content: start; padding: var(--space-6); background: var(--white); border: 1px solid var(--line); border-radius: var(--radius-md); }
+.time-facts li > * { margin: 0; }
+.time-facts .t-eyebrow { color: var(--lake-600); }
+.time-facts li p:not(.t-eyebrow) { color: var(--ink-muted); font-size: 15px; line-height: 24px; }
+.give-time .signup-form { padding-top: var(--space-12); }
