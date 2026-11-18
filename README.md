@@ -39,7 +39,7 @@ Static. Fast. Free to host. Zero backend required.
 | **CSS** | Hand-written, token-based (`assets/css/screen.css`) — colors, type scale, spacing, radius and shadow all defined once at the top |
 | **JS** | ~500 lines, dependency-free, progressively enhances content into components (project cards, timelines, leader walls, item tiles) |
 | **Fonts** | Bricolage Grotesque (display) + Figtree (body), via Google Fonts |
-| **Pages** | 10 (home, Team & Vision, Chicago Projects, India Projects, Get Involved, Give, Events, News, Membership, a sample event post) |
+| **Pages** | 9 (home, Team & Vision, Chicago Projects, India Projects, Get Involved, Give, Events, News, a sample event post) |
 | **Images** | 132, sourced from the live site's real events |
 | **Forms** | Google Forms (sign-up) + Zeffy (donations), both embedded, both free, neither requires a backend |
 | **Hosting cost** | $0 — any static host works |
@@ -82,10 +82,6 @@ node build.js
 
 Donations use Zeffy and the sign-up forms use Google Forms. Both are embedded and work on any host. They load live on the deployed site.
 
-## Memberships
-
-Paid memberships (Advocate and Champion, monthly or yearly) run through Zeffy, the same tool used for donations. Members don't log in on this site. Zeffy handles payments, renewals, receipts and cancellations. Every **Join** button opens the link set in `membership_url` (`sbf-aurav-theme/package.json`). Tier copy lives in `sbf-aurav-theme/partials/membership-tiers.hbs`.
-
 ## Search (SEO)
 
 Every page is its own real URL (`/team/`, `/get-involved/`, ...) with its own title, description, canonical link, social-share tags, and a `sitemap.xml`. The homepage also carries `NonprofitOrganization` data.
@@ -105,6 +101,7 @@ Some old pages now live as sections of one page. Their old addresses forward to 
 
 | Old page | Now |
 | --- | --- |
+| `/membership/` | Give (`/give/#donate`); memberships were dropped |
 | `/where-we-serve/` | Chicago Projects (`/who-we-serve-chicago/`); its `#india` links go to India Projects |
 | `/youth-leaders/` | Get Involved → Lead an event (`/get-involved/#youth-leadership`) |
 | `/donations/` | Give → Donate (`/give/#donate`) |

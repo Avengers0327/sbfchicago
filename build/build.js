@@ -60,7 +60,6 @@ const PAGES = [
   { slug: 'give', title: 'Give', layout: 'template', nocontent: true },
   { slug: 'events', title: 'Events', layout: 'template', nocontent: true },
   { slug: 'news', title: 'News', layout: 'template', nocontent: true },
-  { slug: 'membership', title: 'Become a member', layout: 'membership', nocontent: true },
   { slug: 'aug-event', title: 'August 9 Chicago Food Packing Event', post: true, band: 'chicago',
     date: 'Aug 10, 2026', readingTime: '3 min read',
     feature: 'https://sbfchicago.org/content/images/2026/08/WhatsApp-Image-2026-08-10-at-1.47.25-PM--2--1.jpeg' },
@@ -70,6 +69,7 @@ const SLUGS = new Set(PAGES.map(p => p.slug).concat(['home']));
 // Pages folded into others: old address -> [page, section]
 const MOVED = {
   'where-we-serve': ['who-we-serve-chicago', 'chicago'],
+  membership: ['give', 'donate'],
   'youth-leaders': ['get-involved', 'youth-leadership'],
   donations: ['give', 'donate'],
   'items-needed': ['give', 'items'],
@@ -422,9 +422,6 @@ function shell(p, content, doc) {
       </div>
     </header>`;
 
-  if (p.layout === 'membership') {
-    return `<article class="band-page-plain">${hero().replace('<p class="t-eyebrow"></p>', '<p class="t-eyebrow">Membership</p>')}${renderPartial('membership-tiers', {})}</article>`;
-  }
   const meta = p.post ? `
         <p class="t-small page-hero-meta"><span>By Anuj Saxena</span><span>${p.readingTime}</span></p>
         <figure class="page-hero-feature"><img src="${localImg(p.feature)}" alt="Volunteers packing food at the August 9 event"></figure>` : '';
@@ -512,7 +509,6 @@ const SEO = {
   give: ['Give | SBF Chicago', 'Donate to SBF Chicago through Zeffy or Zelle, or give food items from our Amazon Wishlist. Zeffy is 100% free to the organization.'],
   events: ['Events | SBF Chicago', 'Upcoming SBF Chicago food packing events and fundraisers, and photos from the fundraisers we have held.'],
   news: ['News | SBF Chicago', 'Milestones, press and words from our partners: what SBF Chicago has been up to.'],
-  membership: ['Become a Member | SBF Chicago', 'Become an SBF Chicago member with Advocate and Champion plans: coaching, recognition and mentorship for youth leaders.'],
   'aug-event': ['August 9 Food Packing Event | SBF Chicago', 'We packed 1,200+ sandwiches and 650 brown bags at our August 9 food packing event. Thanks to National India Hub for hosting.'],
 };
 const esc = s => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
@@ -687,7 +683,6 @@ if (SHOW_VERSIONS) {
       ['items', 'Items needed', ['items-needed', 'give#items']],
       ['fundraisers', 'Fundraisers', ['sbf-fundraiser', 'news-events#upcoming', 'events#upcoming']],
       ['news', 'In the news', ['in-the-news', 'news-events#news', 'news#milestones']],
-      ['membership', 'Membership', ['membership']],
       ['aug-event', 'August 9 event post', ['aug-event']],
     ].map(([key, label, tries]) => ({ key, label, try: tries }));
     const tokens = readT('assets/css/screen.css').match(/:root \{[\s\S]*?\n\}/)[0];
